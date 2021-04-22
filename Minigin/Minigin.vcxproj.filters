@@ -22,6 +22,12 @@
     <Filter Include="Audio">
       <UniqueIdentifier>{61345403-ce47-4d34-af35-c8ea6293f8b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Playfield">
+      <UniqueIdentifier>{16719f03-c6ad-41e4-8236-150b56415ad4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{09b58ffd-556f-462f-ae14-03ebb70f0828}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MiniginPCH.h">
@@ -58,9 +64,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Minigin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Time.h">
@@ -105,6 +108,15 @@
     <ClInclude Include="AudioService.h">
       <Filter>Audio</Filter>
     </ClInclude>
+    <ClInclude Include="Playfield.h">
+      <Filter>Playfield</Filter>
+    </ClInclude>
+    <ClInclude Include="CubePlatform.h">
+      <Filter>Playfield</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
@@ -143,9 +155,6 @@
     <ClCompile Include="Time.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Subject.cpp">
       <Filter>Observers</Filter>
     </ClCompile>
@@ -160,6 +169,15 @@
     </ClCompile>
     <ClCompile Include="AudioServiceProvider.cpp">
       <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Playfield.cpp">
+      <Filter>Playfield</Filter>
+    </ClCompile>
+    <ClCompile Include="CubePlatform.cpp">
+      <Filter>Playfield</Filter>
+    </ClCompile>
+    <ClCompile Include="Components.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

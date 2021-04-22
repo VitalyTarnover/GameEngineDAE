@@ -45,6 +45,7 @@ public:
 private:
 	std::shared_ptr<dae::Texture2D> m_spTexture2D{};
 	glm::vec3 m_Position = {};
+	
 };
 
 class TextComponent final : public BaseComponent

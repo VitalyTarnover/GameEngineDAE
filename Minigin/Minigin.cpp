@@ -59,11 +59,11 @@ void dae::Minigin::Initialize()
 	AudioLocator::SetAudioService(new AudioServiceProvider());
 
 
-	AudioLocator::GetAudioService().AddSoundToLibrary(AudioService::MusicNames::Background01, "Resources/UsoppSiren.mp3");
-	AudioLocator::GetAudioService().AddSoundToLibrary(AudioService::SoundNames::BoomEffect, "Resources/KleerBall01.wav");
-
-	AudioLocator::GetAudioService().QueueSound(AudioService::MusicNames::Background01, 0.9f);
-	AudioLocator::GetAudioService().QueueSound(AudioService::SoundNames::BoomEffect, 0.9f);
+	//AudioLocator::GetAudioService().AddSoundToLibrary(AudioService::MusicNames::Background01, "Resources/UsoppSiren.mp3");
+	//AudioLocator::GetAudioService().AddSoundToLibrary(AudioService::SoundNames::BoomEffect, "Resources/KleerBall01.wav");
+	//
+	//AudioLocator::GetAudioService().QueueSound(AudioService::MusicNames::Background01, 0.9f);
+	//AudioLocator::GetAudioService().QueueSound(AudioService::SoundNames::BoomEffect, 0.9f);
 
 
 	//AudioServiceProvider* audio = new AudioServiceProvider();
@@ -95,6 +95,13 @@ void dae::Minigin::LoadGame() const
 	go->AddComponent(new TransformComponent(glm::vec3{ 216,180,0 }));
 	go->AddComponent(new Texture2DComponent("logo.png"));
 	scene.Add(go);
+
+
+	auto testImage = std::make_shared<GameObject>("TestImage");
+	testImage->AddComponent(new TransformComponent(glm::vec3{ 300,300,0 }));
+	testImage->AddComponent(new Texture2DComponent("Test.png"));
+	scene.Add(testImage);
+
 	
 	//titel
 	//go = std::make_shared<GameObject>("Titel");

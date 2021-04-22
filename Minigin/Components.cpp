@@ -1,6 +1,7 @@
 #include "MiniginPCH.h"
 #include "Components.h"
 #include "GameObject.h"
+#include "SDL_image.h"
 
 void BaseComponent::SetOwnerObject(GameObject* pGameObject)
 {
@@ -21,8 +22,8 @@ dae::Transform TransformComponent::GetTransform() const
 Texture2DComponent::Texture2DComponent(const std::string& filename)
 	:m_spTexture2D(dae::ResourceManager::GetInstance().LoadTexture(filename))
 {
-}
 
+}
 
 
 void Texture2DComponent::Render()
@@ -30,10 +31,22 @@ void Texture2DComponent::Render()
 	if (!m_IsInitialized && m_pGameObject->GetComponent<TransformComponent>())// do once
 	{
 		m_IsInitialized = true;
+
+
 		m_Position = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 	}
-	
-	dae::Renderer::GetInstance().RenderTexture(*m_spTexture2D, m_Position.x, m_Position.y);
+
+	int width, height;
+	SDL_QueryTexture(m_spTexture2D.get()->GetSDLTexture(), nullptr, nullptr, &width, &height);
+
+	//auto animCpom = m_pGameObject->GetComponent<ANIMATIONCOMP>();
+	//if (animCopm.hasAnimation)
+	//{
+		dae::Renderer::GetInstance().RenderTexture(*m_spTexture2D, m_Position.x, m_Position.y, width / 2.0f, (float)height, 0, 0, width / 2.0f, (float)height);
+	//}
+	//else
+	//{
+	//}
 };
 
 TextComponent::TextComponent(const std::string& text, const std::shared_ptr<dae::Font>& font, const SDL_Color& color, bool isVisible)
