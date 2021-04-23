@@ -32,21 +32,36 @@ void Texture2DComponent::Render()
 	{
 		m_IsInitialized = true;
 
-
 		m_Position = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 	}
 
-	int width, height;
-	SDL_QueryTexture(m_spTexture2D.get()->GetSDLTexture(), nullptr, nullptr, &width, &height);
+	//int width, height;
+	//SDL_QueryTexture(m_spTexture2D.get()->GetSDLTexture(), nullptr, nullptr, &width, &height);
 
-	//auto animCpom = m_pGameObject->GetComponent<ANIMATIONCOMP>();
-	//if (animCopm.hasAnimation)
-	//{
-		dae::Renderer::GetInstance().RenderTexture(*m_spTexture2D, m_Position.x, m_Position.y, width / 2.0f, (float)height, 0, 0, width / 2.0f, (float)height);
-	//}
-	//else
-	//{
-	//}
+	if (m_pGameObject->GetComponent<SpriteAnimComponent>())
+	{
+		
+		SDL_Rect srcRect = m_pGameObject->GetComponent<SpriteAnimComponent>()->GetSrcRect();
+
+		int scale = 2;
+
+		dae::Renderer::GetInstance().RenderTexture(*m_spTexture2D, 
+			(int)m_Position.x, 
+			(int)m_Position.y,
+			srcRect.w * scale, 
+			srcRect.h * scale,
+			srcRect.x, 
+			srcRect.y, 
+			srcRect.w, 
+			srcRect.h);
+	}
+	else
+	{
+		dae::Renderer::GetInstance().RenderTexture(*m_spTexture2D, m_Position.x, m_Position.y);
+	}
+
+	
+
 };
 
 TextComponent::TextComponent(const std::string& text, const std::shared_ptr<dae::Font>& font, const SDL_Color& color, bool isVisible)
@@ -209,5 +224,30 @@ void ScoreComponent::IncreaseScore(const int score)
 const unsigned int& ScoreComponent::GetScore() const
 {
 	return m_Score;
+}
+
+SpriteAnimComponent::SpriteAnimComponent(int columnsNr)
+	:m_ColumnsNr{columnsNr}
+{
+}
+
+SDL_Rect SpriteAnimComponent::GetSrcRect()
+{
+
+	if (!m_IsInitialized)
+	{
+		m_spTexture2D = m_pGameObject->GetComponent<Texture2DComponent>()->GetTexture2D();
+		m_IsInitialized = true;
+	}
+
+	int textureWidth, textureHeight;
+	SDL_QueryTexture(m_spTexture2D.get()->GetSDLTexture(), nullptr, nullptr, &textureWidth, &textureHeight);
+
+	SDL_Rect srcRect;
+	srcRect.h = textureHeight;
+	srcRect.w = textureWidth / m_ColumnsNr;
+	srcRect.y = 0;
+	srcRect.x = srcRect.w * (int)m_CurrentState;
+	return srcRect;
 }
 

@@ -143,11 +143,13 @@ void dae::Minigin::LoadGame() const
 	
 	//q*bert
 	auto qbert = std::make_shared<GameObject>("Q*Bert");
-	qbert->AddComponent(new TransformComponent(glm::vec3(0, 0, 0)));
+	qbert->AddComponent(new TransformComponent(glm::vec3(300, 300, 0)));
 	qbert->AddComponent(new HealthComponent(3));
 	qbert->AddComponent(new ScoreComponent(0));
 	qbert->AddWatcher(new LivesObserver());
 	qbert->AddWatcher(new ScoreObserver());
+	qbert->AddComponent(new Texture2DComponent("Qbert.png"));
+	qbert->AddComponent(new SpriteAnimComponent(8));
 	scene.Add(qbert);
 	scene.AddPlayer(qbert);
 
@@ -211,6 +213,14 @@ void dae::Minigin::LoadGame() const
 	howToPlay3->AddComponent(new TransformComponent(glm::vec3(120, 420, 0)));
 	howToPlay3->AddComponent(new TextComponent("Back - exit the game", font, SDL_Color{ 100,255,100 }));
 	scene.Add(howToPlay3);
+
+
+	///Qbert
+	auto newQbert = std::make_shared<GameObject>("New Qbert");
+	newQbert->AddComponent(new TransformComponent(glm::vec3(100, 100, 0)));
+	newQbert->AddComponent(new Texture2DComponent("Qbert.png"));
+	newQbert->AddComponent(new SpriteAnimComponent(8));
+	scene.Add(newQbert);
 
 }
 

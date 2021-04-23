@@ -48,6 +48,44 @@ private:
 	
 };
 
+//for frames of characters
+enum class AnimStates
+{
+	OnPlatformRightDown,
+	OnPlatformLeftDown,
+	MidAirRightDown,
+	MidAirLeftDown,
+	OnPlatformRightUp,
+	OnPlatformLeftUp,
+	MidAirRightUp,
+	MidAirLeftUp,
+	//DiscSpin,
+};
+
+
+class SpriteAnimComponent final : public BaseComponent
+{
+public:
+	SpriteAnimComponent(int columnsNr);
+
+	SDL_Rect GetSrcRect();
+	void SetAnimState(AnimStates state) 
+	{ 
+		if ((int)state <= m_ColumnsNr)
+		m_CurrentState = state; 
+		else
+		{
+			//log error
+		}
+	};
+
+private:
+	std::shared_ptr<dae::Texture2D> m_spTexture2D{};
+	AnimStates m_CurrentState = AnimStates::OnPlatformRightDown;
+	int m_ColumnsNr;
+};
+
+
 class TextComponent final : public BaseComponent
 {
 public:

@@ -25,7 +25,13 @@ class FireCommand final : public Command
 public:
 	FireCommand(int index) :Command(index) {};
 
-	void Execute() const override { std::cout << "Fire!" << '\n'; }
+	void Execute() const override
+	{
+		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayerActor.get()->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformLeftDown);
+
+		std::cout << "Fire!" << '\n';
+	}
 	void Undo() override {};
 };
 
@@ -34,7 +40,14 @@ class DuckCommand final : public Command
 public:
 	DuckCommand(int index) :Command(index) {};
 
-	void Execute() const override { std::cout << "Duck!" << '\n'; }
+	void Execute() const override 
+	{
+		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayerActor.get()->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformRightUp);
+
+		std::cout << "Duck!" << '\n';
+	}
+
 	void Undo() override {};
 };
 
@@ -43,7 +56,13 @@ class JumpCommand final : public Command
 public:
 	JumpCommand(int index) :Command(index) {};
 
-	void Execute() const override { std::cout << "Jump!" << '\n'; }
+	void Execute() const override 
+	{ 
+		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayerActor.get()->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformLeftUp);
+		std::cout << "Jump!" << '\n'; 
+	}
+
 	void Undo() override {};
 };
 
@@ -52,7 +71,12 @@ class FartCommand final : public Command
 public:
 	FartCommand(int index) :Command(index) {};
 
-	void Execute() const override { std::cout << "Fart..." << '\n'; }
+	void Execute() const override
+	{
+		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayerActor.get()->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformRightDown);
+		std::cout << "Fart!" << '\n';
+	}
 	void Undo() override {};
 };
 
@@ -90,6 +114,7 @@ public:
 		//std::cout << "PointIncrease" << std::endl;
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
 		pPlayerActor.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
+
 	}
 
 	void Undo() override {};
