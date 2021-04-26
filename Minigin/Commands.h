@@ -3,6 +3,7 @@
 #include "Components.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "MovementComponent.h"
 
 class Command abstract
 {
@@ -20,62 +21,58 @@ protected:
 	int m_ControllerIndex;
 };
 
-class FireCommand final : public Command
+class MoveLeftDown final : public Command
 {
 public:
-	FireCommand(int index) :Command(index) {};
+	MoveLeftDown(int index) :Command(index) {};
 
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
 		pPlayerActor.get()->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformLeftDown);
-
-		std::cout << "Fire!" << '\n';
+		//pPlayerActor.get()->GetComponent<MovementComponent>()->Move(MoveDirections::MoveDownLeft);
 	}
 	void Undo() override {};
 };
 
-class DuckCommand final : public Command
+class MoveRightUp final : public Command
 {
 public:
-	DuckCommand(int index) :Command(index) {};
+	MoveRightUp(int index) :Command(index) {};
 
 	void Execute() const override 
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
 		pPlayerActor.get()->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformRightUp);
-
-		std::cout << "Duck!" << '\n';
+		pPlayerActor.get()->GetComponent<MovementComponent>()->Move(MoveDirections::MoveUpRight);
 	}
 
 	void Undo() override {};
 };
 
-class JumpCommand final : public Command
+class MoveLeftUp final : public Command
 {
 public:
-	JumpCommand(int index) :Command(index) {};
+	MoveLeftUp(int index) :Command(index) {};
 
 	void Execute() const override 
 	{ 
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
 		pPlayerActor.get()->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformLeftUp);
-		std::cout << "Jump!" << '\n'; 
 	}
 
 	void Undo() override {};
 };
 
-class FartCommand final : public Command
+class MoveRightDown final : public Command
 {
 public:
-	FartCommand(int index) :Command(index) {};
+	MoveRightDown(int index) :Command(index) {};
 
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
 		pPlayerActor.get()->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformRightDown);
-		std::cout << "Fart!" << '\n';
 	}
 	void Undo() override {};
 };

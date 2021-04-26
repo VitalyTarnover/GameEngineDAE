@@ -19,8 +19,9 @@ dae::Transform TransformComponent::GetTransform() const
 }
 
 
-Texture2DComponent::Texture2DComponent(const std::string& filename)
+Texture2DComponent::Texture2DComponent(const std::string& filename, float scale)
 	:m_spTexture2D(dae::ResourceManager::GetInstance().LoadTexture(filename))
+	, m_Scale{scale}
 {
 
 }
@@ -31,9 +32,13 @@ void Texture2DComponent::Render()
 	if (!m_IsInitialized && m_pGameObject->GetComponent<TransformComponent>())// do once
 	{
 		m_IsInitialized = true;
-
 		m_Position = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 	}
+
+
+	if(m_IsInitialized)
+		m_Position = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+
 
 	//int width, height;
 	//SDL_QueryTexture(m_spTexture2D.get()->GetSDLTexture(), nullptr, nullptr, &width, &height);
@@ -43,13 +48,11 @@ void Texture2DComponent::Render()
 		
 		SDL_Rect srcRect = m_pGameObject->GetComponent<SpriteAnimComponent>()->GetSrcRect();
 
-		int scale = 2;
-
 		dae::Renderer::GetInstance().RenderTexture(*m_spTexture2D, 
 			(int)m_Position.x, 
 			(int)m_Position.y,
-			srcRect.w * scale, 
-			srcRect.h * scale,
+			srcRect.w * (int)m_Scale,
+			srcRect.h * (int)m_Scale,
 			srcRect.x, 
 			srcRect.y, 
 			srcRect.w, 
@@ -57,11 +60,8 @@ void Texture2DComponent::Render()
 	}
 	else
 	{
-		dae::Renderer::GetInstance().RenderTexture(*m_spTexture2D, m_Position.x, m_Position.y);
+		dae::Renderer::GetInstance().RenderTexture(*m_spTexture2D, m_Position.x, m_Position.y, m_Scale);
 	}
-
-	
-
 };
 
 TextComponent::TextComponent(const std::string& text, const std::shared_ptr<dae::Font>& font, const SDL_Color& color, bool isVisible)
@@ -233,7 +233,6 @@ SpriteAnimComponent::SpriteAnimComponent(int columnsNr)
 
 SDL_Rect SpriteAnimComponent::GetSrcRect()
 {
-
 	if (!m_IsInitialized)
 	{
 		m_spTexture2D = m_pGameObject->GetComponent<Texture2DComponent>()->GetTexture2D();
@@ -250,4 +249,8 @@ SDL_Rect SpriteAnimComponent::GetSrcRect()
 	srcRect.x = srcRect.w * (int)m_CurrentState;
 	return srcRect;
 }
+
+
+
+
 

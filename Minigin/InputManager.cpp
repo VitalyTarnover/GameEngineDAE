@@ -37,16 +37,16 @@ void dae::InputManager::BindCommands()
 	AssignKey<IncreasePointsCommand>(ControllerButton::ButtonB);
 	AssignKey<DieCommand>(ControllerButton::ButtonX, 1);
 	AssignKey<IncreasePointsCommand>(ControllerButton::ButtonY, 1);
-	AssignKey<FartCommand>(ControllerButton::ButtonUp);
-	AssignKey<JumpCommand>(ControllerButton::ButtonDown);
-	AssignKey<FireCommand>(ControllerButton::ButtonLeft);
-	AssignKey<DuckCommand>(ControllerButton::ButtonRight);
+	AssignKey<MoveRightUp>(ControllerButton::ButtonUp);
+	AssignKey<MoveLeftDown>(ControllerButton::ButtonDown);
+	AssignKey<MoveLeftUp>(ControllerButton::ButtonLeft);
+	AssignKey<MoveRightDown>(ControllerButton::ButtonRight);
 	AssignKey<ExitCommand>(ControllerButton::ButtonSelect);
-	AssignKey<FartCommand>(ControllerButton::ButtonStart);
-	AssignKey<FartCommand>(ControllerButton::ButtonLeftThumb);
-	AssignKey<FartCommand>(ControllerButton::ButtonRightThumb);
-	AssignKey<FartCommand>(ControllerButton::ButtonLeftShoulder);
-	AssignKey<FartCommand>(ControllerButton::ButtonRightShoulder);
+	//AssignKey<FartCommand>(ControllerButton::ButtonStart);
+	//AssignKey<FartCommand>(ControllerButton::ButtonLeftThumb);
+	//AssignKey<FartCommand>(ControllerButton::ButtonRightThumb);
+	//AssignKey<FartCommand>(ControllerButton::ButtonLeftShoulder);
+	//AssignKey<FartCommand>(ControllerButton::ButtonRightShoulder);
 	//assign triggers
 	AssignTrigger<AimCommand>(m_Triggers[0].first);
 	AssignTrigger<ShootCommand>(m_Triggers[1].first);

@@ -12,6 +12,8 @@
 #include "Time.h"
 #include "ScoreObserver.h"
 #include "LivesObserver.h"
+#include "LevelComponent.h"
+#include "MovementComponent.h"
 #include <thread>
 
 #include "AudioLocator.h"
@@ -42,8 +44,8 @@ void dae::Minigin::Initialize()
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		640,
-		480,
+		1280,
+		720,
 		SDL_WINDOW_OPENGL
 	);
 
@@ -84,7 +86,7 @@ void dae::Minigin::Initialize()
 void dae::Minigin::LoadGame() const
 {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
-	
+
 	//background
 	auto go = std::make_shared<GameObject>("Background");
 	go->AddComponent(new Texture2DComponent("background.jpg"));
@@ -103,6 +105,12 @@ void dae::Minigin::LoadGame() const
 	scene.Add(testImage);
 
 	
+	///level
+	auto newLevel = std::make_shared<GameObject>("level");
+	newLevel->AddComponent(new LevelComponent(scene));
+	scene.Add(newLevel);
+
+
 	//titel
 	//go = std::make_shared<GameObject>("Titel");
 	//auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
@@ -148,8 +156,9 @@ void dae::Minigin::LoadGame() const
 	qbert->AddComponent(new ScoreComponent(0));
 	qbert->AddWatcher(new LivesObserver());
 	qbert->AddWatcher(new ScoreObserver());
-	qbert->AddComponent(new Texture2DComponent("Qbert.png"));
+	qbert->AddComponent(new Texture2DComponent("Coily.png",4.f));
 	qbert->AddComponent(new SpriteAnimComponent(8));
+	qbert->AddComponent(new MovementComponent());
 	scene.Add(qbert);
 	scene.AddPlayer(qbert);
 
@@ -218,7 +227,7 @@ void dae::Minigin::LoadGame() const
 	///Qbert
 	auto newQbert = std::make_shared<GameObject>("New Qbert");
 	newQbert->AddComponent(new TransformComponent(glm::vec3(100, 100, 0)));
-	newQbert->AddComponent(new Texture2DComponent("Qbert.png"));
+	newQbert->AddComponent(new Texture2DComponent("Coily.png",3));
 	newQbert->AddComponent(new SpriteAnimComponent(8));
 	scene.Add(newQbert);
 

@@ -1,15 +1,6 @@
-﻿  Components.cpp
-  GameObject.cpp
-  InputManager.cpp
-  LivesObserver.cpp
+﻿  InputManager.cpp
   Minigin.cpp
-  Playfield.cpp
-  Scene.cpp
-  SceneManager.cpp
-  ScoreObserver.cpp
-  Subject.cpp
   Generating Code...
-     Creating library D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\GameEngineDAE\x64\Debug\Minigin.lib and object D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\GameEngineDAE\x64\Debug\Minigin.exp
   Minigin.vcxproj -> D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\GameEngineDAE\x64\Debug\Minigin.exe
   D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\GameEngineDAE\3rdParty\SDL2\lib\x64\SDL2.dll
   Скопировано файлов: 1.
