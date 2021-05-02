@@ -8,9 +8,9 @@
 class LevelComponent : public BaseComponent
 {
 public:
-	LevelComponent(dae::Scene& scene);
+	LevelComponent(dae::Scene& scene, const glm::vec3& firstCubePos);
 
-	//void Render(const glm::vec3&) const override;
+	glm::vec3 GetOffset() const { return m_Offset; }
 
 private:
 	void Initialize(dae::Scene& scene);
@@ -22,10 +22,10 @@ private:
 	//const int m_MaxCubes = 28;
 
 	const int m_FirstRowCubeCount;
+	const glm::vec3 m_FirstCubePos;
 	const int m_CubeColumnCount;
 	const SDL_Rect m_CubeSrcRect;
-	glm::vec3 m_CubeOffset;
-	const glm::vec3 m_HighestCubePos;
+	glm::vec3 m_Offset;
 	const float m_CubeScale;
 
 	std::shared_ptr<GameObject> m_Cubes[28];
