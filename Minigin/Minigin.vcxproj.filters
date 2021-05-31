@@ -25,66 +25,21 @@
     <Filter Include="Components">
       <UniqueIdentifier>{09b58ffd-556f-462f-ae14-03ebb70f0828}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CubePlatform">
+      <UniqueIdentifier>{3e60f8d2-ca3e-46ca-9a67-2832ed4025d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MiniginPCH.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Font.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Minigin.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Observer.h">
-      <Filter>Observers</Filter>
-    </ClInclude>
-    <ClInclude Include="Subject.h">
-      <Filter>Observers</Filter>
     </ClInclude>
     <ClInclude Include="AnalogStickCommand.h">
       <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="AnalogTriggerCommand.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Structs.h">
       <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="LivesObserver.h">
@@ -105,42 +60,21 @@
     <ClInclude Include="AudioService.h">
       <Filter>Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Components.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="LevelComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="MovementComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="CubePlatform.h">
+      <Filter>CubePlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
@@ -148,15 +82,6 @@
     </ClCompile>
     <ClCompile Include="Minigin.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Subject.cpp">
-      <Filter>Observers</Filter>
-    </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="LivesObserver.cpp">
       <Filter>Observers</Filter>
@@ -167,14 +92,14 @@
     <ClCompile Include="AudioServiceProvider.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Components.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="LevelComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="MovementComponent.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="CubePlatform.cpp">
+      <Filter>CubePlatform</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,115 +4,188 @@
 #include "LevelComponent.h"
 #include "SceneManager.h"
 #include "Scene.h"
-#include "Time.h"
-
+#include "SystemTime.h"
 
 MovementComponent::MovementComponent()
-	: m_Jumped{ false }
-	, m_GoingUp{ false }
-	, m_CurrentPos{}
-	, m_DesiredPosLeft{}
-	, m_DesiredPosRight{}
-	, m_DesiredPosTop{}
-	, m_DesiredPosBottom{}
-	, m_JumpDirection{}
-	, m_MoveDirection{}
-	, m_JumpSpeed{ 25 }
+	: m_Speed{ 500 }
+	, m_IsMoving{ false }
+	, m_CurrentCubeIndex{ 0 }
+	, m_FallingToDeath{ false }
+	, m_Direction{ AnimStates::OnPlatformLeftDown }
 	, m_IsKeyPressed{ false }
 {
-	const glm::vec3& cubeOffset = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->GetOffset();
-	m_MoveDistance = cubeOffset;
+	m_MoveDistance = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->GetOffset();
 }
 
 void MovementComponent::Move(MoveDirections moveDir)
 {
-	m_CurrentPos = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-
-	m_DesiredPosLeft = m_CurrentPos.x;
-	m_DesiredPosRight = m_CurrentPos.x;
-	m_DesiredPosTop = m_CurrentPos.y;
-	m_DesiredPosBottom = m_CurrentPos.y;
-
-	m_DesiredPosLeft -= 80;
-	m_DesiredPosRight += 80;
-	m_DesiredPosTop -= 120;
-	m_DesiredPosBottom += 120;
-	
-	
+	if (m_IsMoving)
+	{
+		return;
+	}
 	m_MoveDirection = moveDir;
 	m_IsKeyPressed[(int)moveDir] = true;
 
-
 	if (m_IsKeyPressed[(int)MoveDirections::Up] && m_IsKeyPressed[(int)MoveDirections::Left])
 	{
-		m_JumpDirection.x = -1;
-		m_JumpDirection.y = -1;
+		m_Direction = AnimStates::MidAirLeftUp;
 		m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::MidAirLeftUp);
-		m_Jumped = true;
-		m_GoingUp = true;
+		ActivateJump();
 	}
 	else if (m_IsKeyPressed[(int)MoveDirections::Up] && m_IsKeyPressed[(int)MoveDirections::Right])
 	{
-		m_JumpDirection.x = 1;
-		m_JumpDirection.y = -1;
+		m_Direction = AnimStates::MidAirRightUp;
 		m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::MidAirRightUp);
-		m_Jumped = true;
-		m_GoingUp = true;
+		ActivateJump();
 	}
 	else if (m_IsKeyPressed[(int)MoveDirections::Down] && m_IsKeyPressed[(int)MoveDirections::Right])
 	{
-		m_JumpDirection.x = 1;
-		m_JumpDirection.y = 1;
+		m_Direction =AnimStates::MidAirRightDown;
 		m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::MidAirRightDown);
-		m_Jumped = true;
-		m_GoingUp = true;
+		ActivateJump();
 	}
 	else if (m_IsKeyPressed[(int)MoveDirections::Down] && m_IsKeyPressed[(int)MoveDirections::Left])
 	{
-		m_JumpDirection.x = -1;
-		m_JumpDirection.y = 1;
+		m_Direction = AnimStates::MidAirLeftDown;
 		m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::MidAirLeftDown);
-		m_Jumped = true;
-		m_GoingUp = true;
+		ActivateJump();
 	}
+
 }
 
-void MovementComponent::KeyReleased(MoveDirections moveDir)
+void MovementComponent::Jump()
 {
-	m_IsKeyPressed[(int)moveDir] = false;
+	float elapsedTime = SystemTime::GetInstance().GetDeltaTime();
+	
+	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
+
+	glm::vec2 pos = transform->GetTransform().GetPosition();
+
+	const float moveDistRatio = (m_MoveDistance.y / m_MoveDistance.x);
+
+	float jumpHeight = m_MoveDistance.y / 2.0f;
+
+	const glm::vec2 speed = { m_Speed, m_Speed * moveDistRatio * (m_MoveDistance.y / jumpHeight) };
+
+	if (m_Direction == AnimStates::MidAirRightDown || m_Direction == AnimStates::MidAirRightUp)
+		pos.x += elapsedTime * speed.x;
+	else pos.x -= elapsedTime * speed.x;
+
+	if (m_Direction == AnimStates::MidAirRightDown || m_Direction == AnimStates::MidAirLeftDown)
+		jumpHeight = m_MoveDistance.y / 2.0f;
+	else jumpHeight = m_MoveDistance.y * 1.5f;
+
+	if (m_FirstHalfOfTheJump)
+	{
+		pos.y -= elapsedTime * speed.y;
+
+		if ( abs(pos.y - m_JumpStartPos.y) > jumpHeight)
+			m_FirstHalfOfTheJump = false;
+	}
+	else pos.y += elapsedTime * speed.y;
+
+	if (abs(pos.x - m_JumpStartPos.x) > m_MoveDistance.x)
+	{
+		//landing
+		const auto& CurrentMap = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>();
+
+		switch (m_Direction)
+		{
+		case (AnimStates::MidAirLeftDown):
+			m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformLeftDown);
+			break;
+		case (AnimStates::MidAirLeftUp):
+			m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformLeftUp);
+			break;
+		case (AnimStates::MidAirRightDown):
+			m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformRightDown);
+			break;
+		case (AnimStates::MidAirRightUp):
+			m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformRightUp);
+			break;
+		}
+
+		
+		CurrentMap->GetCube(m_CurrentCubeIndex)->SwitchColor(m_pGameObject->GetName());
+
+		m_IsMoving = false;
+
+		auto cube = CurrentMap->GetCube(m_CurrentCubeIndex);
+		//offset fix
+		//m_pGameObject->GetComponent<TransformComponent>()->SetPosition(cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition());
+		pos.x = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 8.f);
+		pos.y = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 10.f);
+
+		m_IsMoving = false;
+
+	}
+
+	transform->SetPosition(glm::vec3(pos.x,pos.y,0));
 }
+
+void MovementComponent::ActivateJump()
+{
+	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
+
+	m_JumpStartPos = transform->GetTransform().GetPosition();
+
+	m_IsMoving = true;
+	
+	m_FirstHalfOfTheJump = true;
+
+	const auto& CurrentMap = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>();
+
+	if (!CurrentMap->GetNextCubeIndex(m_CurrentCubeIndex, m_Direction))
+		m_FallingToDeath = true;
+
+}
+
+
+void MovementComponent::FallToDeath()
+{
+	float elapsedTime = SystemTime::GetInstance().GetDeltaTime();
+	
+	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
+	
+	glm::vec2 pos = transform->GetTransform().GetPosition();
+
+	const float moveDistRatio = (m_MoveDistance.y / m_MoveDistance.x);
+
+	float jumpHeight = m_MoveDistance.y / 2.0f;
+	
+	const glm::vec2 speed = { m_Speed,m_Speed * moveDistRatio * (m_MoveDistance.y / jumpHeight) };
+
+	if (m_Direction == AnimStates::MidAirRightDown || m_Direction == AnimStates::MidAirRightUp)
+		pos.x += elapsedTime * speed.x;
+	else
+		pos.x -= elapsedTime * speed.x;
+
+	if ((int)m_Direction >= (int)AnimStates::OnPlatformRightDown)
+		jumpHeight = m_MoveDistance.y / 2.0f;
+	else
+		jumpHeight = m_MoveDistance.y * 1.5f;
+
+	if (m_FirstHalfOfTheJump)
+	{
+		pos.y -= elapsedTime * speed.y;
+
+		if (abs(pos.y - m_JumpStartPos.y) > jumpHeight)
+			m_FirstHalfOfTheJump = false;
+	}
+	else pos.y += elapsedTime * speed.y;
+
+	if (pos.y > 720)
+	{
+		m_IsMoving = false;
+		m_FallingToDeath = false;
+	}
+	else transform->SetPosition(glm::vec3(pos.x,pos.y,0));
+}
+
+
 
 void MovementComponent::Update()
 {
-	if (m_Jumped)
-	{
-		m_pGameObject->GetComponent<TransformComponent>()->SetTransform(m_CurrentPos);
-
-		if (m_GoingUp)
-		{
-			m_CurrentPos.y += (200 * Time::GetInstance().GetDeltaTime()) * m_JumpDirection.y;
-
-			if (m_CurrentPos.y <= m_DesiredPosTop - 20)
-			{
-				m_GoingUp = false;
-			}
-		}
-		else
-		{
-			m_CurrentPos.y -= (200 * Time::GetInstance().GetDeltaTime()) * m_JumpDirection.y;
-		}
-		m_CurrentPos.x += (110 * Time::GetInstance().GetDeltaTime()) * m_JumpDirection.x;
-
-		if (m_CurrentPos.x <= m_DesiredPosLeft)
-		{
-			m_CurrentPos.x = m_DesiredPosLeft;
-		}
-
-		//land
-		if (m_CurrentPos.x == m_DesiredPosLeft && m_CurrentPos.y >= m_DesiredPosTop && !m_GoingUp)
-		{
-			m_Jumped = false;
-		}
-	}
-
+	if (m_FallingToDeath) FallToDeath();
+	else if (m_IsMoving) Jump();
 }

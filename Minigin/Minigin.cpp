@@ -9,12 +9,15 @@
 #include <SDL.h>
 #include "GameObject.h"
 #include "Scene.h"
-#include "Time.h"
+#include "SystemTime.h"
 #include "ScoreObserver.h"
 #include "LivesObserver.h"
 #include "LevelComponent.h"
 #include "MovementComponent.h"
 #include <thread>
+#include "Commands.h"
+#include "AnalogStickCommand.h"
+#include "AnalogTriggerCommand.h"
 
 #include "AudioLocator.h"
 
@@ -92,24 +95,6 @@ void dae::Minigin::LoadGame() const
 	go->AddComponent(new Texture2DComponent("background.jpg"));
 	scene.Add(go);
 	
-	//logo
-	//go = std::make_shared<GameObject>("Logo");
-	//go->AddComponent(new TransformComponent(glm::vec3{ 216,180,0 }));
-	//go->AddComponent(new Texture2DComponent("logo.png"));
-	//scene.Add(go);
-
-
-	//auto testImage = std::make_shared<GameObject>("TestImage");
-	//testImage->AddComponent(new TransformComponent(glm::vec3{ 300,300,0 }));
-	//testImage->AddComponent(new Texture2DComponent("Test.png"));
-	//scene.Add(testImage);
-
-	//titel
-	//go = std::make_shared<GameObject>("Titel");
-	//auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	//go->AddComponent(new TransformComponent(glm::vec3{ 100,430,0 }));
-	//go->AddComponent(new TextComponent("Programming 4 Assignment", font, SDL_Color{ 255,255,255 }));
-	//scene.Add(go);
 	
 	//fps counter
 	go = std::make_shared<GameObject>("FPSCounter");
@@ -117,123 +102,41 @@ void dae::Minigin::LoadGame() const
 	go->AddComponent(new FPSTextComponent(font2));
 	scene.Add(go);
 	
-	
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
 	
-	//Player1
-		
-	//titel
-	//auto player1Titel = std::make_shared<GameObject>("Player 1 titel");
-	//player1Titel->AddComponent(new TransformComponent(glm::vec3(20, 20, 0)));
-	//player1Titel->AddComponent(new TextComponent("Player 1", font, SDL_Color{ 255,25,25 }));
-	//scene.Add(player1Titel);
-
-	//lives
-	//auto livesDisplay = std::make_shared<GameObject>("LivesDisplay");
-	//livesDisplay->AddComponent(new TransformComponent(glm::vec3(20, 50, 0)));
-	//auto livesCounter = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
-	//livesDisplay->AddComponent(livesCounter);
-	//scene.Add(livesDisplay);
-	
 	//score
-	//auto scoreDisplay = std::make_shared<GameObject>("ScoreDisplay");
-	//scoreDisplay->AddComponent(new TransformComponent(glm::vec3(20, 70, 0)));
-	//auto scoreCounter = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
-	//scoreDisplay->AddComponent(scoreCounter);
-	//scene.Add(scoreDisplay);
-	
-	
+	auto scoreDisplay = std::make_shared<GameObject>("ScoreDisplay");
+	scoreDisplay->AddComponent(new TransformComponent(glm::vec3(20, 70, 0)));
+	auto scoreCounter = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
+	scoreDisplay->AddComponent(scoreCounter);
+	scene.Add(scoreDisplay);
 
-	//player died text
-	//auto playerDied = std::make_shared<GameObject>("Player 1 Died!");
-	//playerDied->AddComponent(new TransformComponent(glm::vec3(250, 300, 0)));
-	//playerDied->AddComponent(new TextComponent("Player 1 Died!", font, SDL_Color{ 255,255,255 }, false));
-	//scene.Add(playerDied);
-	
-	//Player2
-
-	//titel
-	//auto player2Titel = std::make_shared<GameObject>("Player 2 titel");
-	//player2Titel->AddComponent(new TransformComponent(glm::vec3(500, 20, 0)));
-	//player2Titel->AddComponent(new TextComponent("Player 2",font, SDL_Color{ 255,25,25 }));
-	//scene.Add(player2Titel);
-
-	//lives
-	//auto livesDisplay2 = std::make_shared<GameObject>("LivesDisplay2");
-	//livesDisplay2->AddComponent(new TransformComponent(glm::vec3(500, 50, 0)));
-	//auto livesCounter2 = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
-	//livesDisplay2->AddComponent(livesCounter2);
-	//scene.Add(livesDisplay2);
-
-	//score
-	//auto scoreDisplay2 = std::make_shared<GameObject>("ScoreDisplay2");
-	//scoreDisplay2->AddComponent(new TransformComponent(glm::vec3(500, 70, 0)));
-	//auto scoreCounter2 = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
-	//scoreDisplay2->AddComponent(scoreCounter2);
-	//scene.Add(scoreDisplay2);
-	//q*bert
-
-	//auto qbert2 = std::make_shared<GameObject>("Q*Bert2");
-	//qbert2->AddComponent(new TransformComponent(glm::vec3(0, 0, 0)));
-	//qbert2->AddComponent(new HealthComponent(3));
-	//qbert2->AddComponent(new ScoreComponent(0));
-	//qbert2->AddWatcher(new LivesObserver());
-	//qbert2->AddWatcher(new ScoreObserver());
-	//scene.Add(qbert2);
-	//scene.AddPlayer(qbert2);
-
-
-	//player died text
-	//auto playerDied2 = std::make_shared<GameObject>("Player 2 Died!");
-	//playerDied2->AddComponent(new TransformComponent(glm::vec3(250, 100, 0)));
-	//playerDied2->AddComponent(new TextComponent("Player 2 Died!", font, SDL_Color{ 255,255,255 }, false));
-	//scene.Add(playerDied2);
-
-	////How to play
-	//auto howToPlay1 = std::make_shared<GameObject>("How to play");
-	//howToPlay1->AddComponent(new TransformComponent(glm::vec3(120, 380, 0)));
-	//howToPlay1->AddComponent(new TextComponent("A - kill Player 1, B - +25 to score of Player 1", font, SDL_Color{ 100,255,100 }));
-	//scene.Add(howToPlay1);
-	//
-	//auto howToPlay2 = std::make_shared<GameObject>("How to play");
-	//howToPlay2->AddComponent(new TransformComponent(glm::vec3(120, 400, 0)));
-	//howToPlay2->AddComponent(new TextComponent("X - kill Player 2, Y - +25 to score of Player 2", font, SDL_Color{ 100,255,100 }));
-	//scene.Add(howToPlay2);
-	//
-	//auto howToPlay3 = std::make_shared<GameObject>("How to play");
-	//howToPlay3->AddComponent(new TransformComponent(glm::vec3(120, 420, 0)));
-	//howToPlay3->AddComponent(new TextComponent("Back - exit the game", font, SDL_Color{ 100,255,100 }));
-	//scene.Add(howToPlay3);
-
-
-	///Qbert
-	//auto newQbert = std::make_shared<GameObject>("New Qbert");
-	//newQbert->AddComponent(new TransformComponent(glm::vec3(100, 100, 0)));
-	//newQbert->AddComponent(new Texture2DComponent("Coily.png",3));
-	//newQbert->AddComponent(new SpriteAnimComponent(8));
-	//scene.Add(newQbert);
 
 
 	auto level = std::make_shared<GameObject>("Level");
-	level->AddComponent(new LevelComponent(scene, glm::vec3(670, 200, 0)));
+	level->AddComponent(new LevelComponent(scene, glm::vec3(670, 200, 0), scene.GetSceneScale()));
 	scene.Add(level);
 	scene.AddLevel(level);
 	scene.SetCurrentLevel(level);
 
+
 	//q*bert
+	//Get first cube's position
+	glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+	startPosition.x += scene.GetSceneScale() * 8.f;
+	startPosition.y -= scene.GetSceneScale() * 10.f;
+
 	auto qbert = std::make_shared<GameObject>("Q*Bert");
-	qbert->AddComponent(new TransformComponent(glm::vec3(300, 300, 0)));
+	qbert->AddComponent(new TransformComponent(startPosition));
 	qbert->AddComponent(new HealthComponent(3));
 	qbert->AddComponent(new ScoreComponent(0));
 	qbert->AddWatcher(new LivesObserver());
 	qbert->AddWatcher(new ScoreObserver());
-	qbert->AddComponent(new Texture2DComponent("Qbert.png", 4.f));
+	qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
 	qbert->AddComponent(new SpriteAnimComponent(8));
 	qbert->AddComponent(new MovementComponent());
 	scene.Add(qbert);
 	scene.AddPlayer(qbert);
-
-	
 
 }
 
@@ -275,11 +178,11 @@ void dae::Minigin::Run()
 
 		input.ProcessInput();
 		input.ControllerAnalogs();
-		input.KeyboardInput();
+		input.InputHandler();
 
-		doContinue = input.InputHandler();
+		doContinue = input.KeyboardInput();
 
-		Time::GetInstance().SetDeltaTime(deltaTime);
+		SystemTime::GetInstance().SetDeltaTime(deltaTime);
 
 		sceneManager.Update();
 		renderer.Render();
@@ -287,4 +190,38 @@ void dae::Minigin::Run()
 
 	audioThread.detach();
 	Cleanup();
+}
+
+void dae::Minigin::BindCommands()
+{
+	auto& input{ InputManager::GetInstance() };
+	//assign buttons
+	input.AssignKey<DieCommand>(ControllerButton::ButtonA);
+	input.AssignKey<IncreasePointsCommand>(ControllerButton::ButtonB);
+	input.AssignKey<DieCommand>(ControllerButton::ButtonX, 0);
+	input.AssignKey<IncreasePointsCommand>(ControllerButton::ButtonY, 0);
+	//move
+	input.AssignKey<JumpUp>(ControllerButton::ButtonUp);
+	input.AssignKey<JumpDown>(ControllerButton::ButtonDown);
+	input.AssignKey<JumpLeft>(ControllerButton::ButtonLeft);
+	input.AssignKey<JumpRight>(ControllerButton::ButtonRight);
+	//keyboard
+	input.AssignKey<JumpUp>(KeyboardButton::W);
+	input.AssignKey<JumpDown>(KeyboardButton::S);
+	input.AssignKey<JumpLeft>(KeyboardButton::A);
+	input.AssignKey<JumpRight>(KeyboardButton::D);
+	//
+	input.AssignKey<ExitCommand>(ControllerButton::ButtonSelect);
+	input.AssignKey<ExitCommand>(KeyboardButton::ESC);
+	//AssignKey<FartCommand>(ControllerButton::ButtonStart);
+	//AssignKey<FartCommand>(ControllerButton::ButtonLeftThumb);
+	//AssignKey<FartCommand>(ControllerButton::ButtonRightThumb);
+	//AssignKey<FartCommand>(ControllerButton::ButtonLeftShoulder);
+	//AssignKey<FartCommand>(ControllerButton::ButtonRightShoulder);
+	//assign triggers
+	//input.AssignTrigger<AimCommand>(m_Triggers[0].first);
+	//input.AssignTrigger<ShootCommand>(m_Triggers[1].first);
+	//assign sticks
+	//input.AssignStick<MoveCommand>(m_Sticks[0].first);
+	//input.AssignStick<LookCommand>(m_Sticks[1].first);
 }
