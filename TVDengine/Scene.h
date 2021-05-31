@@ -2,7 +2,7 @@
 #include "SceneManager.h"
 #include "GameObject.h"
 
-enum class GameLevel
+enum class GameLevel//different games can have different amount of levels
 {
 	Level1,
 	Level2,

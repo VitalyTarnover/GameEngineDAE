@@ -37,10 +37,10 @@ bool dae::InputManager::IsPressed(ControllerButton button) const
 	return false;
 }
 
-void dae::InputManager::BindCommands()
-{
-
-}
+//void dae::InputManager::BindCommands()
+//{
+//
+//}
 // TODO : change the names of the functions to controller buttons , controller analog sticks and keyboard buttons
 bool dae::InputManager::InputHandler()
 {

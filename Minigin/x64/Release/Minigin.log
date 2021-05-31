@@ -1,0 +1,31 @@
+﻿  Minigin.cpp
+  MovementComponent.cpp
+     Creating library D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\x64\Release\QBert.lib and object D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\x64\Release\QBert.exp
+  Generating code
+  383 of 1699 functions (22.5%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    5 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Minigin.vcxproj -> D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\x64\Release\QBert.exe
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2\lib\x64\SDL2.dll
+  Скопировано файлов: 1.
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_image\lib\x64\libjpeg-9.dll
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_image\lib\x64\libpng16-16.dll
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_image\lib\x64\libtiff-5.dll
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_image\lib\x64\libwebp-7.dll
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_image\lib\x64\SDL2_image.dll
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_image\lib\x64\zlib1.dll
+  Скопировано файлов: 6.
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_ttf\lib\x64\libfreetype-6.dll
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_ttf\lib\x64\SDL2_ttf.dll
+  Скопировано файлов: 2.
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_Mixer\lib\x64\libFLAC-8.dll
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_Mixer\lib\x64\libmodplug-1.dll
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_Mixer\lib\x64\libmpg123-0.dll
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_Mixer\lib\x64\libogg-0.dll
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_Mixer\lib\x64\libopus-0.dll
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_Mixer\lib\x64\libopusfile-0.dll
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_Mixer\lib\x64\libvorbis-0.dll
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_Mixer\lib\x64\libvorbisfile-3.dll
+  D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2_Mixer\lib\x64\SDL2_mixer.dll
+  Скопировано файлов: 9.

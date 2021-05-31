@@ -1,14 +1,4 @@
-﻿  MiniginPCH.cpp
-  AudioServiceProvider.cpp
-  CubePlatform.cpp
-  LevelComponent.cpp
-  LivesObserver.cpp
-  Main.cpp
-  Minigin.cpp
-  MovementComponent.cpp
-  ScoreObserver.cpp
-  Generating Code...
-     Creating library D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\x64\Debug\QBert.lib and object D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\x64\Debug\QBert.exp
+﻿  Minigin.cpp
   Minigin.vcxproj -> D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\x64\Debug\QBert.exe
   D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2\lib\x64\SDL2.dll
   Скопировано файлов: 1.

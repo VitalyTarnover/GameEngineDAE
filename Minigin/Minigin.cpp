@@ -166,7 +166,7 @@ void dae::Minigin::Run()
 	bool doContinue{ true };
 	auto lastTime{ high_resolution_clock::now() };
 
-	input.BindCommands();
+	BindCommands();
 
 	std::thread audioThread (&AudioService::Update, &AudioLocator::GetAudioService());
 

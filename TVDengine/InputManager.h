@@ -79,7 +79,7 @@ namespace dae
 		bool KeyboardInput();
 		bool InputHandler();
 		void ControllerAnalogs();
-		void BindCommands();
+		//void BindCommands();
 
 		//----------------------------------------------------------------------------------------------
 		//button template

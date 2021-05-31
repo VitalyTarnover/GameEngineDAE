@@ -1,19 +1,2 @@
-﻿  pch.cpp
-  BaseAnalogStickCommand.cpp
-  BaseAnalogTriggerCommand.cpp
-  BaseCommand.cpp
-  Components.cpp
-  Font.cpp
-  GameObject.cpp
-  InputManager.cpp
-  Renderer.cpp
-  ResourceManager.cpp
-  Scene.cpp
-  SceneManager.cpp
-  Subject.cpp
-  SystemTime.cpp
-  Texture2D.cpp
-  Transform.cpp
-  TVDengine.cpp
-  Generating Code...
+﻿  InputManager.cpp
   TVDengine.vcxproj -> D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\x64\Debug\TVDengine.lib
