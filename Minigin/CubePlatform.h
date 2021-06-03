@@ -32,8 +32,12 @@ public:
 
 	bool GetState2() const { return m_State2; }
 	void SetState2(bool newState) { m_State2 = newState; }
+	
 	bool GetState3() const { return m_State3; }
 	void SetState3(bool newState) { m_State3 = newState; }
+	
+	bool GetHasDiscNextToIt() const { return m_HasDiscNextToIt; }
+	void SetHasDiscNextToIt(bool hasDisc) { m_HasDiscNextToIt = hasDisc; }
 
 
 private:
@@ -45,4 +49,5 @@ private:
 	bool m_State1 = true;
 	bool m_State2 = false;
 	bool m_State3 = false;
+	bool m_HasDiscNextToIt = false;
 };

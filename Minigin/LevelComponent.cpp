@@ -4,7 +4,7 @@
 #include "SceneManager.h"
 #include "MovementComponent.h"
 #include "LevelFileReader.h"
-
+#include "CollisionCheckManager.h"
 
 //Static variables Init
 const int m_MaxCubes = 28;
@@ -50,6 +50,7 @@ void LevelComponent::CreateMap(dae::Scene& scene)
 
     //CreateDisc(glm::vec3{ 100,100,100 }, scene);
 
+    //here
     LevelFileReader LFR("Resources/Level.txt");
     std::vector<glm::vec3>cubePositions = LFR.ReadGetPositions();
 
@@ -74,14 +75,22 @@ void LevelComponent::CreateMap(dae::Scene& scene)
         row--;
     }
 
+    int leftSideCubeIndex = leftSideIndices[rand() % 7];
+    int rightSideCubeIndex = rightSideIndices[rand() % 6];
 
-    glm::vec3 disc1Pos = m_Cubes[leftSideIndices[rand() % 7]]->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-    glm::vec3 disc2Pos = m_Cubes[rightSideIndices[rand() % 6]]->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+    glm::vec3 disc1Pos = m_Cubes[leftSideCubeIndex]->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+  
+    glm::vec3 disc2Pos = m_Cubes[rightSideCubeIndex]->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+
+
     disc1Pos.x -= m_Offset.x;
     disc2Pos.x += m_Offset.x * 2;
 
     CreateDisc(disc1Pos, scene);
+    m_Cubes[leftSideCubeIndex]->SetHasDiscNextToIt(true);
     CreateDisc(disc2Pos, scene);
+    m_Cubes[rightSideCubeIndex]->SetHasDiscNextToIt(true);
+
     
     
 
@@ -139,7 +148,7 @@ void LevelComponent::Render()
     }
 }
 
-bool LevelComponent::GetNextCubeIndex(int& currentIndex, const AnimStates& dir) const
+bool LevelComponent::GetNextCubeIndex(int& currentIndex, const AnimStates& dir) const//needs reworking
 {
     int columnIndex = GetColumnNumber(currentIndex);
 
@@ -301,11 +310,12 @@ void LevelComponent::CreateCube(const size_t& index, const glm::vec3& pos, dae::
 
 void LevelComponent::CreateDisc(const glm::vec3& pos, dae::Scene& scene)
 {
-    m_Discs.push_back(std::make_shared<DiscPlatform>());
+    m_Discs.push_back(std::make_shared<DiscPlatform>(m_Cubes[0]->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition()));
     auto newDisc = m_Discs[m_Discs.size() - 1]->GetGameObject();
     
-    newDisc->AddComponent(new TransformComponent(pos));
+    newDisc->AddComponent(new TransformComponent(pos, glm::vec2{ 18,8 }));
     newDisc->AddComponent(new Texture2DComponent("disc.png", m_Scale));
     newDisc->AddComponent(new SpriteAnimComponent(4));
+    CollisionCheckManager::GetInstance().AddObjectForCheck(newDisc);
     scene.Add(newDisc);
 }

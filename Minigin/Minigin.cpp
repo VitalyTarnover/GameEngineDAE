@@ -17,6 +17,7 @@
 #include "Commands.h"
 #include "AnalogStickCommand.h"
 #include "AnalogTriggerCommand.h"
+#include "CollisionCheckManager.h"
 
 #include "AudioLocator.h"
 
@@ -128,7 +129,7 @@ void dae::Minigin::LoadGame() const
 	startPosition.y -= scene.GetSceneScale() * 10.f;
 
 	auto qbert = std::make_shared<GameObject>("Q*Bert");
-	qbert->AddComponent(new TransformComponent(startPosition));
+	qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{16,21}));
 	qbert->AddComponent(new HealthComponent(3));
 	qbert->AddComponent(new ScoreComponent(0));
 	qbert->AddWatcher(new LivesObserver());
@@ -136,10 +137,9 @@ void dae::Minigin::LoadGame() const
 	qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
 	qbert->AddComponent(new SpriteAnimComponent(8));
 	qbert->AddComponent(new MovementComponent());
+	CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
 	scene.Add(qbert);
 	scene.AddPlayer(qbert);
-
-
 
 
 }
@@ -183,6 +183,8 @@ void dae::Minigin::Run()
 		input.ProcessInput();
 		input.ControllerAnalogs();
 		input.InputHandler();
+		CollisionCheckManager::GetInstance().Update();
+
 
 		doContinue = input.KeyboardInput();
 

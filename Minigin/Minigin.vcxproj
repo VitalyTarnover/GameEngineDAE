@@ -216,6 +216,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="AudioNullService.h" />
     <ClInclude Include="AudioService.h" />
     <ClInclude Include="AudioServiceProvider.h" />
+    <ClInclude Include="CollisionCheckManager.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="CubePlatform.h" />
     <ClInclude Include="DiscPlatform.h" />
@@ -229,6 +230,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioServiceProvider.cpp" />
+    <ClCompile Include="CollisionCheckManager.cpp" />
     <ClCompile Include="CubePlatform.cpp" />
     <ClCompile Include="DiscPlatform.cpp" />
     <ClCompile Include="LevelComponent.cpp" />

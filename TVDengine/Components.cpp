@@ -9,9 +9,12 @@ void BaseComponent::SetOwnerObject(GameObject* pGameObject)
 	m_pGameObject = pGameObject;
 }
 
-TransformComponent::TransformComponent(const glm::vec3& pos)
+
+TransformComponent::TransformComponent(const glm::vec3& pos, const glm::vec2& scale)
+	:m_SpriteRect{ SDL_Rect{(int)pos.x,(int)pos.y,(int)scale.x,(int)scale.y} }
 {
 	m_Transform.SetPosition(pos.x, pos.y, pos.z);
+	m_Transform.SetScale(scale.x, scale.y);
 }
 
 dae::Transform TransformComponent::GetTransform() const

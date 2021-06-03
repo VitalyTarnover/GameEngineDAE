@@ -2,7 +2,7 @@
 #include "Texture2D.h"
 #include "Transform.h"
 #include "ResourceManager.h"
-//#include <glm\vec2.hpp>
+#include <glm\vec2.hpp>
 //#include "Scene.h"
 
 #include "Renderer.h"
@@ -30,16 +30,29 @@ protected:
 class TransformComponent final : public BaseComponent
 {
 public:
-	TransformComponent(const glm::vec3& pos);
+	TransformComponent(const glm::vec3& pos, const glm::vec2& scale = glm::vec2{ 1,1 });
 
 	dae::Transform GetTransform() const;
 	//void SetTransform(const glm::vec3& newTransform) { m_Transform.SetPosition(newTransform.x, newTransform.y, newTransform.z);  };
-	void SetPosition(const glm::vec3& position)
-	{
-		m_Transform.SetPosition(position.x, position.y, 0);
+	void SetPosition(const glm::vec3& position) 
+	{ 
+		m_SpriteRect.x = (int)position.x;
+		m_SpriteRect.y = (int)position.y;
+		m_Transform.SetPosition(position.x, position.y, 0); 
 	}
+
+	void SetScale(const glm::vec2& scale)
+	{
+		m_SpriteRect.w = (int)scale.x;
+		m_SpriteRect.h = (int)scale.y;
+		m_Transform.SetScale(scale.x, scale.y);
+	}
+
+	const SDL_Rect& GetRect() { return m_SpriteRect; }
+
 private:
 	dae::Transform m_Transform;
+	SDL_Rect m_SpriteRect;
 };
 
 class Texture2DComponent final : public BaseComponent

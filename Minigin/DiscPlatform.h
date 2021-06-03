@@ -6,7 +6,7 @@
 class DiscPlatform
 {
 public:
-	DiscPlatform();
+	DiscPlatform(const glm::vec3& finalPos);
 
 	DiscPlatform(const DiscPlatform& other) = delete;
 	DiscPlatform(DiscPlatform&& other) = delete;
@@ -19,12 +19,22 @@ public:
 
 	std::shared_ptr<GameObject> GetGameObject() const { return m_pGameObject; };
 
+	void SetIsMovingToTop(bool isMoving) { m_IsMovingToTop = isMoving; }
+
 private:
 	void SwitchColors();
+	void MoveToTheTop();
 
 	std::shared_ptr<GameObject> m_pGameObject = nullptr;
+	TransformComponent* m_pTransformComponent = nullptr;
+	
 	float m_AnimTimer = 0;
-	float m_AnimTime = 0.5f;
+	float m_AnimTime = 0.2f;
 
+	float m_Speed = 3.f;
+
+	glm::vec3 m_FinalPos;
+
+	bool m_IsMovingToTop = false;
 };
 

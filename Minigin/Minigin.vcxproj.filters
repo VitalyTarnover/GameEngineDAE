@@ -81,6 +81,9 @@
     <ClInclude Include="LevelFileReader.h">
       <Filter>LevelFileReader</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionCheckManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
@@ -115,6 +118,9 @@
     </ClCompile>
     <ClCompile Include="LevelFileReader.cpp">
       <Filter>LevelFileReader</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionCheckManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

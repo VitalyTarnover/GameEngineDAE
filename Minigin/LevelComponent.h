@@ -19,7 +19,7 @@ public:
 
 	void Render() override;
 
-	std::shared_ptr<CubePlatform> GetCube(int index) { return m_Cubes[index]; }
+	std::shared_ptr<CubePlatform> GetCube(int index) const { return m_Cubes[index]; }
 
 	bool GetNextCubeIndex(int& currentIndex, const AnimStates& dir) const; //False if Qbert jumps off the map
 
@@ -29,6 +29,7 @@ public:
 
 	void TeleportPlayersToSpawnPos();
 
+	std::shared_ptr<DiscPlatform> GetDisc(int index) { return m_Discs[index];}
 private:
 	void Initialize(dae::Scene& scene);
 	void CreateMap(dae::Scene& scene);
