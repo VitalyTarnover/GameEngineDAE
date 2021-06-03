@@ -25,8 +25,11 @@
     <Filter Include="Components">
       <UniqueIdentifier>{09b58ffd-556f-462f-ae14-03ebb70f0828}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CubePlatform">
+    <Filter Include="Platforms">
       <UniqueIdentifier>{3e60f8d2-ca3e-46ca-9a67-2832ed4025d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LevelFileReader">
+      <UniqueIdentifier>{a843aa12-056f-401d-9231-68d56289dd98}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -67,10 +70,16 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="CubePlatform.h">
-      <Filter>CubePlatform</Filter>
+      <Filter>Platforms</Filter>
     </ClInclude>
     <ClInclude Include="Commands.h">
-      <Filter>Header Files</Filter>
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="DiscPlatform.h">
+      <Filter>Platforms</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelFileReader.h">
+      <Filter>LevelFileReader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -99,7 +108,13 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="CubePlatform.cpp">
-      <Filter>CubePlatform</Filter>
+      <Filter>Platforms</Filter>
+    </ClCompile>
+    <ClCompile Include="DiscPlatform.cpp">
+      <Filter>Platforms</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelFileReader.cpp">
+      <Filter>LevelFileReader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

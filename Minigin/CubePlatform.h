@@ -29,8 +29,13 @@ public:
 	{ m_CurrentGameLevel = gameLevel; }
 	std::shared_ptr<GameObject> GetGameObject() const { return m_pGameObject; };
 
-	bool m_State2 = false;
-	bool m_State3 = false;
+
+	bool GetState2() const { return m_State2; }
+	void SetState2(bool newState) { m_State2 = newState; }
+	bool GetState3() const { return m_State3; }
+	void SetState3(bool newState) { m_State3 = newState; }
+
+
 private:
 
 	std::shared_ptr<GameObject> m_pGameObject = nullptr;
@@ -38,4 +43,6 @@ private:
 	GameLevel m_CurrentGameLevel = GameLevel::Level1;
 
 	bool m_State1 = true;
+	bool m_State2 = false;
+	bool m_State3 = false;
 };

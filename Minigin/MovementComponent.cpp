@@ -7,7 +7,7 @@
 #include "SystemTime.h"
 
 MovementComponent::MovementComponent()
-	: m_Speed{ 500 }
+	: m_Speed{ 100 }
 	, m_IsMoving{ false }
 	, m_CurrentCubeIndex{ 0 }
 	, m_FallingToDeath{ false }
@@ -135,7 +135,7 @@ void MovementComponent::ActivateJump()
 
 	const auto& CurrentMap = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>();
 
-	if (!CurrentMap->GetNextCubeIndex(m_CurrentCubeIndex, m_Direction))
+	if (!CurrentMap->GetNextCubeIndex(m_CurrentCubeIndex, m_Direction))//check for disc here
 		m_FallingToDeath = true;
 
 }

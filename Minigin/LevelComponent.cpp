@@ -3,7 +3,8 @@
 #include "Renderer.h"
 #include "SceneManager.h"
 #include "MovementComponent.h"
-#include "Scene.h"
+#include "LevelFileReader.h"
+
 
 //Static variables Init
 const int m_MaxCubes = 28;
@@ -26,7 +27,7 @@ LevelComponent::LevelComponent(dae::Scene& scene, const glm::vec3& firstCubePos,
 
         m_MostRightBlocks[i] = i;
 
-        m_LowestBlocks[i] = lowestBlockIndex; // +1 because its the bottom
+        m_LowestBlocks[i] = lowestBlockIndex; 
         lowestBlockIndex += 6 - i;
     }
 
@@ -46,27 +47,66 @@ void LevelComponent::Initialize(dae::Scene& scene)
 void LevelComponent::CreateMap(dae::Scene& scene)
 {
     //16x24
-    int indexCounter = 0;
-    int rowCubeCount = m_FirstRowCubeCount;
-    glm::vec2 highestCubePos = m_HighestCubePos;
 
-    for (size_t j = 0; j < m_CubeColumnCount; j++)
+    //CreateDisc(glm::vec3{ 100,100,100 }, scene);
+
+    LevelFileReader LFR("Resources/Level.txt");
+    std::vector<glm::vec3>cubePositions = LFR.ReadGetPositions();
+
+
+    for (size_t i = 0; i < cubePositions.size(); i++)
     {
-        for (size_t i = 0; i < rowCubeCount; i++)
-        {
-
-            glm::vec2 pos = highestCubePos;
-            pos.x += m_Offset.x * i;
-            pos.y += m_Offset.y * i;
-
-            CreateCube(indexCounter, glm::vec3(pos.x, pos.y, 0), scene);
-            indexCounter++;
-        }
-        highestCubePos.x -= m_Offset.x;
-        highestCubePos.y += m_Offset.y;
-
-        rowCubeCount--;
+        CreateCube(i, glm::vec3(cubePositions[i].x * m_Scale + m_HighestCubePos.x, cubePositions[i].y * m_Scale + m_HighestCubePos.y, 0), scene);
     }
+    
+    int index = 0;
+    int row = 7;
+    std::vector<int> leftSideIndices;
+    std::vector<int> rightSideIndices;
+    for (int i = 0; i < 7; i++)
+    {
+        index += i;
+
+        leftSideIndices.push_back(i * row + index);
+
+        if (i != 0) rightSideIndices.push_back(i);
+        
+        row--;
+    }
+
+
+    glm::vec3 disc1Pos = m_Cubes[leftSideIndices[rand() % 7]]->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+    glm::vec3 disc2Pos = m_Cubes[rightSideIndices[rand() % 6]]->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+    disc1Pos.x -= m_Offset.x;
+    disc2Pos.x += m_Offset.x * 2;
+
+    CreateDisc(disc1Pos, scene);
+    CreateDisc(disc2Pos, scene);
+    
+    
+
+
+    //int indexCounter = 0;
+    //int rowCubeCount = m_FirstRowCubeCount;
+    //glm::vec2 highestCubePos = m_HighestCubePos;
+    //
+    //for (size_t j = 0; j < m_CubeColumnCount; j++)
+    //{
+    //    for (size_t i = 0; i < rowCubeCount; i++)
+    //    {
+    //
+    //        glm::vec2 pos = highestCubePos;
+    //        pos.x += m_Offset.x * i;
+    //        pos.y += m_Offset.y * i;
+    //
+    //        CreateCube(indexCounter, glm::vec3(pos.x, pos.y, 0), scene);
+    //        indexCounter++;
+    //    }
+    //    highestCubePos.x -= m_Offset.x;
+    //    highestCubePos.y += m_Offset.y;
+    //
+    //    rowCubeCount--;
+    //}
 }
 
 
@@ -78,6 +118,13 @@ void LevelComponent::Update()
         if (cube)
             cube->Update();
     }
+
+    for (auto& disc : m_Discs)
+    {
+        if (disc)
+            disc->Update();
+    }
+
 
     LevelCompletedCheck();
 
@@ -161,7 +208,7 @@ void LevelComponent::LevelCompletedCheck()
     {
         for (auto& cube : m_Cubes)
         {
-            if (!cube->m_State2)
+            if (!cube->GetState2())
                 return;
         }
 
@@ -175,7 +222,7 @@ void LevelComponent::LevelCompletedCheck()
     {
         for (auto& cube : m_Cubes)
         {
-            if (!cube->m_State3)
+            if (!cube->GetState3())
                 return;
         }
 
@@ -189,7 +236,7 @@ void LevelComponent::LevelCompletedCheck()
     {
         for (auto& cube : m_Cubes)
         {
-            if (!cube->m_State2)
+            if (!cube->GetState2())
                 return;
         }
 
@@ -244,10 +291,21 @@ void LevelComponent::CreateCube(const size_t& index, const glm::vec3& pos, dae::
 {
 
     m_Cubes[index] = std::make_shared<CubePlatform>();
-    auto gameObj = m_Cubes[index]->GetGameObject();
-    gameObj->AddComponent(new TransformComponent(pos));
-    gameObj->AddComponent(new Texture2DComponent("CubePlatforms.png", m_Scale));//CubePlatform1
-    gameObj->AddComponent(new SpriteAnimComponent(3));
-    scene.Add(gameObj);
+    auto newCube = m_Cubes[index]->GetGameObject();
+    newCube->AddComponent(new TransformComponent(pos));
+    newCube->AddComponent(new Texture2DComponent("CubePlatforms.png", m_Scale));
+    newCube->AddComponent(new SpriteAnimComponent(3));
+    scene.Add(newCube);
 
+}
+
+void LevelComponent::CreateDisc(const glm::vec3& pos, dae::Scene& scene)
+{
+    m_Discs.push_back(std::make_shared<DiscPlatform>());
+    auto newDisc = m_Discs[m_Discs.size() - 1]->GetGameObject();
+    
+    newDisc->AddComponent(new TransformComponent(pos));
+    newDisc->AddComponent(new Texture2DComponent("disc.png", m_Scale));
+    newDisc->AddComponent(new SpriteAnimComponent(4));
+    scene.Add(newDisc);
 }

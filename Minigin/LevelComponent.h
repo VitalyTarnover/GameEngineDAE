@@ -5,6 +5,8 @@
 #include "Scene.h"
 #include <SDL.h>
 #include "CubePlatform.h"
+#include "DiscPlatform.h"
+#include <vector>
 
 class LevelComponent : public BaseComponent
 {
@@ -31,6 +33,7 @@ private:
 	void Initialize(dae::Scene& scene);
 	void CreateMap(dae::Scene& scene);
 	void CreateCube(const size_t& index, const glm::vec3& pos, dae::Scene& scene);
+	void CreateDisc(const glm::vec3& pos, dae::Scene& scene);
 
 	int GetColumnNumber(const int& currentTileIndex) const;
 
@@ -49,5 +52,7 @@ private:
 	int m_MostRightBlocks[m_SideLength];
 	int m_LowestBlocks[m_SideLength];
 	std::shared_ptr<CubePlatform> m_Cubes[m_MaxCubes];
+
+	std::vector<std::shared_ptr<DiscPlatform>> m_Discs;
 
 };

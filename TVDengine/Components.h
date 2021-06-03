@@ -57,7 +57,7 @@ private:
 };
 
 //for frames of characters
-enum class AnimStates
+enum class AnimStates//this can have different names
 {
 	//characters
 	OnPlatformRightDown = 0,
@@ -72,6 +72,11 @@ enum class AnimStates
 	PinkFirst = 0,
 	BlueSecond = 1,
 	GreenThird = 2,
+	//disc
+	DiscState1 = 0,
+	DiscState2 = 1,
+	DiscState3 = 2,
+	DiscState4 = 3,
 };
 
 
@@ -93,7 +98,7 @@ public:
 	};
 
 	AnimStates GetCurrentAnimState() const { return m_CurrentState; };
-
+	int GetCoumnsNr() const { return m_ColumnsNr; }
 private:
 	std::shared_ptr<dae::Texture2D> m_spTexture2D{};
 	AnimStates m_CurrentState = AnimStates::OnPlatformRightDown;

@@ -14,7 +14,6 @@
 #include "LivesObserver.h"
 #include "LevelComponent.h"
 #include "MovementComponent.h"
-#include <thread>
 #include "Commands.h"
 #include "AnalogStickCommand.h"
 #include "AnalogTriggerCommand.h"
@@ -88,6 +87,8 @@ void dae::Minigin::Initialize()
  */
 void dae::Minigin::LoadGame() const
 {
+	srand(int(time(NULL)));
+
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 
 	//background
@@ -114,7 +115,7 @@ void dae::Minigin::LoadGame() const
 
 
 	auto level = std::make_shared<GameObject>("Level");
-	level->AddComponent(new LevelComponent(scene, glm::vec3(670, 200, 0), scene.GetSceneScale()));
+	level->AddComponent(new LevelComponent(scene, glm::vec3(670, 200, 0), scene.GetSceneScale()));//670, 200, 0
 	scene.Add(level);
 	scene.AddLevel(level);
 	scene.SetCurrentLevel(level);
@@ -137,6 +138,9 @@ void dae::Minigin::LoadGame() const
 	qbert->AddComponent(new MovementComponent());
 	scene.Add(qbert);
 	scene.AddPlayer(qbert);
+
+
+
 
 }
 
