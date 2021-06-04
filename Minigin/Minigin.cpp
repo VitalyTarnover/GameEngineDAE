@@ -129,7 +129,7 @@ void dae::Minigin::LoadGame() const
 	startPosition.y -= scene.GetSceneScale() * 10.f;
 
 	auto qbert = std::make_shared<GameObject>("Q*Bert");
-	qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{16,21}));
+	qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{15,15}));//16,21
 	qbert->AddComponent(new HealthComponent(3));
 	qbert->AddComponent(new ScoreComponent(0));
 	qbert->AddWatcher(new LivesObserver());

@@ -7,7 +7,7 @@
 #include "SystemTime.h"
 
 MovementComponent::MovementComponent()
-	: m_Speed{ 150 }
+	: m_Speed{ 550 }
 	, m_IsMoving{ false }
 	, m_CurrentCubeIndex{ 0 }
 	, m_FallingToDeath{ false }
@@ -192,51 +192,64 @@ void MovementComponent::FallToDeath()
 	else transform->SetPosition(glm::vec3(pos.x,pos.y,0));
 }
 
-void MovementComponent::JumpOnDisc()//jump on it
+void MovementComponent::JumpOnDisc()
 {
 	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
 
 	if (!m_pDiscTransform)
 	{
-		float elapsedTime = SystemTime::GetInstance().GetDeltaTime();
-
-		glm::vec3 pos = transform->GetTransform().GetPosition();
-
-		const float moveDistRatio = (m_MoveDistance.y / m_MoveDistance.x);
-
-		float jumpHeight = m_MoveDistance.y / 2.0f;
-
-		const glm::vec2 speed = { m_Speed,m_Speed * moveDistRatio * (m_MoveDistance.y / jumpHeight) };
-
-		if (m_Direction == AnimStates::MidAirRightDown || m_Direction == AnimStates::MidAirRightUp)
-			pos.x += elapsedTime * speed.x;
-		else
-			pos.x -= elapsedTime * speed.x;
-
-		jumpHeight = m_MoveDistance.y * 1.5f;
-
-		if (m_FirstHalfOfTheJump)
+		if (m_IsOnDisc)
 		{
-			pos.y -= elapsedTime * speed.y;
-
-			if (abs(pos.y - m_JumpStartPos.y) > jumpHeight)
-				m_FirstHalfOfTheJump = false;
-		}
-		else pos.y += elapsedTime * speed.y;
-
-		if (pos.y > 720)
-		{
-			m_IsMoving = false;
+		    dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->TeleportPlayersToSpawnPos();
+			m_CurrentCubeIndex = 0;
+			m_IsOnDisc = false;
+			m_JumpingOnDisc = false;
 			m_FallingToDeath = false;
 		}
-		else transform->SetPosition(glm::vec3(pos.x, pos.y, 0));
+		else
+		{
+			float elapsedTime = SystemTime::GetInstance().GetDeltaTime();
+
+			glm::vec3 pos = transform->GetTransform().GetPosition();
+
+			const float moveDistRatio = (m_MoveDistance.y / m_MoveDistance.x);
+
+			float jumpHeight = m_MoveDistance.y / 2.0f;
+
+			const glm::vec2 speed = { m_Speed,m_Speed * moveDistRatio * (m_MoveDistance.y / jumpHeight) };
+
+			if (m_Direction == AnimStates::MidAirRightDown || m_Direction == AnimStates::MidAirRightUp)
+				pos.x += elapsedTime * speed.x;
+			else
+				pos.x -= elapsedTime * speed.x;
+
+			jumpHeight = m_MoveDistance.y * 1.5f;
+
+			if (m_FirstHalfOfTheJump)
+			{
+				pos.y -= elapsedTime * speed.y;
+
+				if (abs(pos.y - m_JumpStartPos.y) > jumpHeight)
+					m_FirstHalfOfTheJump = false;
+			}
+			else pos.y += elapsedTime * speed.y;
+
+			if (pos.y > 720)
+			{
+				m_IsMoving = false;
+				m_FallingToDeath = false;
+			}
+			else transform->SetPosition(glm::vec3(pos.x, pos.y, 0));
+		}
+
 	}
 	else
 	{
-		m_CurrentCubeIndex = 0;
-		dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->TeleportPlayersToSpawnPos();
-		//map reset here or on collision.. wait not map reset, enemy sweep
-		//change animation mby?
+		m_IsOnDisc = true;
+		glm::vec3 newPos = m_pDiscTransform->GetTransform().GetPosition();
+		newPos.x += dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 1.f;
+		newPos.y -= dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 13.f;
+		transform->SetPosition(newPos);
 	}
 
 	

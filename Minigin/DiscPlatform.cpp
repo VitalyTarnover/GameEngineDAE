@@ -2,19 +2,18 @@
 #include "DiscPlatform.h"
 #include "SceneManager.h"
 #include "LevelComponent.h"
+#include "MovementComponent.h"
 #include <cmath>
 
 DiscPlatform::DiscPlatform(const glm::vec3& finalPos)
 	:m_FinalPos {finalPos}
 {
-
 	m_pGameObject = std::make_shared<GameObject>(("Disc"));
 
 	m_FinalPos.y -= 25 * dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale();
 	m_FinalPos.x += 5 * dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale();
 	//auto currentLevelComponent = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>();
 	//auto finalPos = currentLevelComponent->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-	
 	
 }
 
@@ -67,7 +66,7 @@ void DiscPlatform::MoveToTheTop()
 		glm::vec3 discPosition = m_pTransformComponent->GetTransform().GetPosition();
 
 		
-		if (abs(discPosition.x - m_FinalPos.x) > 5)
+		if (abs(discPosition.x - m_FinalPos.x) > 2)
 		{
 			//float newXPos = std::lerp(m_FinalPos.x, discPosition.x, m_MoveFactor);
 			//float newYPos = std::lerp(m_FinalPos.y, discPosition.y, m_MoveFactor);
@@ -83,6 +82,8 @@ void DiscPlatform::MoveToTheTop()
 		{
 			m_pTransformComponent->SetPosition(glm::vec3{ m_FinalPos.x, m_FinalPos.y, 0 });
 			m_IsMovingToTop = false;
+			m_IsUsed = true;
+			dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<MovementComponent>()->SetDiscTransform(nullptr);
 			//mby kill here
 			//dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->DeleteDisc(this);
 		}

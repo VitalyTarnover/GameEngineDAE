@@ -21,6 +21,9 @@ public:
 
 	void SetIsMovingToTop(bool isMoving) { m_IsMovingToTop = isMoving; }
 
+	bool GetIsUsed() { return m_IsUsed; }
+	void SetIsUsed(bool isUsed) { m_IsUsed = isUsed; }
+
 private:
 	void SwitchColors();
 	void MoveToTheTop();
@@ -39,5 +42,6 @@ private:
 	glm::vec3 m_Direction = glm::vec3{ 0,0,0 };
 
 	bool m_IsMovingToTop = false;
+	bool m_IsUsed = false;
 };
 

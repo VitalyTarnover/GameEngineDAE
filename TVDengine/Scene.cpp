@@ -10,8 +10,6 @@ using namespace dae;
 unsigned int Scene::m_IdCounter = 0;
 
 
-
-
 Scene::Scene(const std::string& name)
 	: m_Name(name)
 	, m_pCurrentLevel{}
@@ -27,22 +25,32 @@ void Scene::Add(const std::shared_ptr<SceneObject>& object)
 
 void Scene::DeleteGameObject(std::shared_ptr<SceneObject> objectToDelete)
 {
-	m_Objects.erase(std::remove(m_Objects.begin(), m_Objects.end(), objectToDelete), m_Objects.end());
+	for (size_t i = 0; i < m_Objects.size(); i++)
+	{
+		if (m_Objects[i] == objectToDelete)
+		{
+			
+			m_Objects.erase(m_Objects.begin() + i);
+
+		}
+	}
 }
 
 void Scene::Update()
 {
-	for (const auto& object : m_Objects)
+
+	for (size_t i = 0; i < m_Objects.size(); i++)
 	{
-		object->Update();
+		if (m_Objects[i]) m_Objects[i]->Update();
 	}
+
 }
 
 void Scene::Render() const
 {
 	for (const auto& object : m_Objects)
 	{
-		object->Render();
+		if (object) object->Render();
 	}
 }
 

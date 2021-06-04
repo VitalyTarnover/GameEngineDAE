@@ -10,7 +10,7 @@ class CollisionCheckManager final : public dae::Singleton<CollisionCheckManager>
 public:
 	void Update();
 	void AddObjectForCheck(std::shared_ptr<GameObject> gameObject);
-
+	void DeleteGameObject(std::shared_ptr<GameObject> gameObject);
 private:
 	bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2);
 	

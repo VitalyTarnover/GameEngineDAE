@@ -44,6 +44,18 @@ void CollisionCheckManager::AddObjectForCheck(std::shared_ptr<GameObject> gameOb
 	else m_pGameObjectsToCheck.push_back(gameObject);
 }
 
+void CollisionCheckManager::DeleteGameObject(std::shared_ptr<GameObject> gameObject)
+{
+	for (size_t i = 0; i < m_pGameObjectsToCheck.size(); i++)
+	{
+		if (m_pGameObjectsToCheck[i] == gameObject)
+		{
+			m_pGameObjectsToCheck.erase(m_pGameObjectsToCheck.begin() + i);
+		}
+	}
+
+}
+
 bool CollisionCheckManager::CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2)
 {
 	if ((object1.x + object1.w) < object2.x || (object2.x + object2.w) < object1.x)	return false;

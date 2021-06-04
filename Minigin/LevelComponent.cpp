@@ -2,6 +2,7 @@
 #include "LevelComponent.h"
 #include "Renderer.h"
 #include "SceneManager.h"
+#include "Scene.h"
 #include "MovementComponent.h"
 #include "LevelFileReader.h"
 #include "CollisionCheckManager.h"
@@ -48,11 +49,7 @@ void LevelComponent::Initialize(dae::Scene& scene)
 
 void LevelComponent::CreateMap(dae::Scene& scene)
 {
-    //16x24
-
-    //CreateDisc(glm::vec3{ 100,100,100 }, scene);
-
-    //here
+    
     LevelFileReader LFR("Resources/Level.txt");
     std::vector<glm::vec3>cubePositions = LFR.ReadGetPositions();
 
@@ -62,6 +59,13 @@ void LevelComponent::CreateMap(dae::Scene& scene)
         CreateCube(i, glm::vec3(cubePositions[i].x * m_Scale + m_HighestCubePos.x, cubePositions[i].y * m_Scale + m_HighestCubePos.y, 0), scene);
     }
     
+    SpawnDiscs();
+    
+}
+
+
+void LevelComponent::SpawnDiscs()
+{
     int index = 0;
     int row = 7;
     std::vector<int> leftSideIndices;
@@ -73,53 +77,33 @@ void LevelComponent::CreateMap(dae::Scene& scene)
         leftSideIndices.push_back(i * row + index);
 
         if (i != 0) rightSideIndices.push_back(i);
-        
+
         row--;
     }
 
-    int leftSideCubeIndex = leftSideIndices[rand() % 7];
-    int rightSideCubeIndex = rightSideIndices[rand() % 6];
+    int leftSideCubeIndex = leftSideIndices[rand() % 5 + 2];
+    int rightSideCubeIndex = rightSideIndices[rand() % 4 + 2];
 
     glm::vec3 disc1Pos = m_Cubes[leftSideCubeIndex]->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-  
+
     glm::vec3 disc2Pos = m_Cubes[rightSideCubeIndex]->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 
 
-    disc1Pos.x -= m_Offset.x;
-    disc2Pos.x += m_Offset.x * 2;
+    disc1Pos.x -= m_Offset.x * 1.5f;
+    disc2Pos.x += m_Offset.x * 2.5f;
 
-    CreateDisc(disc1Pos, scene);
+    for (auto& cube : m_Cubes) cube->SetHasDiscNextToIt(false);
+
+    for (auto& disc : m_Discs) disc->SetIsUsed(true);//
+
+    
+
+    CreateDisc(disc1Pos, *dae::SceneManager::GetInstance().GetCurrentScene());
     m_Cubes[leftSideCubeIndex]->SetHasDiscNextToIt(true);
-    CreateDisc(disc2Pos, scene);
+    CreateDisc(disc2Pos, *dae::SceneManager::GetInstance().GetCurrentScene());
     m_Cubes[rightSideCubeIndex]->SetHasDiscNextToIt(true);
 
-    
-    
-
-
-    //int indexCounter = 0;
-    //int rowCubeCount = m_FirstRowCubeCount;
-    //glm::vec2 highestCubePos = m_HighestCubePos;
-    //
-    //for (size_t j = 0; j < m_CubeColumnCount; j++)
-    //{
-    //    for (size_t i = 0; i < rowCubeCount; i++)
-    //    {
-    //
-    //        glm::vec2 pos = highestCubePos;
-    //        pos.x += m_Offset.x * i;
-    //        pos.y += m_Offset.y * i;
-    //
-    //        CreateCube(indexCounter, glm::vec3(pos.x, pos.y, 0), scene);
-    //        indexCounter++;
-    //    }
-    //    highestCubePos.x -= m_Offset.x;
-    //    highestCubePos.y += m_Offset.y;
-    //
-    //    rowCubeCount--;
-    //}
 }
-
 
 
 void LevelComponent::Update()
@@ -138,6 +122,7 @@ void LevelComponent::Update()
 
 
     LevelCompletedCheck();
+    DeleteUsedDiscs();
 
 }
 
@@ -209,6 +194,8 @@ void LevelComponent::SwitchGameLevel(GameLevel gameLevel)
         cube->ResetCubeState();
         cube->ChangeGameLevel(gameLevel);
     }
+
+    SpawnDiscs();
 }
 
 void LevelComponent::LevelCompletedCheck()
@@ -263,6 +250,7 @@ void LevelComponent::LevelCompletedCheck()
     
 
 }
+
 
 void LevelComponent::TeleportPlayersToSpawnPos()
 {
@@ -320,6 +308,27 @@ void LevelComponent::CreateDisc(const glm::vec3& pos, dae::Scene& scene)
     newDisc->AddComponent(new SpriteAnimComponent(4));
     CollisionCheckManager::GetInstance().AddObjectForCheck(newDisc);
     scene.Add(newDisc);
+}
+
+void LevelComponent::DeleteUsedDiscs()
+{
+    if (m_Discs.size() > 0)
+    {
+        for (size_t i = 0; i < m_Discs.size(); i++)
+        {
+            if (m_Discs[i])
+            {
+                if (m_Discs[i]->GetIsUsed())
+                {
+                    dae::SceneManager::GetInstance().GetCurrentScene()->DeleteGameObject(m_Discs[i]->GetGameObject());
+                    CollisionCheckManager::GetInstance().DeleteGameObject(m_Discs[i]->GetGameObject());
+                    m_Discs.erase(m_Discs.begin() + i);
+                }
+            }
+        }
+    }
+    
+
 }
 
 std::shared_ptr<DiscPlatform> LevelComponent::GetDisc(std::shared_ptr<GameObject> gameObject)

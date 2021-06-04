@@ -25,7 +25,6 @@ public:
 
 	void SwitchGameLevel(GameLevel gameLevel);
 
-	void LevelCompletedCheck();
 
 	void TeleportPlayersToSpawnPos();
 
@@ -40,8 +39,11 @@ private:
 	void CreateMap(dae::Scene& scene);
 	void CreateCube(const size_t& index, const glm::vec3& pos, dae::Scene& scene);
 	void CreateDisc(const glm::vec3& pos, dae::Scene& scene);
-
+	void DeleteUsedDiscs();
 	int GetColumnNumber(const int& currentTileIndex) const;
+	void LevelCompletedCheck();
+	void SpawnDiscs();
+
 
 	const static int m_MaxCubes = 28;
 

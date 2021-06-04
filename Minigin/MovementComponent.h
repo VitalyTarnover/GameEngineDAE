@@ -37,12 +37,14 @@ public:
 
 	TransformComponent* GetDiscTransform() { return m_pDiscTransform; }
 	void SetDiscTransform(TransformComponent* discTC) { m_pDiscTransform = discTC; }
+	//bool SetIsOnDisc(bool onDisc) { m_IsOnDisc = onDisc; }
 
 private:
 	MoveDirections m_MoveDirection;
 	bool m_IsMoving;
 	bool m_FallingToDeath;
-	bool m_JumpingOnDisc;//?
+	bool m_JumpingOnDisc;
+	bool m_IsOnDisc;
 	glm::vec3 m_MoveDistance;
 	float m_Speed;
 	bool m_FirstHalfOfTheJump;
