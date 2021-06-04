@@ -2,14 +2,19 @@
 #include "DiscPlatform.h"
 #include "SceneManager.h"
 #include "LevelComponent.h"
+#include <cmath>
 
 DiscPlatform::DiscPlatform(const glm::vec3& finalPos)
 	:m_FinalPos {finalPos}
 {
+
 	m_pGameObject = std::make_shared<GameObject>(("Disc"));
-	
+
+	m_FinalPos.y -= 25 * dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale();
+	m_FinalPos.x += 5 * dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale();
 	//auto currentLevelComponent = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>();
 	//auto finalPos = currentLevelComponent->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+	
 	
 }
 
@@ -45,31 +50,42 @@ void DiscPlatform::SwitchColors()
 
 void DiscPlatform::MoveToTheTop()
 {
+	if (m_Direction == glm::vec3{ 0,0,0 })
+	{
+		auto dist = m_FinalPos - m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+
+		auto length = sqrt((dist.x * dist.x) + (dist.y * dist.y));
+
+		m_Direction.x = dist.x/length;
+		m_Direction.y = dist.y/length;
+	}
+
 	if (m_IsMovingToTop)
 	{
 		m_pTransformComponent = m_pGameObject->GetComponent<TransformComponent>();
 
 		glm::vec3 discPosition = m_pTransformComponent->GetTransform().GetPosition();
 
+		
 		if (abs(discPosition.x - m_FinalPos.x) > 5)
 		{
-			if (discPosition.x < m_FinalPos.x)//disc is on the left
-			{
-				m_pTransformComponent->SetPosition(glm::vec3{ discPosition.x + m_Speed, discPosition.y - m_Speed*2, 0 });
-			}
-			else if (discPosition.x > m_FinalPos.x)//disc is on the right
-			{
-				m_pTransformComponent->SetPosition(glm::vec3{ discPosition.x - m_Speed, discPosition.y - m_Speed*2, 0 });
-			}
+			//float newXPos = std::lerp(m_FinalPos.x, discPosition.x, m_MoveFactor);
+			//float newYPos = std::lerp(m_FinalPos.y, discPosition.y, m_MoveFactor);
+			//m_pTransformComponent->SetPosition(glm::vec3{ newXPos, newYPos, 0 });
+			//m_MoveFactor += SystemTime::GetInstance().GetDeltaTime() * m_Speed;
+
+			auto newPos = discPosition + m_Direction * m_Speed;
+
+			m_pTransformComponent->SetPosition(newPos);
+
 		}
 		else
 		{
-			//m_pTransformComponent->SetPosition(glm::vec3{ m_FinalPos.x, discPosition.y, 0 });
+			m_pTransformComponent->SetPosition(glm::vec3{ m_FinalPos.x, m_FinalPos.y, 0 });
 			m_IsMovingToTop = false;
+			//mby kill here
+			//dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->DeleteDisc(this);
 		}
 	}
-	
-	
-
 }
 

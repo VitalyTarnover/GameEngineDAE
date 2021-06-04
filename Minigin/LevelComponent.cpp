@@ -37,6 +37,8 @@ LevelComponent::LevelComponent(dae::Scene& scene, const glm::vec3& firstCubePos,
 }
 
 
+
+
 void LevelComponent::Initialize(dae::Scene& scene)
 {
     CreateMap(scene);
@@ -318,4 +320,21 @@ void LevelComponent::CreateDisc(const glm::vec3& pos, dae::Scene& scene)
     newDisc->AddComponent(new SpriteAnimComponent(4));
     CollisionCheckManager::GetInstance().AddObjectForCheck(newDisc);
     scene.Add(newDisc);
+}
+
+std::shared_ptr<DiscPlatform> LevelComponent::GetDisc(std::shared_ptr<GameObject> gameObject)
+{
+    return *std::find_if(
+        m_Discs.begin(), m_Discs.end(),
+        [&](const std::shared_ptr<DiscPlatform>& x) 
+        { 
+             return x->GetGameObject() == gameObject; 
+        });
+}
+
+void LevelComponent::DeleteDisc(std::shared_ptr<DiscPlatform> discToDelte)
+{
+    m_Discs.erase(std::remove(m_Discs.begin(), m_Discs.end(), discToDelte), m_Discs.end());
+    dae::SceneManager::GetInstance().GetCurrentScene()->DeleteGameObject(discToDelte->GetGameObject());
+
 }

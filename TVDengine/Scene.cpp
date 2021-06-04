@@ -10,6 +10,8 @@ using namespace dae;
 unsigned int Scene::m_IdCounter = 0;
 
 
+
+
 Scene::Scene(const std::string& name)
 	: m_Name(name)
 	, m_pCurrentLevel{}
@@ -21,6 +23,11 @@ Scene::Scene(const std::string& name)
 void Scene::Add(const std::shared_ptr<SceneObject>& object)
 {
 	m_Objects.push_back(object);
+}
+
+void Scene::DeleteGameObject(std::shared_ptr<SceneObject> objectToDelete)
+{
+	m_Objects.erase(std::remove(m_Objects.begin(), m_Objects.end(), objectToDelete), m_Objects.end());
 }
 
 void Scene::Update()
@@ -67,8 +74,6 @@ void Scene::AddPlayer(const std::shared_ptr<GameObject>& player)
 	m_pPlayers.push_back(player);
 	m_PlayerSpawnPos = player->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 }
-
-
 
 
 std::shared_ptr<GameObject> Scene::GetPlayer(int index)

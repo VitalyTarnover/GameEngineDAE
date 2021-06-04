@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "GameObject.h"
 
+
 enum class GameLevel//different games can have different amount of levels
 {
 	Level1,
@@ -50,6 +51,7 @@ namespace dae
 		void SetCurrentLevel(const std::shared_ptr<GameObject>& level) { m_pCurrentLevel = level; }
 		std::shared_ptr<GameObject> GetCurrentLevel() const { return m_pCurrentLevel; };
 
+		void DeleteGameObject(std::shared_ptr<SceneObject> objectToDelete);
 		
 
 	private:

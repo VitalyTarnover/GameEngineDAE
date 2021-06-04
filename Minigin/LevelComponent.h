@@ -30,6 +30,11 @@ public:
 	void TeleportPlayersToSpawnPos();
 
 	std::shared_ptr<DiscPlatform> GetDisc(int index) { return m_Discs[index];}
+
+	std::shared_ptr<DiscPlatform> GetDisc(std::shared_ptr<GameObject> gameObject);
+
+	void DeleteDisc(std::shared_ptr<DiscPlatform>);
+
 private:
 	void Initialize(dae::Scene& scene);
 	void CreateMap(dae::Scene& scene);

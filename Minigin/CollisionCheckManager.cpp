@@ -18,7 +18,7 @@ void CollisionCheckManager::Update()
 				//snap and move!
 				m_pQbert->GetComponent<MovementComponent>()->SetDiscTransform(otherGameObject->GetComponent<TransformComponent>());
 				//otherGameObject
-				dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->GetDisc(0)->SetIsMovingToTop(true);
+				dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->GetDisc(otherGameObject)->SetIsMovingToTop(true);
 			}
 			else if (otherGameObject->GetName() == "Ugg" 
 				|| otherGameObject->GetName() == "WrongWay" 

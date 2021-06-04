@@ -90,7 +90,7 @@ void dae::Minigin::LoadGame() const
 {
 	srand(int(time(NULL)));
 
-	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
+	auto& scene = SceneManager::GetInstance().CreateScene("Game");
 
 	//background
 	auto go = std::make_shared<GameObject>("Background");
@@ -173,6 +173,8 @@ void dae::Minigin::Run()
 	BindCommands();
 
 	std::thread audioThread (&AudioService::Update, &AudioLocator::GetAudioService());
+
+
 
 	while (doContinue)
 	{

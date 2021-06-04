@@ -234,12 +234,9 @@ void MovementComponent::JumpOnDisc()//jump on it
 	else
 	{
 		m_CurrentCubeIndex = 0;
+		dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->TeleportPlayersToSpawnPos();
 		//map reset here or on collision.. wait not map reset, enemy sweep
 		//change animation mby?
-		glm::vec3 newPos = m_pDiscTransform->GetTransform().GetPosition();
-		newPos.x += dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 1.f;
-		newPos.y -= dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 13.f;
-		transform->SetPosition(newPos);
 	}
 
 	
