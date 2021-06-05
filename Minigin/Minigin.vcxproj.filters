@@ -37,6 +37,9 @@
     <Filter Include="CollisionChecker">
       <UniqueIdentifier>{446f6daf-1fe3-4f6e-bd8c-c2055f7ee9d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EnemyManager">
+      <UniqueIdentifier>{18bb07a4-e2d6-4a16-b374-1f7e963d75e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MiniginPCH.h">
@@ -96,6 +99,9 @@
     <ClInclude Include="CollisionCheckManager.h">
       <Filter>CollisionChecker</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>EnemyManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
@@ -139,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="CollisionCheckManager.cpp">
       <Filter>CollisionChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>EnemyManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -29,13 +29,13 @@ void LivesObserver::UpdateLives(const GameObject* actor)
 
 
 	//show Player Died
-	std::shared_ptr<dae::SceneObject> playerDiedGO = nullptr;
-
-	if (actor->GetName() == "Q*Bert") playerDiedGO = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName("Player 1 Died!");
-	else if (actor->GetName() == "Q*Bert2") playerDiedGO = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName("Player 2 Died!");
-
-
-	auto textCompPlayerDied = std::static_pointer_cast<GameObject>(playerDiedGO).get()->GetComponent<TextComponent>();
-	textCompPlayerDied->SetIsVisible(true, 5.0f);
+	//std::shared_ptr<dae::SceneObject> playerDiedGO = nullptr;
+	//
+	//if (actor->GetName() == "Q*Bert") playerDiedGO = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName("Player 1 Died!");
+	//else if (actor->GetName() == "Q*Bert2") playerDiedGO = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName("Player 2 Died!");
+	//
+	//
+	//auto textCompPlayerDied = std::static_pointer_cast<GameObject>(playerDiedGO).get()->GetComponent<TextComponent>();
+	//textCompPlayerDied->SetIsVisible(true, 5.0f);
 
 }

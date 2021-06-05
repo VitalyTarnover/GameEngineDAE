@@ -7,15 +7,12 @@
 #include "LevelFileReader.h"
 #include "CollisionCheckManager.h"
 
-//Static variables Init
-const int m_MaxCubes = 28;
-const int m_SideLength = 7;
 
 LevelComponent::LevelComponent(dae::Scene& scene, const glm::vec3& firstCubePos, float scale)
     :m_FirstRowCubeCount(7)
     , m_CubeColumnCount(7)
     , m_CubeSrcRect{ 0,160,32,32 }
-    , m_Offset{ 16, 24, 0 }//???
+    , m_Offset{ 16, 24, 0 }
     , m_HighestCubePos{ firstCubePos }
     , m_Scale{ scale }
 {

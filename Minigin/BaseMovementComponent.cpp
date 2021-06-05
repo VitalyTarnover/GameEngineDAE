@@ -165,6 +165,13 @@ void BaseMovementComponent::FallToDeath()
 	{
 		m_IsMoving = false;
 		m_FallingToDeath = false;
+
+		if (m_pGameObject->GetName() == "Q*bert")
+		{
+			auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
+			pPlayerActor.get()->GetComponent<HealthComponent>()->Die();
+		}
+		
 	}
 	else transform->SetPosition(glm::vec3(pos.x, pos.y, 0));
 }

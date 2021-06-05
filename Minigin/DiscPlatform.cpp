@@ -73,7 +73,7 @@ void DiscPlatform::MoveToTheTop()
 			//m_pTransformComponent->SetPosition(glm::vec3{ newXPos, newYPos, 0 });
 			//m_MoveFactor += SystemTime::GetInstance().GetDeltaTime() * m_Speed;
 
-			auto newPos = discPosition + m_Direction * m_Speed;
+			auto newPos = discPosition + m_Direction * m_Speed * SystemTime::GetInstance().GetDeltaTime();
 
 			m_pTransformComponent->SetPosition(newPos);
 

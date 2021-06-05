@@ -84,9 +84,6 @@ void dae::Minigin::Initialize()
 
 }
 
-/**
- * Code constructing the scene world starts here
- */
 void dae::Minigin::LoadGame() const
 {
 	srand(int(time(NULL)));
@@ -114,13 +111,25 @@ void dae::Minigin::LoadGame() const
 	scoreDisplay->AddComponent(scoreCounter);
 	scene.Add(scoreDisplay);
 
+	auto scoreDisplay2 = std::make_shared<GameObject>("ScoreDisplay2");
+	scoreDisplay2->AddComponent(new TransformComponent(glm::vec3(200, 70, 0)));
+	auto scoreCounter2 = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
+	scoreDisplay2->AddComponent(scoreCounter2);
+	scene.Add(scoreDisplay2);
+
+
 	//healths
 	auto healthsDisplay = std::make_shared<GameObject>("LivesDisplay");
 	healthsDisplay->AddComponent(new TransformComponent(glm::vec3(20, 100, 0)));
-	auto healthsCounter = new TextComponent("Lives: 0", font, SDL_Color{ 255,255,255 });
+	auto healthsCounter = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
 	healthsDisplay->AddComponent(healthsCounter);
 	scene.Add(healthsDisplay);
 
+	auto healthsDisplay2 = std::make_shared<GameObject>("LivesDisplay2");
+	healthsDisplay2->AddComponent(new TransformComponent(glm::vec3(200, 100, 0)));
+	auto healthsCounter2 = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
+	healthsDisplay2->AddComponent(healthsCounter2);
+	scene.Add(healthsDisplay2);
 
 
 	auto level = std::make_shared<GameObject>("Level");
@@ -132,22 +141,43 @@ void dae::Minigin::LoadGame() const
 
 	//q*bert
 	//Get first cube's position
-	glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-	startPosition.x += scene.GetSceneScale() * 8.f;
-	startPosition.y -= scene.GetSceneScale() * 10.f;
+	{
+		glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+		startPosition.x += scene.GetSceneScale() * 8.f;
+		startPosition.y -= scene.GetSceneScale() * 10.f;
 
-	auto qbert = std::make_shared<GameObject>("Q*Bert");
-	qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{15,15}));//16,21
-	qbert->AddComponent(new HealthComponent(3));
-	qbert->AddComponent(new ScoreComponent(0));
-	qbert->AddWatcher(new LivesObserver());
-	qbert->AddWatcher(new ScoreObserver());
-	qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
-	qbert->AddComponent(new SpriteAnimComponent(8));
-	qbert->AddComponent(new QbertMovementComponent());
-	CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
-	scene.Add(qbert);
-	scene.AddPlayer(qbert);
+		auto qbert = std::make_shared<GameObject>("Q*Bert");
+		qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));//16,21
+		qbert->AddComponent(new HealthComponent(3));
+		qbert->AddComponent(new ScoreComponent(0));
+		qbert->AddWatcher(new LivesObserver());
+		qbert->AddWatcher(new ScoreObserver());
+		qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
+		qbert->AddComponent(new SpriteAnimComponent(8));
+		qbert->AddComponent(new QbertMovementComponent());
+		CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
+		scene.Add(qbert);
+		scene.AddPlayer(qbert);
+	}
+
+	{
+		glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+		startPosition.x += scene.GetSceneScale() * 8.f;
+		startPosition.y -= scene.GetSceneScale() * 10.f;
+		
+		auto qbert = std::make_shared<GameObject>("Q*Bert2");
+		qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));//16,21
+		qbert->AddComponent(new HealthComponent(3));
+		qbert->AddComponent(new ScoreComponent(0));
+		qbert->AddWatcher(new LivesObserver());
+		qbert->AddWatcher(new ScoreObserver());
+		qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
+		qbert->AddComponent(new SpriteAnimComponent(8));
+		qbert->AddComponent(new QbertMovementComponent());
+		CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
+		scene.Add(qbert);
+		scene.AddPlayer(qbert);
+	}
 
 
 	//int    enemyWidth = 15;
@@ -168,16 +198,16 @@ void dae::Minigin::LoadGame() const
 	//	transfComp = new TransformComponent(glm::vec3(leftCubePos.x + enemyWidth * 0.5f, leftCubePos.y + enemyHeight,0), glm::vec2(enemyWidth, enemyHeight));
 	//	startOnLeftSide = false;
 	//}
-
+	//
 	//auto wrongWay = std::make_shared<GameObject>("WrongWay");
 	//wrongWay->AddComponent(transfComp);
 	//wrongWay->AddComponent(new HealthComponent(1));
 	//wrongWay->AddWatcher(new LivesObserver());
 	//wrongWay->AddComponent(new Texture2DComponent("WrongWay.png", scene.GetSceneScale()));//("WrongWay.png", 2, true)
-	//wrongWay->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::WrongWay, startOnLeftSide));
+	//wrongWay->AddComponent(new EnemyMovementComponent(scene.GetPlayer(0), EnemyMovementComponent::EnemyType::WrongWay, startOnLeftSide));
 	//wrongWay->AddComponent(new SpriteAnimComponent(8));
 	//scene.Add(wrongWay);
-	//scene.AddPlayer(wrongWay);
+	////scene.AddPlayer(wrongWay);//not needed
 	//CollisionCheckManager::GetInstance().AddObjectForCheck(wrongWay);
 
 	//auto coily = std::make_shared<GameObject>("Coily");
@@ -217,12 +247,6 @@ void dae::Minigin::LoadGame() const
 	//scene.Add(sam);
 	//scene.AddPlayer(sam);
 	//CollisionCheckManager::GetInstance().AddObjectForCheck(sam);
-
-
-
-
-
-
 
 }
 
@@ -286,23 +310,30 @@ void dae::Minigin::BindCommands()
 {
 	auto& input{ InputManager::GetInstance() };
 	//assign buttons
-	input.AssignKey<DieCommand>(ControllerButton::ButtonA);
-	input.AssignKey<IncreasePointsCommand>(ControllerButton::ButtonB);
-	input.AssignKey<DieCommand>(ControllerButton::ButtonX, 0);
-	input.AssignKey<IncreasePointsCommand>(ControllerButton::ButtonY, 0);
+	//input.AssignKey<DieCommand>(ControllerButton::ButtonA);
+	//input.AssignKey<IncreasePointsCommand>(ControllerButton::ButtonB);
+	//input.AssignKey<DieCommand>(ControllerButton::ButtonX, 0);
+	//input.AssignKey<IncreasePointsCommand>(ControllerButton::ButtonY, 0);
 	//move
-	input.AssignKey<JumpUp>(ControllerButton::ButtonUp);
-	input.AssignKey<JumpDown>(ControllerButton::ButtonDown);
-	input.AssignKey<JumpLeft>(ControllerButton::ButtonLeft);
-	input.AssignKey<JumpRight>(ControllerButton::ButtonRight);
+	//input.AssignKey<JumpUp>(ControllerButton::ButtonUp);
+	//input.AssignKey<JumpDown>(ControllerButton::ButtonDown);
+	//input.AssignKey<JumpLeft>(ControllerButton::ButtonLeft);
+	//input.AssignKey<JumpRight>(ControllerButton::ButtonRight);
 	//keyboard
 	input.AssignKey<JumpUp>(KeyboardButton::W);
 	input.AssignKey<JumpDown>(KeyboardButton::S);
 	input.AssignKey<JumpLeft>(KeyboardButton::A);
 	input.AssignKey<JumpRight>(KeyboardButton::D);
-	//
-	input.AssignKey<ExitCommand>(ControllerButton::ButtonSelect);
+	
+	input.AssignKey<JumpUpP2>(KeyboardButton::I);
+	input.AssignKey<JumpDownP2>(KeyboardButton::K);
+	input.AssignKey<JumpLeftP2>(KeyboardButton::J);
+	input.AssignKey<JumpRightP2>(KeyboardButton::L);
+
 	input.AssignKey<ExitCommand>(KeyboardButton::ESC);
+	input.AssignKey<SwitchSceneCommand>(KeyboardButton::P);
+	
+	//input.AssignKey<ExitCommand>(ControllerButton::ButtonSelect);
 	//AssignKey<FartCommand>(ControllerButton::ButtonStart);
 	//AssignKey<FartCommand>(ControllerButton::ButtonLeftThumb);
 	//AssignKey<FartCommand>(ControllerButton::ButtonRightThumb);
@@ -315,3 +346,4 @@ void dae::Minigin::BindCommands()
 	//input.AssignStick<MoveCommand>(m_Sticks[0].first);
 	//input.AssignStick<LookCommand>(m_Sticks[1].first);
 }
+

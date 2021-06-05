@@ -61,6 +61,13 @@ namespace dae
 
 		void DeleteGameObject(std::shared_ptr<SceneObject> objectToDelete);
 		
+		void ClearScene()
+		{
+			m_Objects.clear();
+			m_pPlayers.clear();
+			m_pLevels.clear();
+			m_pCurrentLevel = nullptr;
+		}
 
 	private:
 		explicit Scene(const std::string& name);

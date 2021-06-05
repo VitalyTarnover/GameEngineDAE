@@ -21,6 +21,10 @@ namespace dae
 		A = SDLK_a,
 		S = SDLK_s,
 		D = SDLK_d,
+		I = SDLK_i,
+		J = SDLK_j,
+		K = SDLK_k,
+		L = SDLK_l,
 		P = SDLK_p,
 		SPACE = SDLK_SPACE,
 		ESC = SDLK_ESCAPE
@@ -116,9 +120,13 @@ namespace dae
 		}
 		//----------------------------------------------------------------------------------------------
 
+		void SetExiting(bool exit) { m_Exiting = exit; };
+
 	private:
 		//Methods
 		bool IsPressed(ControllerButton button) const;
+
+		bool m_Exiting = false;
 
 		//Data Members
 		XINPUT_STATE m_CurrentState;

@@ -132,7 +132,7 @@ bool dae::InputManager::KeyboardInput()
 
 	if (SDL_PollEvent(&ev))
 	{
-		if (ev.type == SDL_QUIT)
+		if (ev.type == SDL_QUIT || m_Exiting)
 			return false;
 
 		if (ev.type == SDL_KEYDOWN)
