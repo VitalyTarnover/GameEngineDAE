@@ -25,8 +25,7 @@ public:
 	}
 
 	void SwitchColor(const std::string& playerName);
-	void ChangeGameLevel(GameLevel gameLevel) 
-	{ m_CurrentGameLevel = gameLevel; }
+	void ChangeGameLevel(GameLevel gameLevel) { m_CurrentGameLevel = gameLevel; }
 	std::shared_ptr<GameObject> GetGameObject() const { return m_pGameObject; };
 
 

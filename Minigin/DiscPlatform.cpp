@@ -2,7 +2,7 @@
 #include "DiscPlatform.h"
 #include "SceneManager.h"
 #include "LevelComponent.h"
-#include "MovementComponent.h"
+#include "QbertMovementComponent.h"
 #include <cmath>
 
 DiscPlatform::DiscPlatform(const glm::vec3& finalPos)
@@ -38,7 +38,7 @@ void DiscPlatform::SwitchColors()
 	else
 	{
 		auto animComp = m_pGameObject->GetComponent<SpriteAnimComponent>();
-		if (int(animComp->GetCurrentAnimState()) < int(animComp->GetCoumnsNr()) - 1)
+		if (int(animComp->GetCurrentAnimState()) < int(animComp->GetColumnsNr()) - 1)
 			animComp->SetAnimState( (AnimStates(int(animComp->GetCurrentAnimState()) + 1)) );
 		else animComp->SetAnimState(AnimStates::DiscState1);
 
@@ -83,7 +83,7 @@ void DiscPlatform::MoveToTheTop()
 			m_pTransformComponent->SetPosition(glm::vec3{ m_FinalPos.x, m_FinalPos.y, 0 });
 			m_IsMovingToTop = false;
 			m_IsUsed = true;
-			dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<MovementComponent>()->SetDiscTransform(nullptr);
+			dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<QbertMovementComponent>()->SetDiscTransform(nullptr);
 			//mby kill here
 			//dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->DeleteDisc(this);
 		}

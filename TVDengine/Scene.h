@@ -10,6 +10,13 @@ enum class GameLevel//different games can have different amount of levels
 	Level3
 };
 
+enum class GameMode
+{
+	SinglePlayer,
+	Coop,
+	Versus
+};
+
 
 namespace dae
 {
@@ -48,6 +55,7 @@ namespace dae
 			m_pCurrentLevel = level;
 		}
 		std::shared_ptr<GameObject> GetLevel(int index) const {return m_pLevels[index];}
+		
 		void SetCurrentLevel(const std::shared_ptr<GameObject>& level) { m_pCurrentLevel = level; }
 		std::shared_ptr<GameObject> GetCurrentLevel() const { return m_pCurrentLevel; };
 

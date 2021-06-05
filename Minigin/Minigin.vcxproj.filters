@@ -31,6 +31,12 @@
     <Filter Include="LevelFileReader">
       <UniqueIdentifier>{a843aa12-056f-401d-9231-68d56289dd98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\MovementComponents">
+      <UniqueIdentifier>{593c22f1-d164-4f35-aba0-ad680531f0d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CollisionChecker">
+      <UniqueIdentifier>{446f6daf-1fe3-4f6e-bd8c-c2055f7ee9d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MiniginPCH.h">
@@ -66,9 +72,6 @@
     <ClInclude Include="LevelComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="MovementComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="CubePlatform.h">
       <Filter>Platforms</Filter>
     </ClInclude>
@@ -81,8 +84,17 @@
     <ClInclude Include="LevelFileReader.h">
       <Filter>LevelFileReader</Filter>
     </ClInclude>
+    <ClInclude Include="BaseMovementComponent.h">
+      <Filter>Components\MovementComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyMovementComponent.h">
+      <Filter>Components\MovementComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="QbertMovementComponent.h">
+      <Filter>Components\MovementComponents</Filter>
+    </ClInclude>
     <ClInclude Include="CollisionCheckManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>CollisionChecker</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -107,9 +119,6 @@
     <ClCompile Include="LevelComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="MovementComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="CubePlatform.cpp">
       <Filter>Platforms</Filter>
     </ClCompile>
@@ -119,8 +128,17 @@
     <ClCompile Include="LevelFileReader.cpp">
       <Filter>LevelFileReader</Filter>
     </ClCompile>
+    <ClCompile Include="BaseMovementComponent.cpp">
+      <Filter>Components\MovementComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyMovementComponent.cpp">
+      <Filter>Components\MovementComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="QbertMovementComponent.cpp">
+      <Filter>Components\MovementComponents</Filter>
+    </ClCompile>
     <ClCompile Include="CollisionCheckManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>CollisionChecker</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

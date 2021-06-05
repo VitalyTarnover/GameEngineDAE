@@ -3,7 +3,7 @@
 #include "Renderer.h"
 #include "SceneManager.h"
 #include "Scene.h"
-#include "MovementComponent.h"
+#include "QbertMovementComponent.h"
 #include "LevelFileReader.h"
 #include "CollisionCheckManager.h"
 
@@ -105,14 +105,34 @@ void LevelComponent::SpawnDiscs()
 
 }
 
+void LevelComponent::FlashCubesOnCompletion()
+{
+    if(m_EntireFlashCubesTimer >= 0)
+    {
+        for (auto& cube : m_Cubes)
+        {
+            cube->GetGameObject()->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates(rand() % 3));//0,1,2
+        }
+    }
+    else
+    {
+        m_EntireFlashCubesTimer = m_EntireFlashCubesTime;
+    }
+
+    m_EntireFlashCubesTimer -= SystemTime::GetInstance().GetDeltaTime();
+    //m_FlashingCubes = false;
+
+}
+
 
 void LevelComponent::Update()
 {
-    for (auto& cube : m_Cubes)
-    {
-        if (cube)
-            cube->Update();
-    }
+    //unnecessary
+    //for (auto& cube : m_Cubes)
+    //{
+    //    if (cube)
+    //        cube->Update();
+    //}
 
     for (auto& disc : m_Discs)
     {
@@ -120,8 +140,12 @@ void LevelComponent::Update()
             disc->Update();
     }
 
+    if (m_FlashingCubes)
+    {
+        SwitchGameLevel(dae::SceneManager::GetInstance().GetCurrentScene()->GetGameLevel());
+    }
+    else LevelCompletedCheck();
 
-    LevelCompletedCheck();
     DeleteUsedDiscs();
 
 }
@@ -135,67 +159,199 @@ void LevelComponent::Render()
     }
 }
 
-bool LevelComponent::GetNextCubeIndex(int& currentIndex, const AnimStates& dir) const//needs reworking
+bool LevelComponent::JumpToNextCube(int& currentIndex, AnimStates dir, bool isSidewaysJump, int currentColumn, int currentRow) const//  const AnimStates& dir
 {
-    int columnIndex = GetColumnNumber(currentIndex);
+    //int columnIndex = GetColumnNumber(currentIndex);
+    //
+    //switch (dir)
+    //{
+    //case AnimStates::MidAirRightUp:
+    //{
+    //    for (size_t i = 0; i < m_SideLength; i++)
+    //        if (currentIndex == m_MostRightBlocks[i])
+    //            return false;
+    //
+    //    int columnIndexAfterJump = columnIndex - 1;
+    //    currentIndex -= m_FirstRowCubeCount - columnIndexAfterJump;
+    //
+    //    break;
+    //}
+    //case AnimStates::MidAirLeftUp:
+    //{
+    //    for (size_t i = 0; i < m_SideLength; i++)
+    //        if (currentIndex == m_MostLeftBlocks[i])
+    //            return false;
+    //
+    //    currentIndex--;
+    //
+    //    break;
+    //}
+    //case AnimStates::MidAirRightDown:
+    //{
+    //    for (size_t i = 0; i < m_SideLength; i++)
+    //        if (currentIndex == m_LowestBlocks[i])
+    //            return false;
+    //
+    //    currentIndex++;
+    //
+    //    break;
+    //}
+    //case AnimStates::MidAirLeftDown:
+    //{
+    //    for (size_t i = 0; i < m_SideLength; i++)
+    //        if (currentIndex == m_LowestBlocks[i])
+    //            return false;
+    //
+    //    currentIndex += m_FirstRowCubeCount - columnIndex;
+    //
+    //    break;
+    //}
+    //}
+    //
+    //return true;
 
-    switch (dir)
+    if (isSidewaysJump)
     {
-    case AnimStates::MidAirRightUp:
-    {
-        for (size_t i = 0; i < m_SideLength; i++)
-            if (currentIndex == m_MostRightBlocks[i])
+        int rowIndex = currentRow;
+
+        switch (dir)
+        {
+        case AnimStates::MidAirLeftDown:
+        {
+            if (currentColumn == 0)
+            {
                 return false;
-
-        int columnIndexAfterJump = columnIndex - 1;
-        currentIndex -= m_FirstRowCubeCount - columnIndexAfterJump;
-
-        break;
-    }
-    case AnimStates::MidAirLeftUp:
-    {
-        for (size_t i = 0; i < m_SideLength; i++)
-            if (currentIndex == m_MostLeftBlocks[i])
+            }
+            currentIndex += m_FirstRowCubeCount - rowIndex + currentColumn - 1;
+            break;
+        }
+        case AnimStates::MidAirRightUp:
+        {
+            if (currentColumn == rowIndex)
+            {
                 return false;
-
-        currentIndex--;
-
-        break;
-    }
-    case AnimStates::MidAirRightDown:
-    {
-        for (size_t i = 0; i < m_SideLength; i++)
-            if (currentIndex == m_LowestBlocks[i])
+            }
+            currentIndex -= m_FirstRowCubeCount - currentRow + currentColumn + 1;
+            break;
+        }
+        case AnimStates::MidAirLeftUp:
+        {
+            if (currentColumn == 0)
+            {
                 return false;
-
-        currentIndex++;
-
-        break;
-    }
-    case AnimStates::MidAirLeftDown:
-    {
-        for (size_t i = 0; i < m_SideLength; i++)
-            if (currentIndex == m_LowestBlocks[i])
+            }
+            --currentIndex;
+            break;
+        }
+        case AnimStates::MidAirRightDown:
+        {
+            if (currentColumn == rowIndex)
+            {
                 return false;
+            }
+            currentIndex -= m_FirstRowCubeCount - rowIndex + currentColumn;
+            break;
+        }
+        }
 
-        currentIndex += m_FirstRowCubeCount - columnIndex;
-
-        break;
+        return true;
     }
+    else
+    {
+        int rowIndex = GetRowNumber(currentIndex);
+
+        switch (dir)
+        {
+        case AnimStates::MidAirLeftDown:
+        {
+            for (size_t i = 0; i < m_SideLength; i++)
+            {
+                if (currentIndex == m_LowestBlocks[i])
+                {
+                    return false;
+                }
+            }
+            currentIndex += m_FirstRowCubeCount - rowIndex;
+            break;
+        }
+        case AnimStates::MidAirRightUp:
+        {
+            for (size_t i = 0; i < m_SideLength; i++)
+            {
+                if (currentIndex == m_MostRightBlocks[i])
+                {
+                    return false;
+                }
+            }
+            int rowIndexAfterJump = rowIndex - 1;
+            currentIndex -= m_FirstRowCubeCount - rowIndexAfterJump;
+            break;
+        }
+        case AnimStates::MidAirLeftUp:
+        {
+            for (size_t i = 0; i < m_SideLength; i++)
+            {
+                if (currentIndex == m_MostLeftBlocks[i])
+                {
+                    return false;
+                }
+            }
+            currentIndex--;
+            break;
+        }
+        case AnimStates::MidAirRightDown:
+        {
+            for (size_t i = 0; i < m_SideLength; i++)
+            {
+                if (currentIndex == m_LowestBlocks[i])
+                {
+                    return false;
+                }
+            }
+            currentIndex++;
+            break;
+        }
+        }
+
+        return true;
     }
 
-    return true;
+
+
 }
 
 void LevelComponent::SwitchGameLevel(GameLevel gameLevel)
 {
-    for (auto& cube : m_Cubes)
+    //FlashCubesOnCompletion();
+
+    if (m_EntireFlashCubesTimer >= 0)
     {
-        cube->ResetCubeState();
-        cube->ChangeGameLevel(gameLevel);
+        for (auto& cube : m_Cubes)
+        {
+            int newColorIndex = rand() % 3;
+            cube->GetGameObject()->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates(newColorIndex));//0,1,2
+        }
+         m_EntireFlashCubesTimer -= SystemTime::GetInstance().GetDeltaTime();
+    }
+    else
+    {
+        for (auto& cube : m_Cubes)
+        {
+            cube->ResetCubeState();
+            cube->ChangeGameLevel(gameLevel);
+        }
+
+        SpawnDiscs();
+        m_EntireFlashCubesTimer = m_EntireFlashCubesTime;
+        m_FlashingCubes = false;
+
+        auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
+        currentScene->GetPlayer(0)->GetComponent<QbertMovementComponent>()->SetMovementLocked(false);
     }
 
-    SpawnDiscs();
+   
+
+    
 }
 
 void LevelComponent::LevelCompletedCheck()
@@ -214,7 +370,11 @@ void LevelComponent::LevelCompletedCheck()
 
         currentScene->SetGameLevel(GameLevel(int(currentScene->GetGameLevel()) + 1));
 
-        SwitchGameLevel(currentScene->GetGameLevel());
+        currentScene->GetPlayer(0)->GetComponent<QbertMovementComponent>()->SetMovementLocked(true);
+
+        m_FlashingCubes = true;
+        //SwitchGameLevel(currentScene->GetGameLevel());
+
     }
     else if (currentScene->GetGameLevel() == GameLevel::Level2)
     {
@@ -228,7 +388,10 @@ void LevelComponent::LevelCompletedCheck()
 
         currentScene->SetGameLevel(GameLevel(int(currentScene->GetGameLevel()) + 1));
 
-        SwitchGameLevel(currentScene->GetGameLevel());
+        currentScene->GetPlayer(0)->GetComponent<QbertMovementComponent>()->SetMovementLocked(true);
+
+        m_FlashingCubes = true;
+        //SwitchGameLevel(currentScene->GetGameLevel());
     }
     else if (currentScene->GetGameLevel() == GameLevel::Level3)
     {
@@ -237,15 +400,15 @@ void LevelComponent::LevelCompletedCheck()
             if (!cube->GetState2())
                 return;
         }
-
-        currentScene->GetPlayer(0);
-
         
         TeleportPlayersToSpawnPos();
 
+        currentScene->GetPlayer(0)->GetComponent<QbertMovementComponent>()->SetMovementLocked(true);
+
         currentScene->SetGameLevel(GameLevel(0));
 
-        SwitchGameLevel(currentScene->GetGameLevel());
+        m_FlashingCubes = true;
+        //SwitchGameLevel(currentScene->GetGameLevel());
     }
     
 
@@ -266,12 +429,12 @@ void LevelComponent::TeleportPlayersToSpawnPos()
     startingPosition.y = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 10.f);
 
     player1->GetComponent<TransformComponent>()->SetPosition(startingPosition);
-    player1->GetComponent<MovementComponent>()->SetCurrentCubeIndex(0);
+    player1->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(0);
     //player 2 too
 }
 
 
-int LevelComponent::GetColumnNumber(const int& currentTileIndex) const
+int LevelComponent::GetRowNumber(const int& currentTileIndex) const
 {
     int cubeCount = m_FirstRowCubeCount;
 

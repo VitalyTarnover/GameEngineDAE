@@ -13,7 +13,8 @@
 #include "ScoreObserver.h"
 #include "LivesObserver.h"
 #include "LevelComponent.h"
-#include "MovementComponent.h"
+#include "QbertMovementComponent.h"
+#include "EnemyMovementComponent.h"
 #include "Commands.h"
 #include "AnalogStickCommand.h"
 #include "AnalogTriggerCommand.h"
@@ -113,6 +114,13 @@ void dae::Minigin::LoadGame() const
 	scoreDisplay->AddComponent(scoreCounter);
 	scene.Add(scoreDisplay);
 
+	//healths
+	auto healthsDisplay = std::make_shared<GameObject>("LivesDisplay");
+	healthsDisplay->AddComponent(new TransformComponent(glm::vec3(20, 100, 0)));
+	auto healthsCounter = new TextComponent("Lives: 0", font, SDL_Color{ 255,255,255 });
+	healthsDisplay->AddComponent(healthsCounter);
+	scene.Add(healthsDisplay);
+
 
 
 	auto level = std::make_shared<GameObject>("Level");
@@ -136,10 +144,84 @@ void dae::Minigin::LoadGame() const
 	qbert->AddWatcher(new ScoreObserver());
 	qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
 	qbert->AddComponent(new SpriteAnimComponent(8));
-	qbert->AddComponent(new MovementComponent());
+	qbert->AddComponent(new QbertMovementComponent());
 	CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
 	scene.Add(qbert);
 	scene.AddPlayer(qbert);
+
+
+	//int    enemyWidth = 15;
+	//int    enemyHeight = 20;
+	//
+	//const int randNr = rand() % 2;
+	//bool startOnLeftSide = false;
+	//TransformComponent* transfComp;
+	//if (randNr == 0)
+	//{
+	//	glm::vec3 leftCubePos = level->GetComponent<LevelComponent>()->GetCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+	//	transfComp = new TransformComponent(glm::vec3(leftCubePos.x - enemyWidth , leftCubePos.y + enemyHeight ,0), glm::vec2(enemyWidth, enemyHeight));
+	//	startOnLeftSide = true;
+	//}
+	//else
+	//{
+	//	glm::vec3 leftCubePos = level->GetComponent<LevelComponent>()->GetCube(6)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+	//	transfComp = new TransformComponent(glm::vec3(leftCubePos.x + enemyWidth * 0.5f, leftCubePos.y + enemyHeight,0), glm::vec2(enemyWidth, enemyHeight));
+	//	startOnLeftSide = false;
+	//}
+
+	//auto wrongWay = std::make_shared<GameObject>("WrongWay");
+	//wrongWay->AddComponent(transfComp);
+	//wrongWay->AddComponent(new HealthComponent(1));
+	//wrongWay->AddWatcher(new LivesObserver());
+	//wrongWay->AddComponent(new Texture2DComponent("WrongWay.png", scene.GetSceneScale()));//("WrongWay.png", 2, true)
+	//wrongWay->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::WrongWay, startOnLeftSide));
+	//wrongWay->AddComponent(new SpriteAnimComponent(8));
+	//scene.Add(wrongWay);
+	//scene.AddPlayer(wrongWay);
+	//CollisionCheckManager::GetInstance().AddObjectForCheck(wrongWay);
+
+	//auto coily = std::make_shared<GameObject>("Coily");
+	//coily->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));
+	//coily->AddComponent(new HealthComponent(1));
+	//coily->AddWatcher(new LivesObserver());
+	//coily->AddComponent(new Texture2DComponent("Coily.png", scene.GetSceneScale()));//("WrongWay.png", 2, true)
+	//coily->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::Coily, startOnLeftSide));
+	//coily->AddComponent(new SpriteAnimComponent(8));
+	//scene.Add(coily);
+	//scene.AddPlayer(coily);
+	//CollisionCheckManager::GetInstance().AddObjectForCheck(coily);
+
+
+	//auto ugg = std::make_shared<GameObject>("Ugg");
+	//ugg->AddComponent(transfComp);
+	//ugg->AddComponent(new HealthComponent(1));
+	//ugg->AddWatcher(new LivesObserver());
+	//ugg->AddComponent(new Texture2DComponent("Ugg.png", scene.GetSceneScale()));//("WrongWay.png", 2, true)
+	//ugg->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::Ugg, startOnLeftSide));
+	//ugg->AddComponent(new SpriteAnimComponent(8));
+	//scene.Add(ugg);
+	//scene.AddPlayer(ugg);
+	//CollisionCheckManager::GetInstance().AddObjectForCheck(ugg);
+
+
+
+
+
+	//auto sam = std::make_shared<GameObject>("Sam");
+	//sam->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));
+	//sam->AddComponent(new HealthComponent(1));
+	//sam->AddWatcher(new LivesObserver());
+	//sam->AddComponent(new Texture2DComponent("Sam.png", scene.GetSceneScale()));//("WrongWay.png", 2, true)
+	//sam->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::Slick, true));
+	//sam->AddComponent(new SpriteAnimComponent(8));
+	//scene.Add(sam);
+	//scene.AddPlayer(sam);
+	//CollisionCheckManager::GetInstance().AddObjectForCheck(sam);
+
+
+
+
+
 
 
 }

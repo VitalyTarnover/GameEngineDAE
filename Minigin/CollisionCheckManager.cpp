@@ -1,6 +1,6 @@
 #include "MiniginPCH.h"
 #include "CollisionCheckManager.h"
-#include "MovementComponent.h"
+#include "QbertMovementComponent.h"
 #include "SceneManager.h"
 #include "Scene.h"
 #include "LevelComponent.h"
@@ -16,8 +16,7 @@ void CollisionCheckManager::Update()
 			if (otherGameObject->GetName() == "Disc")
 			{
 				//snap and move!
-				m_pQbert->GetComponent<MovementComponent>()->SetDiscTransform(otherGameObject->GetComponent<TransformComponent>());
-				//otherGameObject
+				m_pQbert->GetComponent<QbertMovementComponent>()->SetDiscTransform(otherGameObject->GetComponent<TransformComponent>());
 				dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->GetDisc(otherGameObject)->SetIsMovingToTop(true);
 			}
 			else if (otherGameObject->GetName() == "Ugg" 

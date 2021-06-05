@@ -21,7 +21,7 @@ public:
 
 	void SetIsMovingToTop(bool isMoving) { m_IsMovingToTop = isMoving; }
 
-	bool GetIsUsed() { return m_IsUsed; }
+	bool GetIsUsed() const { return m_IsUsed; }
 	void SetIsUsed(bool isUsed) { m_IsUsed = isUsed; }
 
 private:
