@@ -187,14 +187,21 @@ void BaseMovementComponent::FallToDeath()
 		m_IsMoving = false;
 		m_FallingToDeath = false;
 
-		if (m_pGameObject->GetName() == "Q*Bert")
+		if (m_pGameObject->GetName() == "Q*Bert" || m_pGameObject->GetName() == "Q*Bert2")
 		{
 			m_pGameObject->GetComponent<HealthComponent>()->Die();
-			m_pGameObject->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
-			m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformRightDown);
-			dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->TeleportPlayersToSpawnPos();
+			if (m_pGameObject->GetComponent<HealthComponent>()->GetLives() > 0)
+			{
+				m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformRightDown);
+				m_pGameObject->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+				dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->TeleportPlayersToSpawnPos();
+			}
+			else
+			{
+				m_MovementLocked = true;
+				m_pGameObject->GetComponent<TransformComponent>()->SetPosition(glm::vec3(0,-100,0));
+			}
 			EnemyManager::GetInstance().DeleteAllEnemies();
-
 		}
 
 		if (m_pGameObject->GetName() == "Coily")

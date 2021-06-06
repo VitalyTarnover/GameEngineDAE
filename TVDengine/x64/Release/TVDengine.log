@@ -1,2 +1,6 @@
-﻿  Scene.cpp
+﻿  Components.cpp
+  GameObject.cpp
+  Scene.cpp
+  SceneManager.cpp
+  Subject.cpp
   TVDengine.vcxproj -> D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\x64\Release\TVDengine.lib

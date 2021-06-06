@@ -7,7 +7,11 @@ class BaseMovementComponent : public BaseComponent
 public:
     explicit BaseMovementComponent();
     virtual void Update() = 0;
-    void SetCurrentCubeIndex(int index) { m_CurrentCubeIndex = index; };
+    void SetCurrentCubeIndex(int index) { 
+        m_CurrentCubeIndex = index;
+        m_FallingToDeath = false;
+        m_IsMoving = false;
+    };
 
     void SetMovementLocked(bool lock) { m_MovementLocked = lock; }
     bool GetMovementLocked() const { return m_MovementLocked; }

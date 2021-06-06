@@ -26,13 +26,13 @@ private:
 	void DeleteSuicideJumpers();
 
 	float m_CoilySpawnTimer = 0.f;
-	float m_CoilySpawnTime = 15.f;
+	float m_CoilySpawnTime = 13.f;
 
 	float m_WrongWayUggSpawnTimer = 0.f;
-	float m_WrongWayUggSpawnTime = 6.5f;
+	float m_WrongWayUggSpawnTime = 6.f;
 
 	float m_SamSlickSpawnTimer = 0.f;
-	float m_SamSlickSpawnTime = 19.f;
+	float m_SamSlickSpawnTime = 20.f;
 
 	std::vector<std::shared_ptr<GameObject>> m_Enemies;
 };

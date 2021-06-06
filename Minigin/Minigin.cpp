@@ -88,166 +88,228 @@ void dae::Minigin::LoadGame() const
 {
 	srand(int(time(NULL)));
 
+
 	auto& scene = SceneManager::GetInstance().CreateScene("Game");
 
+	scene.SetCurrentGameMode(GameMode::SinglePlayer);//GameMode::Coop
+	
 	//background
-	auto go = std::make_shared<GameObject>("Background");
-	go->AddComponent(new Texture2DComponent("background.jpg"));
-	scene.Add(go);
-	
-	
+	//auto go = std::make_shared<GameObject>("Background");
+	//go->AddComponent(new Texture2DComponent("background.jpg"));
+	//scene.Add(go);
+
+
 	//fps counter
-	go = std::make_shared<GameObject>("FPSCounter");
+	auto fpsCounter = std::make_shared<GameObject>("FPSCounter");
 	auto font2 = ResourceManager::GetInstance().LoadFont("Lingua.otf", 14);
-	go->AddComponent(new FPSTextComponent(font2));
-	scene.Add(go);
-	
+	fpsCounter->AddComponent(new FPSTextComponent(font2));
+	scene.Add(fpsCounter);
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
-	
-	//score
-	auto scoreDisplay = std::make_shared<GameObject>("ScoreDisplay");
-	scoreDisplay->AddComponent(new TransformComponent(glm::vec3(20, 70, 0)));
-	auto scoreCounter = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
-	scoreDisplay->AddComponent(scoreCounter);
-	scene.Add(scoreDisplay);
 
-	auto scoreDisplay2 = std::make_shared<GameObject>("ScoreDisplay2");
-	scoreDisplay2->AddComponent(new TransformComponent(glm::vec3(200, 70, 0)));
-	auto scoreCounter2 = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
-	scoreDisplay2->AddComponent(scoreCounter2);
-	scene.Add(scoreDisplay2);
-
-
-	//healths
-	auto healthsDisplay = std::make_shared<GameObject>("LivesDisplay");
-	healthsDisplay->AddComponent(new TransformComponent(glm::vec3(20, 100, 0)));
-	auto healthsCounter = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
-	healthsDisplay->AddComponent(healthsCounter);
-	scene.Add(healthsDisplay);
-
-	auto healthsDisplay2 = std::make_shared<GameObject>("LivesDisplay2");
-	healthsDisplay2->AddComponent(new TransformComponent(glm::vec3(200, 100, 0)));
-	auto healthsCounter2 = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
-	healthsDisplay2->AddComponent(healthsCounter2);
-	scene.Add(healthsDisplay2);
-
-
-	auto level = std::make_shared<GameObject>("Level");
-	level->AddComponent(new LevelComponent(scene, glm::vec3(670, 200, 0), scene.GetSceneScale()));//670, 200, 0
-	scene.Add(level);
-	scene.AddLevel(level);
-	scene.SetCurrentLevel(level);
-
-
-	//q*bert
-	//Get first cube's position
+	switch (scene.GetCurrentGameMode())
 	{
-		glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-		startPosition.x += scene.GetSceneScale() * 8.f;
-		startPosition.y -= scene.GetSceneScale() * 10.f;
+	case(GameMode::SinglePlayer):
+	{
+		//score
+		auto scoreDisplay = std::make_shared<GameObject>("ScoreDisplay");
+		scoreDisplay->AddComponent(new TransformComponent(glm::vec3(20, 70, 0)));
+		auto scoreCounter = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
+		scoreDisplay->AddComponent(scoreCounter);
+		scene.Add(scoreDisplay);
 
-		auto qbert = std::make_shared<GameObject>("Q*Bert");
-		qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));//16,21
-		qbert->AddComponent(new HealthComponent(3));
-		qbert->AddComponent(new ScoreComponent(0));
-		qbert->AddWatcher(new LivesObserver());
-		qbert->AddWatcher(new ScoreObserver());
-		qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
-		qbert->AddComponent(new SpriteAnimComponent(8));
-		qbert->AddComponent(new QbertMovementComponent());
-		CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
-		scene.Add(qbert);
-		scene.AddPlayer(qbert);
+
+
+		//healths
+		auto healthsDisplay = std::make_shared<GameObject>("LivesDisplay");
+		healthsDisplay->AddComponent(new TransformComponent(glm::vec3(20, 100, 0)));
+		auto healthsCounter = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
+		healthsDisplay->AddComponent(healthsCounter);
+		scene.Add(healthsDisplay);
+
+
+		auto level = std::make_shared<GameObject>("Level");
+		level->AddComponent(new LevelComponent(scene, glm::vec3(630, 175, 0), scene.GetSceneScale()));//670, 200, 0
+		scene.Add(level);
+		scene.AddLevel(level);
+		scene.SetCurrentLevel(level);
+
+
+		//q*bert
+		{
+			glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+			startPosition.x += scene.GetSceneScale() * 8.f;
+			startPosition.y -= scene.GetSceneScale() * 10.f;
+
+			auto qbert = std::make_shared<GameObject>("Q*Bert");
+			qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));//16,21
+			qbert->AddComponent(new HealthComponent(3));
+			qbert->AddComponent(new ScoreComponent(0));
+			qbert->AddWatcher(new LivesObserver());
+			qbert->AddWatcher(new ScoreObserver());
+			qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
+			qbert->AddComponent(new SpriteAnimComponent(8));
+			qbert->AddComponent(new QbertMovementComponent());
+			CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
+			scene.Add(qbert);
+			scene.AddPlayer(qbert);
+		}
+	}
+	break;
+	case(GameMode::Coop):
+	{
+		//score
+		auto scoreDisplay = std::make_shared<GameObject>("ScoreDisplay");
+		scoreDisplay->AddComponent(new TransformComponent(glm::vec3(20, 70, 0)));
+		auto scoreCounter = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
+		scoreDisplay->AddComponent(scoreCounter);
+		scene.Add(scoreDisplay);
+
+		auto scoreDisplay2 = std::make_shared<GameObject>("ScoreDisplay2");
+		scoreDisplay2->AddComponent(new TransformComponent(glm::vec3(200, 70, 0)));
+		auto scoreCounter2 = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
+		scoreDisplay2->AddComponent(scoreCounter2);
+		scene.Add(scoreDisplay2);
+
+
+		//healths
+		auto healthsDisplay = std::make_shared<GameObject>("LivesDisplay");
+		healthsDisplay->AddComponent(new TransformComponent(glm::vec3(20, 100, 0)));
+		auto healthsCounter = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
+		healthsDisplay->AddComponent(healthsCounter);
+		scene.Add(healthsDisplay);
+
+		auto healthsDisplay2 = std::make_shared<GameObject>("LivesDisplay2");
+		healthsDisplay2->AddComponent(new TransformComponent(glm::vec3(200, 100, 0)));
+		auto healthsCounter2 = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
+		healthsDisplay2->AddComponent(healthsCounter2);
+		scene.Add(healthsDisplay2);
+
+
+		auto level = std::make_shared<GameObject>("Level");
+		level->AddComponent(new LevelComponent(scene, glm::vec3(630, 175, 0), scene.GetSceneScale()));//670, 200, 0
+		scene.Add(level);
+		scene.AddLevel(level);
+		scene.SetCurrentLevel(level);
+
+
+		//q*bert
+		{
+			glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+			startPosition.x += scene.GetSceneScale() * 8.f;
+			startPosition.y -= scene.GetSceneScale() * 10.f;
+
+			auto qbert = std::make_shared<GameObject>("Q*Bert");
+			qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));//16,21
+			qbert->AddComponent(new HealthComponent(3));
+			qbert->AddComponent(new ScoreComponent(0));
+			qbert->AddWatcher(new LivesObserver());
+			qbert->AddWatcher(new ScoreObserver());
+			qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
+			qbert->AddComponent(new SpriteAnimComponent(8));
+			qbert->AddComponent(new QbertMovementComponent());
+			qbert->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(27);
+			CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
+			scene.Add(qbert);
+			scene.AddPlayer(qbert);
+		}
+		//q*bert2
+		{
+			glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(6)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+			startPosition.x += scene.GetSceneScale() * 8.f;
+			startPosition.y -= scene.GetSceneScale() * 10.f;
+
+			auto qbert2 = std::make_shared<GameObject>("Q*Bert2");
+			qbert2->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));//16,21
+			qbert2->AddComponent(new HealthComponent(3));
+			qbert2->AddComponent(new ScoreComponent(0));
+			qbert2->AddWatcher(new LivesObserver());
+			qbert2->AddWatcher(new ScoreObserver());
+			qbert2->AddComponent(new Texture2DComponent("Qbert2.png", scene.GetSceneScale()));
+			qbert2->AddComponent(new SpriteAnimComponent(8));
+			qbert2->AddComponent(new QbertMovementComponent());
+			qbert2->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(6);
+			CollisionCheckManager::GetInstance().AddObjectForCheck(qbert2);
+			scene.Add(qbert2);
+			scene.AddPlayer(qbert2);
+		}
+
+	}
+	break;
+	case(GameMode::Versus):
+	{
+		//score
+		auto scoreDisplay = std::make_shared<GameObject>("ScoreDisplay");
+		scoreDisplay->AddComponent(new TransformComponent(glm::vec3(20, 70, 0)));
+		auto scoreCounter = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
+		scoreDisplay->AddComponent(scoreCounter);
+		scene.Add(scoreDisplay);
+
+
+
+		//healths
+		auto healthsDisplay = std::make_shared<GameObject>("LivesDisplay");
+		healthsDisplay->AddComponent(new TransformComponent(glm::vec3(20, 100, 0)));
+		auto healthsCounter = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
+		healthsDisplay->AddComponent(healthsCounter);
+		scene.Add(healthsDisplay);
+
+
+		auto level = std::make_shared<GameObject>("Level");
+		level->AddComponent(new LevelComponent(scene, glm::vec3(630, 175, 0), scene.GetSceneScale()));//670, 200, 0
+		scene.Add(level);
+		scene.AddLevel(level);
+		scene.SetCurrentLevel(level);
+
+
+		//q*bert
+		{
+			glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+			startPosition.x += scene.GetSceneScale() * 8.f;
+			startPosition.y -= scene.GetSceneScale() * 10.f;
+
+			auto qbert = std::make_shared<GameObject>("Q*Bert");
+			qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));//16,21
+			qbert->AddComponent(new HealthComponent(3));
+			qbert->AddComponent(new ScoreComponent(0));
+			qbert->AddWatcher(new LivesObserver());
+			qbert->AddWatcher(new ScoreObserver());
+			qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
+			qbert->AddComponent(new SpriteAnimComponent(8));
+			qbert->AddComponent(new QbertMovementComponent());
+			CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
+			scene.Add(qbert);
+			scene.AddPlayer(qbert);
+		}
+		//coily
+		{
+			glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+			startPosition.x += scene.GetSceneScale() * 8.f;
+			startPosition.y -= scene.GetSceneScale() * 10.f;
+
+			auto coily = std::make_shared<GameObject>("Coily");
+			coily->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));
+			coily->AddComponent(new Texture2DComponent("Coily.png", scene.GetSceneScale()));
+
+			coily->AddComponent(new QbertMovementComponent());
+			coily->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(27);
+
+			coily->AddComponent(new SpriteAnimComponent(8));
+			scene.Add(coily);
+			CollisionCheckManager::GetInstance().AddObjectForCheck(coily);
+			scene.AddPlayer(coily);
+
+		}
+
+	}
+	break;
 	}
 
-	//{
-	//	glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-	//	startPosition.x += scene.GetSceneScale() * 8.f;
-	//	startPosition.y -= scene.GetSceneScale() * 10.f;
-	//	
-	//	auto qbert = std::make_shared<GameObject>("Q*Bert2");
-	//	qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));//16,21
-	//	qbert->AddComponent(new HealthComponent(3));
-	//	qbert->AddComponent(new ScoreComponent(0));
-	//	qbert->AddWatcher(new LivesObserver());
-	//	qbert->AddWatcher(new ScoreObserver());
-	//	qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
-	//	qbert->AddComponent(new SpriteAnimComponent(8));
-	//	qbert->AddComponent(new QbertMovementComponent());
-	//	CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
-	//	scene.Add(qbert);
-	//	scene.AddPlayer(qbert);
-	//}
-
-
-	//int    enemyWidth = 15;
-	//int    enemyHeight = 20;
-	//
-	//const int randNr = rand() % 2;
-	//bool startOnLeftSide = false;
-	//TransformComponent* transfComp;
-	//if (randNr == 0)
-	//{
-	//	glm::vec3 leftCubePos = level->GetComponent<LevelComponent>()->GetCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-	//	transfComp = new TransformComponent(glm::vec3(leftCubePos.x - enemyWidth , leftCubePos.y + enemyHeight ,0), glm::vec2(enemyWidth, enemyHeight));
-	//	startOnLeftSide = true;
-	//}
-	//else
-	//{
-	//	glm::vec3 leftCubePos = level->GetComponent<LevelComponent>()->GetCube(6)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-	//	transfComp = new TransformComponent(glm::vec3(leftCubePos.x + enemyWidth * 0.5f, leftCubePos.y + enemyHeight,0), glm::vec2(enemyWidth, enemyHeight));
-	//	startOnLeftSide = false;
-	//}
-	//
-	//auto wrongWay = std::make_shared<GameObject>("WrongWay");
-	//wrongWay->AddComponent(transfComp);
-	//wrongWay->AddComponent(new HealthComponent(1));
-	//wrongWay->AddWatcher(new LivesObserver());
-	//wrongWay->AddComponent(new Texture2DComponent("WrongWay.png", scene.GetSceneScale()));//("WrongWay.png", 2, true)
-	//wrongWay->AddComponent(new EnemyMovementComponent(scene.GetPlayer(0), EnemyMovementComponent::EnemyType::WrongWay, startOnLeftSide));
-	//wrongWay->AddComponent(new SpriteAnimComponent(8));
-	//scene.Add(wrongWay);
-	////scene.AddPlayer(wrongWay);//not needed
-	//CollisionCheckManager::GetInstance().AddObjectForCheck(wrongWay);
-
-	//auto coily = std::make_shared<GameObject>("Coily");
-	//coily->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));
-	//coily->AddComponent(new HealthComponent(1));
-	//coily->AddWatcher(new LivesObserver());
-	//coily->AddComponent(new Texture2DComponent("Coily.png", scene.GetSceneScale()));//("WrongWay.png", 2, true)
-	//coily->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::Coily, startOnLeftSide));
-	//coily->AddComponent(new SpriteAnimComponent(8));
-	//scene.Add(coily);
-	//scene.AddPlayer(coily);
-	//CollisionCheckManager::GetInstance().AddObjectForCheck(coily);
-
-
-	//auto ugg = std::make_shared<GameObject>("Ugg");
-	//ugg->AddComponent(transfComp);
-	//ugg->AddComponent(new HealthComponent(1));
-	//ugg->AddWatcher(new LivesObserver());
-	//ugg->AddComponent(new Texture2DComponent("Ugg.png", scene.GetSceneScale()));//("WrongWay.png", 2, true)
-	//ugg->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::Ugg, startOnLeftSide));
-	//ugg->AddComponent(new SpriteAnimComponent(8));
-	//scene.Add(ugg);
-	//scene.AddPlayer(ugg);
-	//CollisionCheckManager::GetInstance().AddObjectForCheck(ugg);
+    
 
 
 
 
-
-	//auto sam = std::make_shared<GameObject>("Sam");
-	//sam->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));
-	//sam->AddComponent(new HealthComponent(1));
-	//sam->AddWatcher(new LivesObserver());
-	//sam->AddComponent(new Texture2DComponent("Sam.png", scene.GetSceneScale()));//("WrongWay.png", 2, true)
-	//sam->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::Slick, true));
-	//sam->AddComponent(new SpriteAnimComponent(8));
-	//scene.Add(sam);
-	//scene.AddPlayer(sam);
-	//CollisionCheckManager::GetInstance().AddObjectForCheck(sam);
-
+	
 }
 
 void dae::Minigin::Cleanup()
@@ -325,7 +387,7 @@ void dae::Minigin::BindCommands()
 	input.AssignKey<JumpLeft>(KeyboardButton::A);
 	input.AssignKey<JumpRight>(KeyboardButton::D);
 	
-	//input.AssignKey<JumpUpP2>(KeyboardButton::I);
+	input.AssignKey<JumpUpP2>(KeyboardButton::I);
 	input.AssignKey<JumpDownP2>(KeyboardButton::K);
 	input.AssignKey<JumpLeftP2>(KeyboardButton::J);
 	input.AssignKey<JumpRightP2>(KeyboardButton::L);
@@ -333,7 +395,7 @@ void dae::Minigin::BindCommands()
 	input.AssignKey<ExitCommand>(KeyboardButton::ESC);
 
 	input.AssignKey<Test1Command>(KeyboardButton::P);
-	input.AssignKey<Test2Command>(KeyboardButton::I);
+	//input.AssignKey<Test2Command>(KeyboardButton::I);
 
 	//input.AssignKey<ExitCommand>(ControllerButton::ButtonSelect);
 	//AssignKey<FartCommand>(ControllerButton::ButtonStart);

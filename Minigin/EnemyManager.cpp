@@ -2,6 +2,7 @@
 #include "Components.h"
 #include "EnemyManager.h"
 #include "SceneManager.h"
+#include "Scene.h"
 #include "GameObject.h"
 #include "EnemyMovementComponent.h"
 #include "LevelComponent.h"
@@ -9,13 +10,53 @@
 #include "Scene.h"
 #include "Minigin.h"
 
+
 using namespace dae;
 
 void EnemyManager::Update()
 {
+	auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
 	float elapsedTime = SystemTime::GetInstance().GetDeltaTime();
-	
-	if (m_Enemies.size() <= 4)
+
+
+	if (currentScene->GetCurrentGameMode() == GameMode::SinglePlayer)
+	{
+		if (!currentScene->GetPlayer(0) || currentScene->GetPlayer(0)->GetComponent<HealthComponent>()->GetLives() <= 0)return;
+	}
+	else if (currentScene->GetCurrentGameMode() == GameMode::Coop)
+	{
+		if (!currentScene->GetPlayer(0) || currentScene->GetPlayer(0)->GetComponent<HealthComponent>()->GetLives() <= 0
+			&& (!currentScene->GetPlayer(1) || currentScene->GetPlayer(1)->GetComponent<HealthComponent>()->GetLives() <= 0)) return;
+		
+	}
+	else if (currentScene->GetCurrentGameMode() == GameMode::Versus)
+	{
+		//if (!currentScene->GetPlayer(0) || currentScene->GetPlayer(0)->GetComponent<HealthComponent>()->GetLives() <= 0
+		//	&& (!currentScene->GetPlayer(1) || currentScene->GetPlayer(1)->GetComponent<HealthComponent>()->GetLives() <= 0)) return;
+		//
+		//if (m_Enemies.size() <= 3)
+		//{
+		//	m_WrongWayUggSpawnTimer -= elapsedTime;
+		//	m_SamSlickSpawnTimer -= elapsedTime;
+		//
+		//	if (m_WrongWayUggSpawnTimer <= 0.f)
+		//	{
+		//		SpawnWrongWayOrUgg();
+		//		m_WrongWayUggSpawnTimer = m_WrongWayUggSpawnTime;
+		//	}
+		//
+		//	if (m_SamSlickSpawnTimer <= 0.f)
+		//	{
+		//		SpawnSamOrSlick();
+		//		m_SamSlickSpawnTimer = m_SamSlickSpawnTime;
+		//	}
+		//}
+		return;
+	}
+
+
+
+	if (m_Enemies.size() <= 5)
 	{
 		m_CoilySpawnTimer -= elapsedTime;
 		m_WrongWayUggSpawnTimer -= elapsedTime;
@@ -42,7 +83,6 @@ void EnemyManager::Update()
 	}
 
 	DeleteSuicideJumpers();
-
 }
 
 void EnemyManager::SpawnWrongWayOrUgg()

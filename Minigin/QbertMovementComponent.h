@@ -14,7 +14,7 @@ enum class MoveDirections
 class QbertMovementComponent final : public BaseMovementComponent
 {
 public:
-	QbertMovementComponent();
+	QbertMovementComponent(float speed = 100.f);
 	
 	void Move(MoveDirections direction);
 

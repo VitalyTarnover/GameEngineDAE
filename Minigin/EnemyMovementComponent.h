@@ -15,7 +15,7 @@ public:
         Slick,
     };
 
-    EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType);
+    EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType, float speed = 100.f);
     void Update();
 
 private:
@@ -27,6 +27,6 @@ private:
 
     EnemyType m_EnemyType;
     std::shared_ptr<GameObject> m_pPlayer;
-    float m_CurrentJumpTime;
-    const float m_MaxJumpTime;
+    float m_JumpTimer;
+    const float m_JumpTime;
 };

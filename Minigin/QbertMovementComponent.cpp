@@ -6,10 +6,11 @@
 #include "Scene.h"
 #include "SystemTime.h"
 
-QbertMovementComponent::QbertMovementComponent()
+QbertMovementComponent::QbertMovementComponent(float speed)
 	: m_IsKeyPressed{ false }
 {
 	m_SourceHeightOffset = 0;
+	m_Speed = speed;
 	//m_MoveDistance = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->GetOffset();
 }
 

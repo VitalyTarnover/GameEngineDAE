@@ -39,7 +39,7 @@ private:
 	float m_AnimTime = 0.2f;
 
 	float m_MoveFactor = 0.f;
-	float m_Speed = 200.f;
+	float m_Speed = 150.f;
 
 
 	glm::vec3 m_FinalPos;

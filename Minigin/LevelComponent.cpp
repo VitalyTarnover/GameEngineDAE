@@ -426,20 +426,96 @@ void LevelComponent::LevelCompletedCheck()
 
 void LevelComponent::TeleportPlayersToSpawnPos()
 {
-    //gamemodes switch here
-
-    auto cube = GetCube(0);
-
+    GameMode currentGameMode = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode();
     auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
-    auto player1 = currentScene->GetPlayer(0);
 
-    glm::vec3 startingPosition{ 0,0,0 };
-    startingPosition.x = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 8.f);
-    startingPosition.y = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 10.f);
 
-    player1->GetComponent<TransformComponent>()->SetPosition(startingPosition);
-    player1->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(0);
-    //player 2 too
+    switch (currentGameMode)
+    {
+    case GameMode::SinglePlayer:
+    {
+        auto cube = GetCube(0);
+
+        auto player1 = currentScene->GetPlayer(0);
+
+        glm::vec3 startingPosition{ 0,0,0 };
+        startingPosition.x = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 8.f);
+        startingPosition.y = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 10.f);
+
+        player1->GetComponent<TransformComponent>()->SetPosition(startingPosition);
+        player1->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(0);
+    }
+        break;
+    case GameMode::Coop:
+    {
+        auto rightCube = GetCube(27);
+        auto leftCube = GetCube(6);
+
+        auto player1 = currentScene->GetPlayer(0);
+        auto player2 = currentScene->GetPlayer(1);
+
+        glm::vec3 startingPosition{ 0,0,0 };
+        
+        if (!player1->GetComponent<QbertMovementComponent>()->GetIsOnDisc())
+        {
+            startingPosition.x = rightCube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 8.f);
+            startingPosition.y = rightCube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 10.f);
+
+            player1->GetComponent<TransformComponent>()->SetPosition(startingPosition);
+            player1->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(27);
+            player1->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+            auto playerHealth = player1->GetComponent<HealthComponent>();
+            if (playerHealth->GetLives() <= 0) playerHealth->SetLives(1);
+        }
+        
+        if (!player2->GetComponent<QbertMovementComponent>()->GetIsOnDisc())
+        {
+            startingPosition.x = leftCube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 8.f);
+            startingPosition.y = leftCube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 10.f);
+
+            player2->GetComponent<TransformComponent>()->SetPosition(startingPosition);
+            player2->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(6);
+            player2->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+            auto playerHealth = player2->GetComponent<HealthComponent>();
+            if (playerHealth->GetLives() <= 0) playerHealth->SetLives(1);
+        }
+
+    }
+        break;
+    case GameMode::Versus:
+    {
+        auto cube = GetCube(0);
+
+        auto player1 = currentScene->GetPlayer(0);
+        auto player2 = currentScene->GetPlayer(1);
+
+        glm::vec3 startingPosition{ 0,0,0 };
+        startingPosition.x = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 8.f);
+        startingPosition.y = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 10.f);
+
+        player1->GetComponent<TransformComponent>()->SetPosition(startingPosition);
+        player1->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(0);
+        player1->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+
+        auto rightCube = GetCube(27);
+
+        startingPosition.x = rightCube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 8.f);
+        startingPosition.y = rightCube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 10.f);
+
+        player2->GetComponent<TransformComponent>()->SetPosition(startingPosition);
+        player2->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(27);
+        player2->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+
+    }
+        break;
+    default:
+        break;
+    }
+
+
+   
+    
+    
 }
 
 

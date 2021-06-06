@@ -35,11 +35,26 @@ void CollisionCheckManager::Update()
 					|| m_pGameObjectsToCheck[i]->GetName() == "Coily")
 				{
 					//damage!
+					auto currenScene = dae::SceneManager::GetInstance().GetCurrentScene();
+					if (currenScene->GetCurrentGameMode() == GameMode::Versus)
+					{
+						currenScene->GetCurrentLevel()->GetComponent<LevelComponent>()->TeleportPlayersToSpawnPos();
+					}
 					if (!m_pQbert->GetComponent<QbertMovementComponent>()->GetIsOnDisc())
 					{
 						auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
 						pPlayer->GetComponent<HealthComponent>()->Die();
-						pPlayer->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+						
+						if (pPlayer->GetComponent<HealthComponent>()->GetLives() > 0)
+						{
+							pPlayer->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+						}
+						else
+						{
+							pPlayer->GetComponent<QbertMovementComponent>()->SetMovementLocked(true);
+							pPlayer->GetComponent<TransformComponent>()->SetPosition(glm::vec3(0, -100, 0));
+						}
+
 						EnemyManager::GetInstance().DeleteAllEnemies();
 					}
 
@@ -85,7 +100,15 @@ void CollisionCheckManager::Update()
 					{
 						auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
 						pPlayer->GetComponent<HealthComponent>()->Die();
-						pPlayer->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+						if (pPlayer->GetComponent<HealthComponent>()->GetLives() > 0)
+						{
+							pPlayer->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+						}
+						else
+						{
+							pPlayer->GetComponent<QbertMovementComponent>()->SetMovementLocked(true);
+							pPlayer->GetComponent<TransformComponent>()->SetPosition(glm::vec3(0, -100, 0));
+						}
 						EnemyManager::GetInstance().DeleteAllEnemies();
 					}
 				}

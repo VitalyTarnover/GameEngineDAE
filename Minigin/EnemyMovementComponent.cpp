@@ -3,13 +3,13 @@
 #include "SceneManager.h"
 #include "LevelComponent.h"
 
-EnemyMovementComponent::EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType)
+EnemyMovementComponent::EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType, float speed)
 	:m_pPlayer{ pPlayer }
-	, m_CurrentJumpTime{ 0.0f }
-	, m_MaxJumpTime{ 1.5f }
+	, m_JumpTimer{ 0.0f }
+	, m_JumpTime{ 1.0f }
 	, m_EnemyType{ enemyType }
 {
-
+	m_Speed = speed;
 	switch (m_EnemyType)
 	{
 	case EnemyMovementComponent::EnemyType::Coily:
@@ -71,9 +71,9 @@ void EnemyMovementComponent::Update()
 		BaseMovementComponent::Update();
 	}
 
-	m_CurrentJumpTime += SystemTime::GetInstance().GetDeltaTime();
+	m_JumpTimer += SystemTime::GetInstance().GetDeltaTime();
 
-	if (m_CurrentJumpTime >= m_MaxJumpTime)
+	if (m_JumpTimer >= m_JumpTime)
 	{
 		if (m_EnemyType == EnemyType::Coily)
 		{
@@ -88,7 +88,7 @@ void EnemyMovementComponent::Update()
 			SidewaysMovement();
 		}
 
-		m_CurrentJumpTime -= m_CurrentJumpTime;
+		m_JumpTimer -= m_JumpTimer;
 	}
 }
 
