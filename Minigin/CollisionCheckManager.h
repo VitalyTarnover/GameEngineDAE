@@ -17,8 +17,7 @@ private:
 	CollisionCheckManager() = default;
 	friend class dae::Singleton<CollisionCheckManager>;
 	
-	//std::vector<TransformComponent*> m_pTransforms;
 	std::vector<std::shared_ptr<GameObject>> m_pGameObjectsToCheck;
-	//TransformComponent* m_pQbertTransform;
 	std::shared_ptr<GameObject> m_pQbert;
+	std::shared_ptr<GameObject> m_pQbert2;
 };

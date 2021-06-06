@@ -7,7 +7,7 @@
 
 void ScoreObserver::OnNotify(const GameObject* actor, Event event)
 {
-	if (event == Event::CatchSlickOrSam || event == Event::CoilyHitWithFlyingDisc || event == Event::ColorChanged || event == Event::DiscLeftAtEndOfTheStage || event == Event::ScoreSet)
+	if (event == Event::CatchSlickOrSam || event == Event::CoilyKilledWithFlyingDisc || event == Event::ColorChanged || event == Event::DiscLeftAtEndOfTheStage || event == Event::ScoreSet)
 	{
 		UpdateScore(actor);
 	}

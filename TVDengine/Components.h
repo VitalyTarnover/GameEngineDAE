@@ -81,7 +81,7 @@ enum class AnimStates//this can have different names
 	MidAirRightDown = 5,
 	OnPlatformLeftDown = 6,
 	MidAirLeftDown = 7,
-	//cubes
+	//Cubes
 	PinkFirst = 0,
 	BlueSecond = 1,
 	GreenThird = 2,
@@ -90,15 +90,6 @@ enum class AnimStates//this can have different names
 	DiscState2 = 1,
 	DiscState3 = 2,
 	DiscState4 = 3,
-	//Enemies
-	EnemyOnPlatformRightUp = 0,
-	EnemyMidAirRightUp = 1,
-	EnemyOnPlatformLeftUp = 2,
-	EnemyMidAirLeftUp = 3,
-	EnemyOnPlatformRightDown = 4,
-	EnemyMidAirRightDown = 5,
-	EnemyOnPlatformLeftDown = 6,
-	EnemyMidAirLeftDown = 7,
 };
 
 

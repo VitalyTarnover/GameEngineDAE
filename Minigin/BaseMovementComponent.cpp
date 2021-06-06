@@ -2,12 +2,14 @@
 #include "BaseMovementComponent.h"
 #include "SceneManager.h"
 #include "LevelComponent.h"
+#include "EnemyManager.h"
+#include "QbertMovementComponent.h"
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Time.h"
 
 BaseMovementComponent::BaseMovementComponent()
-	: m_Speed{ 500 }
+	: m_Speed{ 120 }
 	, m_IsMoving{ false }
 	, m_CurrentCubeIndex{ 0 }
 	, m_FallingToDeath{ false }
@@ -15,11 +17,12 @@ BaseMovementComponent::BaseMovementComponent()
 {
 	const glm::vec2& cubeOffset = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->GetOffset();
 	m_MoveDistance = cubeOffset;
+
+	m_FallToDeathTimer = m_FallToDeathTime;
 }
 
 void BaseMovementComponent::Update()
 {
-
 	if (m_FallingToDeath)
 	{
 		FallToDeath();
@@ -42,10 +45,7 @@ void BaseMovementComponent::ActivateJump(bool isSideWaysJump)
 	const auto& CurrentMap = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>();
 
 	if (!CurrentMap->JumpToNextCube(m_CurrentCubeIndex, m_Direction, isSideWaysJump, m_CurrentColumn, m_CurrentRow))
-	{
-		// Player jumped off the map
 		m_FallingToDeath = true;
-	}
 
 }
 
@@ -161,17 +161,60 @@ void BaseMovementComponent::FallToDeath()
 	}
 	else pos.y += elapsedTime * speed.y;
 
-	if (pos.y > 720)
+	//if (pos.y > 720)
+	//{
+	//	m_IsMoving = false;
+	//	m_FallingToDeath = false;
+	//
+	//	if (m_pGameObject->GetName() == "Q*bert")
+	//	{
+	//		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
+	//		pPlayer.get()->GetComponent<HealthComponent>()->Die();
+	//	}
+	//	
+	//}
+	//else transform->SetPosition(glm::vec3(pos.x, pos.y, 0));
+
+	if (m_FallToDeathTimer > 0)
 	{
+		m_FallToDeathTimer -= SystemTime::GetInstance().GetDeltaTime();
+		transform->SetPosition(glm::vec3(pos.x, pos.y, 0));
+	}
+	else
+	{
+		m_FallToDeathTimer = m_FallToDeathTime;
+
 		m_IsMoving = false;
 		m_FallingToDeath = false;
 
-		if (m_pGameObject->GetName() == "Q*bert")
+		if (m_pGameObject->GetName() == "Q*Bert")
 		{
-			auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
-			pPlayerActor.get()->GetComponent<HealthComponent>()->Die();
+			m_pGameObject->GetComponent<HealthComponent>()->Die();
+			m_pGameObject->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+			m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformRightDown);
+			dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->TeleportPlayersToSpawnPos();
+			EnemyManager::GetInstance().DeleteAllEnemies();
+
 		}
-		
+
+		if (m_pGameObject->GetName() == "Coily")
+		{
+			m_IsInDeathZone = true;
+
+			auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
+			auto pPlayer2 = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+			if (pPlayer->GetComponent<QbertMovementComponent>()->GetIsOnDisc())
+			{
+				pPlayer->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::CoilyKilledWithFlyingDisc);
+			}
+
+			if (pPlayer2 && pPlayer->GetComponent<QbertMovementComponent>()->GetIsOnDisc())
+			{
+				pPlayer2->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::CoilyKilledWithFlyingDisc);
+			}
+		}
+
 	}
-	else transform->SetPosition(glm::vec3(pos.x, pos.y, 0));
+
+
 }

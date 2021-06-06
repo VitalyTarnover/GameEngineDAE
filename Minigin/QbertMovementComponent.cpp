@@ -272,5 +272,6 @@ void QbertMovementComponent::Update()
 		else if (m_JumpingOnDisc) JumpOnDisc();
 		else if (m_IsMoving) Jump();
 	}
+	UpdateMovementLockedWithTimer();
 
 }

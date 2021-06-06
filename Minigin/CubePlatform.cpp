@@ -36,13 +36,13 @@ void CubePlatform::SwitchColor(const std::string& playerName)
 
 			if (playerName == "Q*Bert")
 			{
-				auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
-				pPlayerActor.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
+				auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
+				pPlayer->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
 			}
 			else if (playerName == "Q*Bert2")
 			{
-				auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
-				pPlayerActor.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
+				auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+				pPlayer->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
 			}
 
 		}
@@ -59,13 +59,13 @@ void CubePlatform::SwitchColor(const std::string& playerName)
 
 			if (playerName == "Q*Bert")
 			{
-				auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
-				pPlayerActor.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
+				auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
+				pPlayer.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
 			}
 			else if (playerName == "Q*Bert2")
 			{
-				auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
-				pPlayerActor.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
+				auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+				pPlayer.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
 			}
 
 		}
@@ -79,13 +79,13 @@ void CubePlatform::SwitchColor(const std::string& playerName)
 
 			if (playerName == "Q*Bert")
 			{
-				auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
-				pPlayerActor.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
+				auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
+				pPlayer.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
 			}
 			else if (playerName == "Q*Bert2")
 			{
-				auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
-				pPlayerActor.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
+				auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+				pPlayer.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
 			}
 
 		}
@@ -102,13 +102,13 @@ void CubePlatform::SwitchColor(const std::string& playerName)
 
 			if (playerName == "Q*Bert")
 			{
-				auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
-				pPlayerActor.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
+				auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
+				pPlayer.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
 			}
 			else if (playerName == "Q*Bert2")
 			{
-				auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
-				pPlayerActor.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
+				auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+				pPlayer.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
 			}
 
 		}

@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "LevelComponent.h"
 #include "QbertMovementComponent.h"
+#include "EnemyManager.h"
 #include <cmath>
 
 DiscPlatform::DiscPlatform(const glm::vec3& finalPos)
@@ -49,23 +50,24 @@ void DiscPlatform::SwitchColors()
 
 void DiscPlatform::MoveToTheTop()
 {
-	if (m_Direction == glm::vec3{ 0,0,0 })
-	{
-		auto dist = m_FinalPos - m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-
-		auto length = sqrt((dist.x * dist.x) + (dist.y * dist.y));
-
-		m_Direction.x = dist.x/length;
-		m_Direction.y = dist.y/length;
-	}
-
 	if (m_IsMovingToTop)
 	{
+		if (m_Direction == glm::vec3{ 0,0,0 })
+		{
+			auto dist = m_FinalPos - m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+
+			auto length = sqrt((dist.x * dist.x) + (dist.y * dist.y));
+
+			m_Direction.x = dist.x / length;
+			m_Direction.y = dist.y / length;
+		}
+
+
 		m_pTransformComponent = m_pGameObject->GetComponent<TransformComponent>();
 
 		glm::vec3 discPosition = m_pTransformComponent->GetTransform().GetPosition();
 
-		
+
 		if (abs(discPosition.x - m_FinalPos.x) > 2)
 		{
 			//float newXPos = std::lerp(m_FinalPos.x, discPosition.x, m_MoveFactor);
@@ -80,10 +82,11 @@ void DiscPlatform::MoveToTheTop()
 		}
 		else
 		{
+			EnemyManager::GetInstance().DeleteAllEnemies();
 			m_pTransformComponent->SetPosition(glm::vec3{ m_FinalPos.x, m_FinalPos.y, 0 });
 			m_IsMovingToTop = false;
 			m_IsUsed = true;
-			dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<QbertMovementComponent>()->SetDiscTransform(nullptr);
+			dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(m_PlayerIndex)->GetComponent<QbertMovementComponent>()->SetDiscTransform(nullptr);
 			//mby kill here
 			//dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->DeleteDisc(this);
 		}

@@ -8,7 +8,7 @@ enum class Event
 	ActorDied,
 	ScoreSet,
 	ColorChanged = 25,
-	CoilyHitWithFlyingDisc = 500,
+	CoilyKilledWithFlyingDisc = 500,
 	DiscLeftAtEndOfTheStage = 50,
 	CatchSlickOrSam = 300
 };
@@ -50,7 +50,10 @@ public:
 	GameObject& operator=(const GameObject& other) = delete;
 	GameObject& operator=(GameObject&& other) = delete;
 
+
+
 private:
 	std::vector<BaseComponent*> m_pComponents;
 	std::unique_ptr<Subject> m_spActorChanged;
+
 };

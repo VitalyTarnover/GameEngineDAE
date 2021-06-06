@@ -57,10 +57,8 @@ private:
 	float m_Scale;
 
 	bool m_FlashingCubes = false;
-	float m_EntireFlashCubesTimer = 2.f;
-	float m_EntireFlashCubesTime = 2.0f;
-	float m_FlashCubesTimer = 0.f;
-	float m_FlashCubesTime = 0.2f;
+	float m_EntireFlashCubesTimer = 0.f;
+	float m_EntireFlashCubesTime = 1.5f;
 
 	const static int m_SideLength = 7;
 	int m_MostLeftBlocks[m_SideLength];

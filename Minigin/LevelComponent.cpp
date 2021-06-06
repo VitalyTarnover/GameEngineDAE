@@ -6,6 +6,7 @@
 #include "QbertMovementComponent.h"
 #include "LevelFileReader.h"
 #include "CollisionCheckManager.h"
+#include "EnemyManager.h"
 
 
 LevelComponent::LevelComponent(dae::Scene& scene, const glm::vec3& firstCubePos, float scale)
@@ -16,6 +17,8 @@ LevelComponent::LevelComponent(dae::Scene& scene, const glm::vec3& firstCubePos,
     , m_HighestCubePos{ firstCubePos }
     , m_Scale{ scale }
 {
+    m_EntireFlashCubesTimer = m_EntireFlashCubesTime;
+
     int mostLeftBlockIndex = 0;
     int lowestBlockIndex = 6;
     for (int i = 0; i < m_SideLength; i++)
@@ -344,6 +347,9 @@ void LevelComponent::SwitchGameLevel(GameLevel gameLevel)
 
         auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
         currentScene->GetPlayer(0)->GetComponent<QbertMovementComponent>()->SetMovementLocked(false);
+        if (currentScene->GetPlayer(1)) currentScene->GetPlayer(1)->GetComponent<QbertMovementComponent>()->SetMovementLocked(false);
+        
+        EnemyManager::GetInstance().DeleteAllEnemies(true);//double check
     }
 
    
@@ -368,8 +374,10 @@ void LevelComponent::LevelCompletedCheck()
         currentScene->SetGameLevel(GameLevel(int(currentScene->GetGameLevel()) + 1));
 
         currentScene->GetPlayer(0)->GetComponent<QbertMovementComponent>()->SetMovementLocked(true);
+        if (currentScene->GetPlayer(1)) currentScene->GetPlayer(1)->GetComponent<QbertMovementComponent>()->SetMovementLocked(true);
 
         m_FlashingCubes = true;
+        EnemyManager::GetInstance().DeleteAllEnemies(true);
         //SwitchGameLevel(currentScene->GetGameLevel());
 
     }
@@ -388,6 +396,8 @@ void LevelComponent::LevelCompletedCheck()
         currentScene->GetPlayer(0)->GetComponent<QbertMovementComponent>()->SetMovementLocked(true);
 
         m_FlashingCubes = true;
+        EnemyManager::GetInstance().DeleteAllEnemies(true);
+
         //SwitchGameLevel(currentScene->GetGameLevel());
     }
     else if (currentScene->GetGameLevel() == GameLevel::Level3)
@@ -405,6 +415,8 @@ void LevelComponent::LevelCompletedCheck()
         currentScene->SetGameLevel(GameLevel(0));
 
         m_FlashingCubes = true;
+        EnemyManager::GetInstance().DeleteAllEnemies(true);
+
         //SwitchGameLevel(currentScene->GetGameLevel());
     }
     
@@ -414,8 +426,8 @@ void LevelComponent::LevelCompletedCheck()
 
 void LevelComponent::TeleportPlayersToSpawnPos()
 {
-   
     //gamemodes switch here
+
     auto cube = GetCube(0);
 
     auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
@@ -482,7 +494,8 @@ void LevelComponent::DeleteUsedDiscs()
                 {
                     dae::SceneManager::GetInstance().GetCurrentScene()->DeleteGameObject(m_Discs[i]->GetGameObject());
                     CollisionCheckManager::GetInstance().DeleteGameObject(m_Discs[i]->GetGameObject());
-                    m_Discs.erase(m_Discs.begin() + i);
+                    //m_Discs.erase(m_Discs.begin() + i);
+                    m_Discs.erase(std::remove(m_Discs.begin(), m_Discs.end(), m_Discs[i]), m_Discs.end());
                 }
             }
         }

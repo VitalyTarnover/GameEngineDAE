@@ -30,7 +30,8 @@ void Scene::DeleteGameObject(std::shared_ptr<SceneObject> objectToDelete)
 		if (m_Objects[i] == objectToDelete)
 		{
 			
-			m_Objects.erase(m_Objects.begin() + i);
+			//m_Objects.erase(m_Objects.begin() + i);
+			m_Objects.erase(std::remove(m_Objects.begin(), m_Objects.end(), m_Objects[i]), m_Objects.end());
 
 		}
 	}
@@ -43,6 +44,8 @@ void Scene::Update()
 	{
 		if (m_Objects[i]) m_Objects[i]->Update();
 	}
+
+	DeleteMarkedForDelteGameObjects();
 
 }
 

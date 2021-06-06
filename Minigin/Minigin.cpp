@@ -160,24 +160,24 @@ void dae::Minigin::LoadGame() const
 		scene.AddPlayer(qbert);
 	}
 
-	{
-		glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-		startPosition.x += scene.GetSceneScale() * 8.f;
-		startPosition.y -= scene.GetSceneScale() * 10.f;
-		
-		auto qbert = std::make_shared<GameObject>("Q*Bert2");
-		qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));//16,21
-		qbert->AddComponent(new HealthComponent(3));
-		qbert->AddComponent(new ScoreComponent(0));
-		qbert->AddWatcher(new LivesObserver());
-		qbert->AddWatcher(new ScoreObserver());
-		qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
-		qbert->AddComponent(new SpriteAnimComponent(8));
-		qbert->AddComponent(new QbertMovementComponent());
-		CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
-		scene.Add(qbert);
-		scene.AddPlayer(qbert);
-	}
+	//{
+	//	glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+	//	startPosition.x += scene.GetSceneScale() * 8.f;
+	//	startPosition.y -= scene.GetSceneScale() * 10.f;
+	//	
+	//	auto qbert = std::make_shared<GameObject>("Q*Bert2");
+	//	qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));//16,21
+	//	qbert->AddComponent(new HealthComponent(3));
+	//	qbert->AddComponent(new ScoreComponent(0));
+	//	qbert->AddWatcher(new LivesObserver());
+	//	qbert->AddWatcher(new ScoreObserver());
+	//	qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
+	//	qbert->AddComponent(new SpriteAnimComponent(8));
+	//	qbert->AddComponent(new QbertMovementComponent());
+	//	CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
+	//	scene.Add(qbert);
+	//	scene.AddPlayer(qbert);
+	//}
 
 
 	//int    enemyWidth = 15;
@@ -297,7 +297,7 @@ void dae::Minigin::Run()
 		doContinue = input.KeyboardInput();
 
 		SystemTime::GetInstance().SetDeltaTime(deltaTime);
-
+		EnemyManager::GetInstance().Update();
 		sceneManager.Update();
 		renderer.Render();
 	}
@@ -325,14 +325,16 @@ void dae::Minigin::BindCommands()
 	input.AssignKey<JumpLeft>(KeyboardButton::A);
 	input.AssignKey<JumpRight>(KeyboardButton::D);
 	
-	input.AssignKey<JumpUpP2>(KeyboardButton::I);
+	//input.AssignKey<JumpUpP2>(KeyboardButton::I);
 	input.AssignKey<JumpDownP2>(KeyboardButton::K);
 	input.AssignKey<JumpLeftP2>(KeyboardButton::J);
 	input.AssignKey<JumpRightP2>(KeyboardButton::L);
 
 	input.AssignKey<ExitCommand>(KeyboardButton::ESC);
-	input.AssignKey<SwitchSceneCommand>(KeyboardButton::P);
-	
+
+	input.AssignKey<Test1Command>(KeyboardButton::P);
+	input.AssignKey<Test2Command>(KeyboardButton::I);
+
 	//input.AssignKey<ExitCommand>(ControllerButton::ButtonSelect);
 	//AssignKey<FartCommand>(ControllerButton::ButtonStart);
 	//AssignKey<FartCommand>(ControllerButton::ButtonLeftThumb);

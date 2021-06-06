@@ -37,12 +37,21 @@ public:
 	
 	void JumpOnDisc();
 
+	bool GetIsOnDisc() const { return m_IsOnDisc; }
+
+	void LockMovementForSeconds(float seconds) { 
+		m_MovementLockedWithTimer = true;
+		m_MovementLockTimer = seconds; 
+	};
+
 	TransformComponent* GetDiscTransform() { return m_pDiscTransform; }
 	void SetDiscTransform(TransformComponent* discTC) { m_pDiscTransform = discTC; }
 	//bool SetIsOnDisc(bool onDisc) { m_IsOnDisc = onDisc; }
 
 private:
 	MoveDirections m_MoveDirection;
+	bool m_MovementLockedWithTimer = false;
+	float m_MovementLockTimer = 0.f;
 	//bool m_IsMoving;
 	//bool m_FallingToDeath;
 	bool m_JumpingOnDisc;
@@ -57,6 +66,25 @@ private:
 
 	//glm::vec3 m_JumpStartPos;
 	//int m_CurrentCubeIndex;
+
+	void UpdateMovementLockedWithTimer()
+	{
+		if (m_MovementLockedWithTimer)
+		{
+			if (m_MovementLockTimer > 0)
+			{
+				m_MovementLocked = true;
+				m_MovementLockTimer -= SystemTime::GetInstance().GetDeltaTime();
+			}
+			else
+			{
+				m_MovementLocked = false;
+				m_MovementLockedWithTimer = false;
+				m_MovementLockTimer = 0;
+			}
+		}
+
+	}
 
 
 };

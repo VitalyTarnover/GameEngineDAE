@@ -9,27 +9,24 @@ public:
     enum class EnemyType
     {
         Coily,
+        WrongWay,
+        Ugg,
         Sam,
         Slick,
-        Ugg,
-        WrongWay
     };
 
-    EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType, bool startOnLeftSide = false);
+    EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType);
     void Update();
 
 private:
-    //Methods
     void FollowPlayer();
     void Descend();
     void SidewaysMovement();
     void SidewaysJump();
-    void SidewaysFall();
+    void SidewaysFallToDeath();
 
-    //Datamembers
     EnemyType m_EnemyType;
     std::shared_ptr<GameObject> m_pPlayer;
     float m_CurrentJumpTime;
     const float m_MaxJumpTime;
-    bool  m_StartOnLeftSide;
 };

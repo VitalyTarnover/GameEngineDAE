@@ -3,37 +3,54 @@
 #include "SceneManager.h"
 #include "LevelComponent.h"
 
-EnemyMovementComponent::EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType, bool startOnLeftSide)
+EnemyMovementComponent::EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType)
 	:m_pPlayer{ pPlayer }
 	, m_CurrentJumpTime{ 0.0f }
 	, m_MaxJumpTime{ 1.5f }
 	, m_EnemyType{ enemyType }
-	, m_StartOnLeftSide{ startOnLeftSide }
 {
-	if (m_EnemyType == EnemyType::Coily)
+
+	switch (m_EnemyType)
 	{
+	case EnemyMovementComponent::EnemyType::Coily:
 		m_SourceHeightOffset = -8;
-	}
-	else if (m_EnemyType == EnemyType::Sam || m_EnemyType == EnemyType::Slick)
-	{
+		break;
+	case EnemyMovementComponent::EnemyType::WrongWay:
 		m_SourceHeightOffset = 0;
-	}
-	else if (m_EnemyType == EnemyType::WrongWay || m_EnemyType == EnemyType::Ugg)
-	{
-		if (startOnLeftSide)
-		{
-			m_CurrentColumn = 0;
-			m_CurrentRow = 6;
-			m_CurrentCubeIndex = 27;
-		}
-		else
-		{
-			m_CurrentColumn = 6;
-			m_CurrentRow = 6;
-			m_CurrentCubeIndex = 6;
-		}
+		m_CurrentColumn = 0;
+		m_CurrentRow = 6;
+		m_CurrentCubeIndex = 27;
+		m_FallToDeathTimer = 1.f;
+		break;
+	case EnemyMovementComponent::EnemyType::Ugg:
 		m_SourceHeightOffset = 0;
+		m_CurrentColumn = 6;
+		m_CurrentRow = 6;
+		m_CurrentCubeIndex = 6;
+		m_FallToDeathTimer = 1.f;
+
+		break;
+	case EnemyMovementComponent::EnemyType::Sam:
+		m_SourceHeightOffset = 0;
+		m_CurrentColumn = 0;
+		m_CurrentRow = 1;
+		m_CurrentCubeIndex = 7;
+		m_FallToDeathTimer = 1.f;
+
+		break;
+	case EnemyMovementComponent::EnemyType::Slick:
+		m_SourceHeightOffset = 0;
+		m_CurrentColumn = 1;
+		m_CurrentRow = 1;
+		m_CurrentCubeIndex = 1;
+		m_FallToDeathTimer = 1.f;
+
+		break;
+	default:
+		break;
 	}
+
+
 }
 
 void EnemyMovementComponent::Update()
@@ -42,7 +59,7 @@ void EnemyMovementComponent::Update()
 	{
 		if (m_FallingToDeath)
 		{
-			SidewaysFall();
+			SidewaysFallToDeath();
 		}
 		else if (m_IsMoving)
 		{
@@ -141,11 +158,11 @@ void EnemyMovementComponent::SidewaysMovement()
 	{
 		return;
 	}
-	int randNr = rand() % 2;
+	int dir = rand() % 2;
 
-	if (m_StartOnLeftSide)
+	if (m_EnemyType == EnemyType::WrongWay)
 	{
-		if (randNr == 0)
+		if (dir == 0)
 		{
 			m_Direction = AnimStates::MidAirRightDown;
 			m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::MidAirRightDown);
@@ -160,9 +177,9 @@ void EnemyMovementComponent::SidewaysMovement()
 			--m_CurrentRow;
 		}
 	}
-	else
+	else if(m_EnemyType == EnemyType::Ugg)
 	{
-		if (randNr == 0)
+		if (dir == 0)
 		{
 			m_Direction = AnimStates::MidAirLeftDown;
 			m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::MidAirLeftDown);
@@ -202,7 +219,7 @@ void EnemyMovementComponent::SidewaysJump()
 	else
 		pos.x -= deltaTime * speed.x;
 
-	if ((int)m_Direction >= (int)AnimStates::OnPlatformRightDown)//!
+	if ((int)m_Direction >= (int)AnimStates::OnPlatformRightDown)
 		jumpHeight = m_MoveDistance.y / 2.0f;
 	else
 		jumpHeight = m_MoveDistance.y * 1.5f;
@@ -235,12 +252,12 @@ void EnemyMovementComponent::SidewaysJump()
 		auto cubePos = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 		//auto srcRect = m_pGameObject->GetComponent<Texture2DComponent>()->GetSrcRect();
 
-		if (m_StartOnLeftSide)
+		if (m_EnemyType == EnemyType::WrongWay)
 		{
 			m_pGameObject->GetComponent<TransformComponent>()->SetPosition(glm::vec3(cubePos.x - 15, cubePos.y + 20 * 2 + m_SourceHeightOffset,0));
 			//m_pGameObject->GetComponent<TransformComponent>()->SetPosition(glm::vec2(cubePos.x - srcRect.w, cubePos.y + srcRect.h * 2 + m_SourceHeightOffset));
 		}
-		else
+		else if (m_EnemyType == EnemyType::Ugg)
 		{
 			m_pGameObject->GetComponent<TransformComponent>()->SetPosition(glm::vec3(cubePos.x + 15 * 3.f, cubePos.y + 20 * 2 + m_SourceHeightOffset,0));
 			//m_pGameObject->GetComponent<TransformComponent>()->SetPosition(glm::vec2(cubePos.x + srcRect.w * 2.5f, cubePos.y + srcRect.h * 2 + m_SourceHeightOffset));
@@ -254,21 +271,32 @@ void EnemyMovementComponent::SidewaysJump()
 	}
 }
 
-void EnemyMovementComponent::SidewaysFall()
+void EnemyMovementComponent::SidewaysFallToDeath()
 {
 	float deltaTime = SystemTime::GetInstance().GetDeltaTime();
-
-	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
-	glm::vec3 pos = transform->GetTransform().GetPosition();
-
-	if (m_StartOnLeftSide)
+	if(m_FallToDeathTimer > 0)
 	{
-		pos.x += deltaTime * m_Speed * 4;
+		m_FallToDeathTimer -= deltaTime;
+
+		const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
+		glm::vec3 pos = transform->GetTransform().GetPosition();
+
+		if (m_EnemyType == EnemyType::WrongWay)
+		{
+			pos.x += deltaTime * m_Speed * 4;
+		}
+		else if (m_EnemyType == EnemyType::Ugg)
+		{
+			pos.x -= deltaTime * m_Speed * 4;
+		}
+
+		transform->SetPosition(pos);
 	}
 	else
 	{
-		pos.x -= deltaTime * m_Speed * 4;
+		m_IsInDeathZone = true;
+		m_IsMoving = false;
+		m_FallingToDeath = false;
 	}
-
-	transform->SetPosition(pos);
+	
 }

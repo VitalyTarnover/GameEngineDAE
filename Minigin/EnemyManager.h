@@ -1,21 +1,39 @@
 #pragma once
 #include "Singleton.h"
+#include <vector>
 
 class EnemyManager : public dae::Singleton<EnemyManager>
 {
 public:
-	EnemyManager() {};
-	void Update(float deltaT);
+	EnemyManager() 
+	{
+		m_CoilySpawnTimer = m_CoilySpawnTime;
+		m_WrongWayUggSpawnTimer = m_WrongWayUggSpawnTime;
+		m_SamSlickSpawnTimer = m_SamSlickSpawnTime;
+	};
+	
+	void Update();
+	
 	void SpawnCoily();
-	void SpawnWrongWay();
-	void ClearEnemies();
-	void RemoveEnemyByName(const std::string& Enemy);
+	void SpawnWrongWayOrUgg();
+	void SpawnSamOrSlick();
+	
+	void DeleteEnemyGameObject(const std::shared_ptr<GameObject>& gameObject);
+	void DeleteAllEnemies(bool timerFullReset = false);
 private:
 	friend class dae::Singleton<EnemyManager>;
 
-	float m_SpawnTimer = 0.f;
-	float m_SpawnEnemyInterval = 7.5f;
-	int m_CoilyCount = 0;
-	int m_WrongWayCount = 0;
+	void DeleteSuicideJumpers();
+
+	float m_CoilySpawnTimer = 0.f;
+	float m_CoilySpawnTime = 15.f;
+
+	float m_WrongWayUggSpawnTimer = 0.f;
+	float m_WrongWayUggSpawnTime = 6.5f;
+
+	float m_SamSlickSpawnTimer = 0.f;
+	float m_SamSlickSpawnTime = 19.f;
+
+	std::vector<std::shared_ptr<GameObject>> m_Enemies;
 };
 

@@ -12,6 +12,8 @@ public:
     void SetMovementLocked(bool lock) { m_MovementLocked = lock; }
     bool GetMovementLocked() const { return m_MovementLocked; }
 
+    bool GetIsInDeathZone() const { return m_IsInDeathZone; }
+    bool GetIsFallingToDeath() const { return m_FallingToDeath;  }
 
 protected:
 
@@ -20,9 +22,13 @@ protected:
     void FallToDeath();
     void Jump();
     
+    float m_FallToDeathTimer = 0.f;
+    float m_FallToDeathTime = 0.5f;
+
     bool m_MovementLocked = false;
     bool m_IsMoving;
-    bool m_FallingToDeath;
+    bool m_FallingToDeath = false;
+    bool m_IsInDeathZone = false;
     float m_Speed;
     glm::vec2 m_MoveDistance;
     bool m_FirstHalfOfTheJump;

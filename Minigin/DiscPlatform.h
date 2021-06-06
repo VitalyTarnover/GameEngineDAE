@@ -19,7 +19,11 @@ public:
 
 	std::shared_ptr<GameObject> GetGameObject() const { return m_pGameObject; };
 
-	void SetIsMovingToTop(bool isMoving) { m_IsMovingToTop = isMoving; }
+	void SetIsMovingToTop(bool isMoving, int playerIndex)
+	{
+		m_IsMovingToTop = isMoving;
+		m_PlayerIndex = playerIndex;
+	}
 
 	bool GetIsUsed() const { return m_IsUsed; }
 	void SetIsUsed(bool isUsed) { m_IsUsed = isUsed; }
@@ -43,5 +47,6 @@ private:
 
 	bool m_IsMovingToTop = false;
 	bool m_IsUsed = false;
+	int m_PlayerIndex = 0;
 };
 

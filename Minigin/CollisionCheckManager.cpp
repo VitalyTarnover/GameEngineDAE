@@ -4,42 +4,112 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "LevelComponent.h"
+#include "EnemyManager.h"
 
 void CollisionCheckManager::Update()
 {
-	auto qbertRect = m_pQbert->GetComponent<TransformComponent>()->GetRect();
+	SDL_Rect qbertRect = m_pQbert->GetComponent<TransformComponent>()->GetRect();
 
-	for (auto& otherGameObject : m_pGameObjectsToCheck)
+	if (m_pQbert)
 	{
-		if (CheckCollision(qbertRect, otherGameObject->GetComponent<TransformComponent>()->GetRect()))
+
+		for (size_t i = 0; i < m_pGameObjectsToCheck.size(); i++)
 		{
-			if (otherGameObject->GetName() == "Disc")
+
+			if (CheckCollision(qbertRect, m_pGameObjectsToCheck[i]->GetComponent<TransformComponent>()->GetRect()))
 			{
-				//snap and move!
-				m_pQbert->GetComponent<QbertMovementComponent>()->SetDiscTransform(otherGameObject->GetComponent<TransformComponent>());
-				dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->GetDisc(otherGameObject)->SetIsMovingToTop(true);
-			}
-			else if (otherGameObject->GetName() == "Ugg" 
-				|| otherGameObject->GetName() == "WrongWay" 
-				|| otherGameObject->GetName() == "Coily")
-			{
-				//damage!
-			}
-			else if (otherGameObject->GetName() == "Sam"
-				|| otherGameObject->GetName() == "Slick")
-			{
-				//bonus!
+				if (m_pGameObjectsToCheck[i]->GetName() == "Disc")
+				{
+					//snap and move!
+					auto qbertMovementComponent = m_pQbert->GetComponent<QbertMovementComponent>();
+
+					if (!qbertMovementComponent->GetIsFallingToDeath())
+					{
+						qbertMovementComponent->SetDiscTransform(m_pGameObjectsToCheck[i]->GetComponent<TransformComponent>());
+						dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->GetDisc(m_pGameObjectsToCheck[i])->SetIsMovingToTop(true, 0);
+					}
+
+				}
+				else if (m_pGameObjectsToCheck[i]->GetName() == "Ugg"
+					|| m_pGameObjectsToCheck[i]->GetName() == "WrongWay"
+					|| m_pGameObjectsToCheck[i]->GetName() == "Coily")
+				{
+					//damage!
+					if (!m_pQbert->GetComponent<QbertMovementComponent>()->GetIsOnDisc())
+					{
+						auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
+						pPlayer->GetComponent<HealthComponent>()->Die();
+						pPlayer->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+						EnemyManager::GetInstance().DeleteAllEnemies();
+					}
+
+				}
+				else if (m_pGameObjectsToCheck[i]->GetName() == "Sam"
+					|| m_pGameObjectsToCheck[i]->GetName() == "Slick")
+				{
+					//bonus!
+					auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
+					pPlayer.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::CatchSlickOrSam);
+
+					EnemyManager::GetInstance().DeleteEnemyGameObject(m_pGameObjectsToCheck[i]);
+
+				}
 			}
 		}
 	}
+
+	if (m_pQbert2)
+	{
+		SDL_Rect qbertRect2 = m_pQbert2->GetComponent<TransformComponent>()->GetRect();
+
+		for (size_t i = 0; i < m_pGameObjectsToCheck.size(); i++)
+		{
+			if (CheckCollision(qbertRect2, m_pGameObjectsToCheck[i]->GetComponent<TransformComponent>()->GetRect()))
+			{
+				if (m_pGameObjectsToCheck[i]->GetName() == "Disc")
+				{
+					auto qbertMovementComponent2 = m_pQbert2->GetComponent<QbertMovementComponent>();
+
+					if (!qbertMovementComponent2->GetIsFallingToDeath())
+					{
+						m_pQbert2->GetComponent<QbertMovementComponent>()->SetDiscTransform(m_pGameObjectsToCheck[i]->GetComponent<TransformComponent>());
+						dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->GetDisc(m_pGameObjectsToCheck[i])->SetIsMovingToTop(true, 1);
+					}
+				}
+				else if (m_pGameObjectsToCheck[i]->GetName() == "Ugg"
+					|| m_pGameObjectsToCheck[i]->GetName() == "WrongWay"
+					|| m_pGameObjectsToCheck[i]->GetName() == "Coily")
+				{
+					//damage!
+					if (!m_pQbert2->GetComponent<QbertMovementComponent>()->GetIsOnDisc())
+					{
+						auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+						pPlayer->GetComponent<HealthComponent>()->Die();
+						pPlayer->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+						EnemyManager::GetInstance().DeleteAllEnemies();
+					}
+				}
+				else if (m_pGameObjectsToCheck[i]->GetName() == "Sam"
+					|| m_pGameObjectsToCheck[i]->GetName() == "Slick")
+				{
+					//bonus!
+					auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+					pPlayer.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::CatchSlickOrSam);
+
+					EnemyManager::GetInstance().DeleteEnemyGameObject(m_pGameObjectsToCheck[i]);
+				}
+			}
+		}
+	
+	}
+
 
 }
 
 void CollisionCheckManager::AddObjectForCheck(std::shared_ptr<GameObject> gameObject)
 {
-	//auto transform = gameObject->GetComponent<TransformComponent>();
-
 	if (gameObject->GetName() == "Q*Bert") m_pQbert = gameObject;
+	else if (gameObject->GetName() == "Q*Bert2") m_pQbert2 = gameObject;
 	else m_pGameObjectsToCheck.push_back(gameObject);
 }
 
@@ -49,7 +119,7 @@ void CollisionCheckManager::DeleteGameObject(std::shared_ptr<GameObject> gameObj
 	{
 		if (m_pGameObjectsToCheck[i] == gameObject)
 		{
-			m_pGameObjectsToCheck.erase(m_pGameObjectsToCheck.begin() + i);
+			m_pGameObjectsToCheck.erase(std::remove(m_pGameObjectsToCheck.begin(), m_pGameObjectsToCheck.end(), m_pGameObjectsToCheck[i]), m_pGameObjectsToCheck.end());
 		}
 	}
 

@@ -11,21 +11,39 @@
 #include "EnemyManager.h"
 
 
-class SwitchSceneCommand : public Command
+class Test1Command : public Command
 {
 public:
-	SwitchSceneCommand(int controllerIndex) : Command(controllerIndex) {};
-	~SwitchSceneCommand() override = default;
+	Test1Command(int controllerIndex) : Command(controllerIndex) {};
+	~Test1Command() override = default;
 	void Execute() const override { 
-		//auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		//pPlayerActor.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
+		//auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		//pPlayer.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
 		//dae::SceneManager::GetInstance().GetCurrentScene()->ClearScene();
-		//EnemyManager::GetInstance().SpawnWrongWay();
+		//EnemyManager::GetInstance().SpawnSamOrSlick();
 		EnemyManager::GetInstance().SpawnCoily();
 	};
 	void Release() const override {};
 	void Undo() override {};
 };
+
+class Test2Command : public Command
+{
+public:
+	Test2Command(int controllerIndex) : Command(controllerIndex) {};
+	~Test2Command() override = default;
+	void Execute() const override {
+		//auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		//pPlayer.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
+		//dae::SceneManager::GetInstance().GetCurrentScene()->ClearScene();
+		EnemyManager::GetInstance().SpawnWrongWayOrUgg();
+		//EnemyManager::GetInstance().SpawnCoily();
+		//EnemyManager::GetInstance().DeleteAllEnemies();
+	};
+	void Release() const override {};
+	void Undo() override {};
+};
+
 
 class FireCommand final : public Command
 {
@@ -86,8 +104,8 @@ public:
 	void Execute() const override
 	{
 		std::cout << "Die!" << '\n';
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor.get()->GetComponent<HealthComponent>()->Die();
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayer.get()->GetComponent<HealthComponent>()->Die();
 	}
 
 	void Release() const override {};
@@ -103,8 +121,8 @@ public:
 	void Execute() const override
 	{
 		std::cout << "PointIncrease" << std::endl;
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayer.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
 	}
 
 	void Release() const override {};
@@ -119,8 +137,8 @@ public:
 
 	void Execute() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		//pPlayerActor.get()->GetComponent<TransformComponent>()->MoveLeftTop ? ? ? ;
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		//pPlayer.get()->GetComponent<TransformComponent>()->MoveLeftTop ? ? ? ;
 	}
 
 	void Release() const override {};
@@ -135,8 +153,8 @@ public:
 
 	void Execute() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		//pPlayerActor.get()->GetComponent<TransformComponent>()->MoveLeftTop ? ? ? ;
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		//pPlayer.get()->GetComponent<TransformComponent>()->MoveLeftTop ? ? ? ;
 	}
 
 	void Release() const override {};
@@ -151,8 +169,8 @@ public:
 
 	void Execute() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		//pPlayerActor.get()->GetComponent<TransformComponent>()->MoveLeftTop ? ? ? ;
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		//pPlayer.get()->GetComponent<TransformComponent>()->MoveLeftTop ? ? ? ;
 	}
 
 	void Release() const override {};
@@ -167,8 +185,8 @@ public:
 
 	void Execute() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		//pPlayerActor.get()->GetComponent<TransformComponent>()->MoveLeftTop ? ? ? ;
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		//pPlayer.get()->GetComponent<TransformComponent>()->MoveLeftTop ? ? ? ;
 	}
 
 	void Release() const override {};
@@ -183,14 +201,14 @@ public:
 
 	void Execute() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Up);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayer->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Up);
 	}
 
 	void Release() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Up);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayer->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Up);
 	};
 
 	void Undo() override {};
@@ -203,14 +221,14 @@ public:
 
 	void Execute() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Down);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayer->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Down);
 	}
 
 	void Release() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Down);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayer->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Down);
 	};
 	void Undo() override {};
 };
@@ -222,14 +240,14 @@ public:
 
 	void Execute() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Left);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayer->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Left);
 	}
 
 	void Release() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Left);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayer->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Left);
 	};
 	void Undo() override {};
 };
@@ -241,14 +259,14 @@ public:
 
 	void Execute() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Right);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayer->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Right);
 	}
 
 	void Release() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Right);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayer->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Right);
 	};
 	void Undo() override {};
 };
@@ -263,14 +281,14 @@ public:
 
 	void Execute() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
-		if(pPlayerActor) pPlayerActor->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Up);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+		if(pPlayer) pPlayer->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Up);
 	}
 
 	void Release() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
-		if (pPlayerActor) pPlayerActor->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Up);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+		if (pPlayer) pPlayer->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Up);
 	};
 
 	void Undo() override {};
@@ -283,14 +301,14 @@ public:
 
 	void Execute() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
-		if (pPlayerActor) pPlayerActor->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Down);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+		if (pPlayer) pPlayer->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Down);
 	}
 
 	void Release() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
-		if (pPlayerActor) pPlayerActor->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Down);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+		if (pPlayer) pPlayer->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Down);
 	};
 	void Undo() override {};
 };
@@ -302,14 +320,14 @@ public:
 
 	void Execute() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
-		if (pPlayerActor) pPlayerActor->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Left);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+		if (pPlayer) pPlayer->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Left);
 	}
 
 	void Release() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
-		if (pPlayerActor) pPlayerActor->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Left);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+		if (pPlayer) pPlayer->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Left);
 	};
 	void Undo() override {};
 };
@@ -321,14 +339,14 @@ public:
 
 	void Execute() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
-		if (pPlayerActor) pPlayerActor->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Right);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+		if (pPlayer) pPlayer->GetComponent<QbertMovementComponent>()->Move(MoveDirections::Right);
 	}
 
 	void Release() const override
 	{
-		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
-		if (pPlayerActor) pPlayerActor->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Right);
+		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+		if (pPlayer) pPlayer->GetComponent<QbertMovementComponent>()->KeyReleased(MoveDirections::Right);
 	};
 	void Undo() override {};
 };
