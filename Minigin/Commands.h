@@ -9,6 +9,7 @@
 #include "Scene.h"
 #include "InputManager.h"
 #include "EnemyManager.h"
+#include "QbertSceneManager.h"
 
 
 class Test1Command : public Command
@@ -21,7 +22,8 @@ public:
 		//pPlayer.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
 		//dae::SceneManager::GetInstance().GetCurrentScene()->ClearScene();
 		//EnemyManager::GetInstance().SpawnSamOrSlick();
-		EnemyManager::GetInstance().SpawnCoily();
+		//EnemyManager::GetInstance().SpawnCoily();
+		QbertSceneManager::GetInstance().LoadSinglePlayer();
 	};
 	void Release() const override {};
 	void Undo() override {};
@@ -36,9 +38,11 @@ public:
 		//auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
 		//pPlayer.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
 		//dae::SceneManager::GetInstance().GetCurrentScene()->ClearScene();
-		EnemyManager::GetInstance().SpawnWrongWayOrUgg();
+		//EnemyManager::GetInstance().SpawnWrongWayOrUgg();
 		//EnemyManager::GetInstance().SpawnCoily();
 		//EnemyManager::GetInstance().DeleteAllEnemies();
+		QbertSceneManager::GetInstance().LoadCoop();
+
 	};
 	void Release() const override {};
 	void Undo() override {};

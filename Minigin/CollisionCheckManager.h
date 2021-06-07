@@ -11,6 +11,12 @@ public:
 	void Update();
 	void AddObjectForCheck(std::shared_ptr<GameObject> gameObject);
 	void DeleteGameObject(std::shared_ptr<GameObject> gameObject);
+	void CleanUp() 
+	{ 
+		m_pGameObjectsToCheck.clear(); 
+		m_pQbert = nullptr;
+		m_pQbert2 = nullptr;
+	}
 private:
 	bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2);
 	

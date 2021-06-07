@@ -92,9 +92,21 @@ void LevelComponent::SpawnDiscs()
     disc1Pos.x -= m_Offset.x * 1.5f;
     disc2Pos.x += m_Offset.x * 2.5f;
 
-    for (auto& cube : m_Cubes) cube->SetHasDiscNextToIt(false);
+    //for (auto& cube : m_Cubes) cube->SetHasDiscNextToIt(false);
 
-    for (auto& disc : m_Discs) disc->SetIsUsed(true);//
+    for (size_t i = 0; i < m_Cubes.size(); i++)
+    {
+        m_Cubes[i]->SetHasDiscNextToIt(false);
+    }
+    
+    
+    //for (auto& disc : m_Discs) disc->SetIsUsed(true);
+    
+    for (size_t i = 0; i < m_Discs.size(); i++)
+    {
+        m_Discs[i]->SetIsUsed(true);
+    }
+
 
     
 
@@ -444,6 +456,7 @@ void LevelComponent::TeleportPlayersToSpawnPos()
 
         player1->GetComponent<TransformComponent>()->SetPosition(startingPosition);
         player1->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(0);
+        player1->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformLeftDown);
     }
         break;
     case GameMode::Coop:
@@ -464,6 +477,8 @@ void LevelComponent::TeleportPlayersToSpawnPos()
             player1->GetComponent<TransformComponent>()->SetPosition(startingPosition);
             player1->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(27);
             player1->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+            player1->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformLeftDown);
+
             auto playerHealth = player1->GetComponent<HealthComponent>();
             if (playerHealth->GetLives() <= 0) playerHealth->SetLives(1);
         }
@@ -476,6 +491,8 @@ void LevelComponent::TeleportPlayersToSpawnPos()
             player2->GetComponent<TransformComponent>()->SetPosition(startingPosition);
             player2->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(6);
             player2->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+            player2->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformLeftDown);
+
             auto playerHealth = player2->GetComponent<HealthComponent>();
             if (playerHealth->GetLives() <= 0) playerHealth->SetLives(1);
         }
@@ -496,6 +513,8 @@ void LevelComponent::TeleportPlayersToSpawnPos()
         player1->GetComponent<TransformComponent>()->SetPosition(startingPosition);
         player1->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(0);
         player1->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+        player1->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformLeftDown);
+
 
         auto rightCube = GetCube(27);
 
@@ -505,6 +524,8 @@ void LevelComponent::TeleportPlayersToSpawnPos()
         player2->GetComponent<TransformComponent>()->SetPosition(startingPosition);
         player2->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(27);
         player2->GetComponent<QbertMovementComponent>()->LockMovementForSeconds(1.5f);
+        player2->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformLeftDown);
+
 
     }
         break;
@@ -537,7 +558,7 @@ int LevelComponent::GetRowNumber(const int& currentTileIndex) const
 void LevelComponent::CreateCube(const size_t& index, const glm::vec3& pos, dae::Scene& scene)
 {
 
-    m_Cubes[index] = std::make_shared<CubePlatform>();
+    m_Cubes.push_back(std::make_shared<CubePlatform>());
     auto newCube = m_Cubes[index]->GetGameObject();
     newCube->AddComponent(new TransformComponent(pos));
     newCube->AddComponent(new Texture2DComponent("CubePlatforms.png", m_Scale));

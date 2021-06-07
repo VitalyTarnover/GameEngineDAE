@@ -149,7 +149,7 @@ void EnemyManager::SpawnSamOrSlick()
 		auto slick = std::make_shared<GameObject>("Slick");
 		slick->AddComponent(new TransformComponent(rightCubePos, glm::vec2{ 15,15 }));
 		slick->AddComponent(new Texture2DComponent("Slick.png", scene->GetSceneScale()));
-		slick->AddComponent(new EnemyMovementComponent(scene->GetPlayer(0), EnemyMovementComponent::EnemyType::Slick));
+		slick->AddComponent(new EnemyMovementComponent(scene->GetPlayer(0), EnemyMovementComponent::EnemyType::Slick, 125.f, 0.75f));
 		slick->AddComponent(new SpriteAnimComponent(8));
 		slick->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformLeftDown);
 		scene->Add(slick);
@@ -163,11 +163,11 @@ void EnemyManager::SpawnSamOrSlick()
 
 		leftCubePos.x += scene->GetSceneScale() * 8.f;
 		leftCubePos.y -= scene->GetSceneScale() * 10.f;
-
+		
 		auto sam = std::make_shared<GameObject>("Sam");
 		sam->AddComponent(new TransformComponent(leftCubePos, glm::vec2{ 15,15 }));
 		sam->AddComponent(new Texture2DComponent("Sam.png", scene->GetSceneScale()));
-		sam->AddComponent(new EnemyMovementComponent(scene->GetPlayer(0), EnemyMovementComponent::EnemyType::Sam));
+		sam->AddComponent(new EnemyMovementComponent(scene->GetPlayer(0), EnemyMovementComponent::EnemyType::Sam, 125.f, 0.75f));
 		sam->AddComponent(new SpriteAnimComponent(8));
 		sam->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::OnPlatformLeftDown);
 		scene->Add(sam);
@@ -193,7 +193,7 @@ void EnemyManager::SpawnCoily()
 	coily->AddComponent(new Texture2DComponent("Coily.png", scene->GetSceneScale()));
 
 	if (scene->GetPlayer(1) != nullptr) coily->AddComponent(new EnemyMovementComponent(scene->GetPlayer(rand() % 2), EnemyMovementComponent::EnemyType::Coily));
-	else coily->AddComponent(new EnemyMovementComponent(scene->GetPlayer(0), EnemyMovementComponent::EnemyType::Coily));
+	else coily->AddComponent(new EnemyMovementComponent(scene->GetPlayer(0), EnemyMovementComponent::EnemyType::Coily, 120.f, 1.f));
 
 	
 	coily->AddComponent(new SpriteAnimComponent(8));

@@ -40,6 +40,9 @@
     <Filter Include="EnemyManager">
       <UniqueIdentifier>{18bb07a4-e2d6-4a16-b374-1f7e963d75e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="QbertSceneManager">
+      <UniqueIdentifier>{c793b96a-4540-4864-ae58-2a8bec03325f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MiniginPCH.h">
@@ -102,6 +105,9 @@
     <ClInclude Include="EnemyManager.h">
       <Filter>EnemyManager</Filter>
     </ClInclude>
+    <ClInclude Include="QbertSceneManager.h">
+      <Filter>QbertSceneManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
@@ -148,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="EnemyManager.cpp">
       <Filter>EnemyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="QbertSceneManager.cpp">
+      <Filter>QbertSceneManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

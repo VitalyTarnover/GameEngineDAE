@@ -3,10 +3,10 @@
 #include "SceneManager.h"
 #include "LevelComponent.h"
 
-EnemyMovementComponent::EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType, float speed)
+EnemyMovementComponent::EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType, float speed, float jumpTime)
 	:m_pPlayer{ pPlayer }
 	, m_JumpTimer{ 0.0f }
-	, m_JumpTime{ 1.0f }
+	, m_JumpTime{ jumpTime }
 	, m_EnemyType{ enemyType }
 {
 	m_Speed = speed;

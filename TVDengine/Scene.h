@@ -12,6 +12,7 @@ enum class GameLevel//different games can have different amount of levels
 
 enum class GameMode
 {
+	MainMenu,
 	SinglePlayer,
 	Coop,
 	Versus

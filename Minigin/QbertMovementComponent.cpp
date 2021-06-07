@@ -6,8 +6,9 @@
 #include "Scene.h"
 #include "SystemTime.h"
 
-QbertMovementComponent::QbertMovementComponent(float speed)
+QbertMovementComponent::QbertMovementComponent(bool autoStatrt, float speed)
 	: m_IsKeyPressed{ false }
+	, m_AutoStart {autoStatrt}
 {
 	m_SourceHeightOffset = 0;
 	m_Speed = speed;
@@ -20,6 +21,30 @@ void QbertMovementComponent::Move(MoveDirections dir)
 	{
 		if (m_IsMoving)
 		{
+			return;
+		}
+
+		if (m_AutoStart)
+		{
+			int randDir = rand() % 2;
+
+			if(randDir == 0)
+			{
+				m_Direction = AnimStates::MidAirLeftDown;
+				m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::MidAirLeftDown);
+				ActivateJump();
+				++m_CurrentRow;
+			}
+			else
+			{
+				m_Direction = AnimStates::MidAirRightDown;
+				m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates::MidAirRightDown);
+				ActivateJump();
+				++m_CurrentColumn;
+				++m_CurrentRow;
+			}
+			if (m_CurrentRow >= 6) m_AutoStart = false;
+
 			return;
 		}
 		m_MoveDirection = dir;
@@ -149,12 +174,20 @@ void QbertMovementComponent::ActivateJump(bool isSideWaysJump)
 
 		const auto& CurrentMap = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>();
 
-		bool onMap = CurrentMap->JumpToNextCube(m_CurrentCubeIndex, m_Direction, isSideWaysJump, m_CurrentColumn, m_CurrentRow);//gets and sets!
+		bool onMap = CurrentMap->JumpToNextCube(m_CurrentCubeIndex, m_Direction, isSideWaysJump, m_CurrentColumn, m_CurrentRow);
 
-		if (!onMap && !CurrentMap->GetCube(m_CurrentCubeIndex)->GetHasDiscNextToIt())//check for disc here
-			m_FallingToDeath = true;
-		else if (!onMap && CurrentMap->GetCube(m_CurrentCubeIndex)->GetHasDiscNextToIt())
-			m_JumpingOnDisc = true;
+		if (m_pGameObject->GetName() != "Coily")
+		{
+			if (!onMap && !CurrentMap->GetCube(m_CurrentCubeIndex)->GetHasDiscNextToIt())
+				m_FallingToDeath = true;
+			else if (!onMap && CurrentMap->GetCube(m_CurrentCubeIndex)->GetHasDiscNextToIt())
+				m_JumpingOnDisc = true;
+		}
+		else
+		{
+			if (!onMap) m_FallingToDeath = true;
+		}
+
 	
 }
 
@@ -273,6 +306,10 @@ void QbertMovementComponent::Update()
 		else if (m_JumpingOnDisc) JumpOnDisc();
 		else if (m_IsMoving) Jump();
 	}
+
+	if (m_AutoStart)Move(MoveDirections::Right);
+
+
 	UpdateMovementLockedWithTimer();
 
 }

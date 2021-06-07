@@ -206,19 +206,28 @@ void BaseMovementComponent::FallToDeath()
 
 		if (m_pGameObject->GetName() == "Coily")
 		{
-			m_IsInDeathZone = true;
-
-			auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
-			auto pPlayer2 = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
-			if (pPlayer->GetComponent<QbertMovementComponent>()->GetIsOnDisc())
+			if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() != GameMode::Versus)
 			{
-				pPlayer->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::CoilyKilledWithFlyingDisc);
-			}
+				m_IsInDeathZone = true;
 
-			if (pPlayer2 && pPlayer->GetComponent<QbertMovementComponent>()->GetIsOnDisc())
-			{
-				pPlayer2->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::CoilyKilledWithFlyingDisc);
+				auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
+				auto pPlayer2 = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+				if (pPlayer->GetComponent<QbertMovementComponent>()->GetIsOnDisc())
+				{
+					pPlayer->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::CoilyKilledWithFlyingDisc);
+				}
+
+				if (pPlayer2 && pPlayer->GetComponent<QbertMovementComponent>()->GetIsOnDisc())
+				{
+					pPlayer2->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::CoilyKilledWithFlyingDisc);
+				}
 			}
+			else
+			{
+				m_MovementLocked = true;
+				m_pGameObject->GetComponent<TransformComponent>()->SetPosition(glm::vec3(0, -100, 0));
+			}
+			
 		}
 
 	}

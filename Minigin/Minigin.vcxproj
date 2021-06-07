@@ -229,6 +229,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="MiniginPCH.h" />
     <ClInclude Include="QbertMovementComponent.h" />
+    <ClInclude Include="QbertSceneManager.h" />
     <ClInclude Include="ScoreObserver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -252,6 +253,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MiniginPCH.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="QbertMovementComponent.cpp" />
+    <ClCompile Include="QbertSceneManager.cpp" />
     <ClCompile Include="ScoreObserver.cpp" />
   </ItemGroup>
   <ItemGroup>

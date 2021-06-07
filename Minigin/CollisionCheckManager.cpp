@@ -8,10 +8,10 @@
 
 void CollisionCheckManager::Update()
 {
-	SDL_Rect qbertRect = m_pQbert->GetComponent<TransformComponent>()->GetRect();
 
 	if (m_pQbert)
 	{
+		SDL_Rect qbertRect = m_pQbert->GetComponent<TransformComponent>()->GetRect();
 
 		for (size_t i = 0; i < m_pGameObjectsToCheck.size(); i++)
 		{

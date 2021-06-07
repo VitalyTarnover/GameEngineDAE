@@ -20,6 +20,8 @@
 #include "AnalogTriggerCommand.h"
 #include "CollisionCheckManager.h"
 
+#include "QbertSceneManager.h"
+
 #include "AudioLocator.h"
 
 
@@ -88,10 +90,11 @@ void dae::Minigin::LoadGame() const
 {
 	srand(int(time(NULL)));
 
+	SceneManager::GetInstance().CreateScene("Game");
 
-	auto& scene = SceneManager::GetInstance().CreateScene("Game");
+	QbertSceneManager::GetInstance().LoadMainMenu();
 
-	scene.SetCurrentGameMode(GameMode::SinglePlayer);//GameMode::Coop
+	//scene.SetCurrentGameMode(GameMode::Versus);//GameMode::Coop
 	
 	//background
 	//auto go = std::make_shared<GameObject>("Background");
@@ -100,12 +103,16 @@ void dae::Minigin::LoadGame() const
 
 
 	//fps counter
-	auto fpsCounter = std::make_shared<GameObject>("FPSCounter");
-	auto font2 = ResourceManager::GetInstance().LoadFont("Lingua.otf", 14);
-	fpsCounter->AddComponent(new FPSTextComponent(font2));
-	scene.Add(fpsCounter);
+	//auto fpsCounter = std::make_shared<GameObject>("FPSCounter");
+	//auto font2 = ResourceManager::GetInstance().LoadFont("Lingua.otf", 14);
+	//fpsCounter->AddComponent(new FPSTextComponent(font2));
+	//scene.Add(fpsCounter);
+	
+	
+	/*
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
 
+	
 	switch (scene.GetCurrentGameMode())
 	{
 	case(GameMode::SinglePlayer):
@@ -263,7 +270,7 @@ void dae::Minigin::LoadGame() const
 
 		//q*bert
 		{
-			glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+			glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 			startPosition.x += scene.GetSceneScale() * 8.f;
 			startPosition.y -= scene.GetSceneScale() * 10.f;
 
@@ -276,13 +283,14 @@ void dae::Minigin::LoadGame() const
 			qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
 			qbert->AddComponent(new SpriteAnimComponent(8));
 			qbert->AddComponent(new QbertMovementComponent());
+			qbert->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(27);
 			CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
 			scene.Add(qbert);
 			scene.AddPlayer(qbert);
 		}
 		//coily
 		{
-			glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+			glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 			startPosition.x += scene.GetSceneScale() * 8.f;
 			startPosition.y -= scene.GetSceneScale() * 10.f;
 
@@ -290,8 +298,8 @@ void dae::Minigin::LoadGame() const
 			coily->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));
 			coily->AddComponent(new Texture2DComponent("Coily.png", scene.GetSceneScale()));
 
-			coily->AddComponent(new QbertMovementComponent());
-			coily->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(27);
+			coily->AddComponent(new QbertMovementComponent(true, 75.f));
+			coily->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(0);
 
 			coily->AddComponent(new SpriteAnimComponent(8));
 			scene.Add(coily);
@@ -303,7 +311,7 @@ void dae::Minigin::LoadGame() const
 	}
 	break;
 	}
-
+	*/
     
 
 
@@ -353,13 +361,18 @@ void dae::Minigin::Run()
 		input.ProcessInput();
 		input.ControllerAnalogs();
 		input.InputHandler();
-		CollisionCheckManager::GetInstance().Update();
 
 
 		doContinue = input.KeyboardInput();
 
 		SystemTime::GetInstance().SetDeltaTime(deltaTime);
-		EnemyManager::GetInstance().Update();
+		
+		if (SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() != GameMode::MainMenu)
+		{
+			EnemyManager::GetInstance().Update();
+			CollisionCheckManager::GetInstance().Update();
+		}
+
 		sceneManager.Update();
 		renderer.Render();
 	}
@@ -377,25 +390,25 @@ void dae::Minigin::BindCommands()
 	//input.AssignKey<DieCommand>(ControllerButton::ButtonX, 0);
 	//input.AssignKey<IncreasePointsCommand>(ControllerButton::ButtonY, 0);
 	//move
-	//input.AssignKey<JumpUp>(ControllerButton::ButtonUp);
-	//input.AssignKey<JumpDown>(ControllerButton::ButtonDown);
-	//input.AssignKey<JumpLeft>(ControllerButton::ButtonLeft);
-	//input.AssignKey<JumpRight>(ControllerButton::ButtonRight);
+	input.AssignKey<JumpUpP2>(ControllerButton::ButtonUp);
+	input.AssignKey<JumpDownP2>(ControllerButton::ButtonDown);
+	input.AssignKey<JumpLeftP2>(ControllerButton::ButtonLeft);
+	input.AssignKey<JumpRightP2>(ControllerButton::ButtonRight);
 	//keyboard
 	input.AssignKey<JumpUp>(KeyboardButton::W);
 	input.AssignKey<JumpDown>(KeyboardButton::S);
 	input.AssignKey<JumpLeft>(KeyboardButton::A);
 	input.AssignKey<JumpRight>(KeyboardButton::D);
 	
-	input.AssignKey<JumpUpP2>(KeyboardButton::I);
-	input.AssignKey<JumpDownP2>(KeyboardButton::K);
-	input.AssignKey<JumpLeftP2>(KeyboardButton::J);
-	input.AssignKey<JumpRightP2>(KeyboardButton::L);
+	//input.AssignKey<JumpUpP2>(KeyboardButton::I);
+	//input.AssignKey<JumpDownP2>(KeyboardButton::K);
+	//input.AssignKey<JumpLeftP2>(KeyboardButton::J);
+	//input.AssignKey<JumpRightP2>(KeyboardButton::L);
 
 	input.AssignKey<ExitCommand>(KeyboardButton::ESC);
 
 	input.AssignKey<Test1Command>(KeyboardButton::P);
-	//input.AssignKey<Test2Command>(KeyboardButton::I);
+	input.AssignKey<Test2Command>(KeyboardButton::I);
 
 	//input.AssignKey<ExitCommand>(ControllerButton::ButtonSelect);
 	//AssignKey<FartCommand>(ControllerButton::ButtonStart);

@@ -26,6 +26,9 @@ namespace dae
 		K = SDLK_k,
 		L = SDLK_l,
 		P = SDLK_p,
+		One = SDLK_1,
+		Two = SDLK_2,
+		Three = SDLK_3,
 		SPACE = SDLK_SPACE,
 		ESC = SDLK_ESCAPE
 	};

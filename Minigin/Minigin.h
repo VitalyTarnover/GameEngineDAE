@@ -10,6 +10,7 @@ namespace dae
 		void Initialize();
 		void LoadGame() const;
 		
+		void LoadMenuScene();
 		
 		void Cleanup();
 		void Run();

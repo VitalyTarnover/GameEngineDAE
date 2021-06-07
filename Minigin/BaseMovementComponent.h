@@ -27,7 +27,7 @@ protected:
     void Jump();
     
     float m_FallToDeathTimer = 0.f;
-    float m_FallToDeathTime = 0.5f;
+    float m_FallToDeathTime = 0.75f;
 
     bool m_MovementLocked = false;
     bool m_IsMoving;

@@ -14,8 +14,13 @@ enum class MoveDirections
 class QbertMovementComponent final : public BaseMovementComponent
 {
 public:
-	QbertMovementComponent(float speed = 100.f);
-	
+	QbertMovementComponent(bool autoStart = false, float speed = 100.f);
+	~QbertMovementComponent()
+	{
+		m_pDiscTransform = nullptr;
+		delete m_pDiscTransform;
+	}
+
 	void Move(MoveDirections direction);
 
 	void KeyReleased(MoveDirections moveDir) { m_IsKeyPressed[(int)moveDir] = false; }
@@ -58,6 +63,8 @@ private:
 	bool m_IsOnDisc;
 	TransformComponent* m_pDiscTransform;
 	bool m_IsKeyPressed[4];
+
+	bool m_AutoStart = false;
 	//glm::vec3 m_MoveDistance;
 	//float m_Speed;
 	//bool m_FirstHalfOfTheJump;
