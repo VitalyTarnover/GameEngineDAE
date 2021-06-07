@@ -383,44 +383,36 @@ void dae::Minigin::Run()
 
 void dae::Minigin::BindCommands()
 {
-	auto& input{ InputManager::GetInstance() };
-	//assign buttons
-	//input.AssignKey<DieCommand>(ControllerButton::ButtonA);
-	//input.AssignKey<IncreasePointsCommand>(ControllerButton::ButtonB);
-	//input.AssignKey<DieCommand>(ControllerButton::ButtonX, 0);
-	//input.AssignKey<IncreasePointsCommand>(ControllerButton::ButtonY, 0);
-	//move
-	input.AssignKey<JumpUpP2>(ControllerButton::ButtonUp);
-	input.AssignKey<JumpDownP2>(ControllerButton::ButtonDown);
-	input.AssignKey<JumpLeftP2>(ControllerButton::ButtonLeft);
-	input.AssignKey<JumpRightP2>(ControllerButton::ButtonRight);
+	auto& inputManager = InputManager::GetInstance();
+
 	//keyboard
-	input.AssignKey<JumpUp>(KeyboardButton::W);
-	input.AssignKey<JumpDown>(KeyboardButton::S);
-	input.AssignKey<JumpLeft>(KeyboardButton::A);
-	input.AssignKey<JumpRight>(KeyboardButton::D);
-	
-	//input.AssignKey<JumpUpP2>(KeyboardButton::I);
-	//input.AssignKey<JumpDownP2>(KeyboardButton::K);
-	//input.AssignKey<JumpLeftP2>(KeyboardButton::J);
-	//input.AssignKey<JumpRightP2>(KeyboardButton::L);
+	inputManager.AssignKey<JumpUp>(KeyboardButton::W, 0);
+	inputManager.AssignKey<JumpDown>(KeyboardButton::S, 0);
+	inputManager.AssignKey<JumpLeft>(KeyboardButton::A, 0);
+	inputManager.AssignKey<JumpRight>(KeyboardButton::D, 0);
+	inputManager.AssignKey<ExitCommand>(KeyboardButton::ESC, 0);
 
-	input.AssignKey<ExitCommand>(KeyboardButton::ESC);
 
-	input.AssignKey<Test1Command>(KeyboardButton::P);
-	input.AssignKey<Test2Command>(KeyboardButton::I);
+	inputManager.AssignKey<JumpUp>(KeyboardButton::I, 1);
+	inputManager.AssignKey<JumpDown>(KeyboardButton::K, 1);
+	inputManager.AssignKey<JumpLeft>(KeyboardButton::J, 1);
+	inputManager.AssignKey<JumpRight>(KeyboardButton::L, 1);
 
-	//input.AssignKey<ExitCommand>(ControllerButton::ButtonSelect);
-	//AssignKey<FartCommand>(ControllerButton::ButtonStart);
-	//AssignKey<FartCommand>(ControllerButton::ButtonLeftThumb);
-	//AssignKey<FartCommand>(ControllerButton::ButtonRightThumb);
-	//AssignKey<FartCommand>(ControllerButton::ButtonLeftShoulder);
-	//AssignKey<FartCommand>(ControllerButton::ButtonRightShoulder);
-	//assign triggers
-	//input.AssignTrigger<AimCommand>(m_Triggers[0].first);
-	//input.AssignTrigger<ShootCommand>(m_Triggers[1].first);
-	//assign sticks
-	//input.AssignStick<MoveCommand>(m_Sticks[0].first);
-	//input.AssignStick<LookCommand>(m_Sticks[1].first);
+	inputManager.AssignKey<LoadSinglePlayerCommand>(KeyboardButton::One, 0);
+	inputManager.AssignKey<LoadCoopCommand>(KeyboardButton::Two, 0);
+	inputManager.AssignKey<LoadVersusCommand>(KeyboardButton::Three, 0);
+	inputManager.AssignKey<LoadMainMenuCommand>(KeyboardButton::P, 0);
+
+	//inputManager.AssignKey<Test1Command>(KeyboardButton::P, 0);
+
+	for (int i = 0; i < XUSER_MAX_COUNT; i++)
+	{
+		//gamepad
+		inputManager.AssignKey<JumpUp>(ControllerButton::ButtonUp, i);
+		inputManager.AssignKey<JumpDown>(ControllerButton::ButtonDown, i);
+		inputManager.AssignKey<JumpLeft>(ControllerButton::ButtonLeft, i);
+		inputManager.AssignKey<JumpRight>(ControllerButton::ButtonRight, i);
+
+	}
+
 }
-

@@ -10,7 +10,6 @@
 #include <map>
 #include "Singleton.h"
 #include <SDL.h>
-
 #pragma comment(lib, "XInput.lib")
 
 namespace dae
@@ -50,105 +49,101 @@ namespace dae
 		ButtonRightShoulder = XINPUT_GAMEPAD_RIGHT_SHOULDER,
 		ButtonStart = XINPUT_GAMEPAD_START,
 	};
-	//----------------------------------------------------------------------------------------------
-	//for buttons
+
+	//buttons
 	using ControllerKey = std::pair<unsigned, ControllerButton>;
-	using ControllerButtonCommandsMap = std::map<ControllerKey, std::unique_ptr<Command>>;
-	//for triggers
+	using ControllerButtonCommandsMap = std::map<ControllerKey, std::pair<std::unique_ptr<Command>, int>>;
+	
+	//triggers
 	using ControllerTrigger = std::pair<std::string, float>;
-	using ControllerTriggerCommandMap = std::map<std::string, std::unique_ptr<AnalogTriggerCommand>>;
-	//for sticks
+	using ControllerTriggerCommandMap = std::map<std::string, std::pair<std::unique_ptr<AnalogTriggerCommand>, int>>;
+	
+	//sticks
 	using ControllerStick = std::pair<std::string, AnalogStickInput>;
-	using ControllerStickCommandMap = std::map<std::string, std::unique_ptr<AnalogStickCommand>>;
-	//for keyboard
+	using ControllerStickCommandMap = std::map<std::string, std::pair<std::unique_ptr<AnalogStickCommand>, int>>;
+	
+	//keyboard
 	using KeyboardKey = std::pair<unsigned, KeyboardButton>;
-	using KeyboardCommandsMap = std::map<KeyboardKey, std::unique_ptr<Command>>;
-	//----------------------------------------------------------------------------------------------
-	struct Controller //TODO : use this instead of the three seperatly
+	using KeyboardCommandsMap = std::map<KeyboardKey, std::pair<std::unique_ptr<Command>, int>>;
+	
+	struct Controller 
 	{
 		ControllerButtonCommandsMap m_ConsoleButtonCommands;
 		ControllerTriggerCommandMap m_ConsoleTriggerCommands;
 		ControllerStickCommandMap m_ConsoleStickCommands;
 		XINPUT_STATE m_CurrentState{};
 	};
-	struct Keyboard //TODO : this as well like above
+	struct Keyboard 
 	{
 		KeyboardCommandsMap m_ConsoleCommands;
 	};
 
-	//----------------------------------------------------------------------------------------------
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
 		InputManager();
-		//Functions
-		void ProcessInput();
-		bool KeyboardInput();
-		bool InputHandler();
-		void ControllerAnalogs();
-		//void BindCommands();
 
-		//----------------------------------------------------------------------------------------------
+		void ProcessInput();
+		
+		bool KeyboardInput();
+		
+		bool InputHandler();
+		
+		void ControllerAnalogs();
+		
+
 		//button template
 		template <typename T>
-		void AssignKey(ControllerButton button, int controllerIndex = 0)
+		void AssignKey(ControllerButton button, int controllerIndex, int param = 0)
 		{
 			ControllerKey key = std::make_pair(unsigned(button), button);
-			m_ButtonCommands.insert(std::make_pair(key, std::make_unique<T>(controllerIndex)));
+			m_Controllers[controllerIndex]->m_ConsoleButtonCommands.insert(std::make_pair(key, std::make_pair(std::make_unique<T>(controllerIndex), param)));
 		}
-		template <typename T>
-		void AssignKey(ControllerButton button, std::unique_ptr<T> command)//untested
-		{
-			ControllerKey key = std::make_pair(unsigned(button), button);
-			m_ButtonCommands.insert(std::make_pair(key, std::move(command)));
-		}
+		
 		//trigger template
 		template <typename T>
-		void AssignTrigger(std::string triggerName, int controllerIndex = 0)
+		void AssignTrigger(std::string triggerName, int controllerIndex, int param = 0)
 		{
-			m_TriggerCommands.insert(std::make_pair(triggerName, std::make_unique<T>(controllerIndex)));
+			m_Controllers[controllerIndex]->m_ConsoleTriggerCommands.insert(std::make_pair(triggerName, std::make_pair(std::make_unique<T>(controllerIndex), param)));
 		}
+
 		//stick template
 		template <typename T>
-		void AssignStick(std::string stickName, int controllerIndex = 0)
+		void AssignStick(std::string stickName, int controllerIndex, int param = 0)
 		{
-			m_StickCommands.insert(std::make_pair(stickName, std::make_unique<T>(controllerIndex)));
+			m_Controllers[controllerIndex]->m_ConsoleStickCommands.insert(std::make_pair(stickName, std::make_pair(std::make_unique<T>(controllerIndex), param)));
 		}
+
 		//keyboard template
 		template <typename T>
 		void AssignKey(KeyboardButton button, int keyboardParameter = 0)
 		{
 			KeyboardKey key = std::make_pair(unsigned(button), button);
-			m_KeyboardButtonCommands.insert(std::make_pair(key, std::make_unique<T>(keyboardParameter)));
+			m_KeyboardButtonCommands.insert(std::make_pair(key, std::make_pair(std::make_unique<T>(keyboardParameter), 0)));
 		}
-		//----------------------------------------------------------------------------------------------
 
-		void SetExiting(bool exit) { m_Exiting = exit; };
+		void SetIsExiting(bool exit) { m_IsExiting = exit; }
 
 	private:
-		//Methods
-		bool IsPressed(ControllerButton button) const;
+		bool IsPressed(ControllerButton button, const std::unique_ptr<Controller>& controller) const;
 
-		bool m_Exiting = false;
-
-		//Data Members
 		XINPUT_STATE m_CurrentState;
-		//std::vector<std::unique_ptr<Controller>> m_Controllers;
-		//for buttons
-		ControllerButtonCommandsMap m_ButtonCommands;
+		
+		bool m_IsExiting = false;
+
+		//buttons
 		static const int amountOfButtons = 14;
 		const ControllerButton m_Buttons[amountOfButtons];
-		//for triggers
-		ControllerTriggerCommandMap m_TriggerCommands;
+		//triggers
 		static const int amountOfTriggers = 2;
 		ControllerTrigger m_Triggers[amountOfTriggers] = { std::make_pair("LeftTrigger" , 0.f),std::make_pair("RightTrigger" , 0.f) };
-		//for sticks
-		ControllerStickCommandMap m_StickCommands;
+		//sticks
 		static const int amountOfAnalogSticks = 2;
 		ControllerStick m_Sticks[amountOfAnalogSticks] = { std::make_pair("LeftStick" , AnalogStickInput{0.f,0.f}),std::make_pair("RightStick" , AnalogStickInput{0.f,0.f}) };
-		//for keyboard
-		KeyboardCommandsMap m_KeyboardButtonCommands;
 		//controllers
-		//std::vector<std::unique_ptr<Controller>> m_Controllers;
+		std::vector<std::unique_ptr<Controller>> m_Controllers;
+
+		//keyboard
+		KeyboardCommandsMap m_KeyboardButtonCommands;
 	};
 }

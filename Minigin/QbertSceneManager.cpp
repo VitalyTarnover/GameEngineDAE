@@ -25,55 +25,72 @@ void QbertSceneManager::LoadMainMenu()
 	scene->SetCurrentGameMode(GameMode::MainMenu);
 	scene->SetGameLevel(GameLevel::Level1);
 
+	//background
+	auto background = std::make_shared<GameObject>("Background");
+	background->AddComponent(new Texture2DComponent("QbertBackground.jpg"));
+	scene->Add(background);
+
 	auto text1 = std::make_shared<GameObject>("Text1");
-	text1->AddComponent(new TransformComponent(glm::vec3(20, 100, 0)));
+	text1->AddComponent(new TransformComponent(glm::vec3(20, 150, 0)));
 	auto textText1 = new TextComponent("Q*Bert!", font, SDL_Color{ 255,165,0 });
 	text1->AddComponent(textText1);
 	scene->Add(text1);
 
 	auto text2 = std::make_shared<GameObject>("Text2");
-	text2->AddComponent(new TransformComponent(glm::vec3(20, 150, 0)));
+	text2->AddComponent(new TransformComponent(glm::vec3(20, 200, 0)));
 	auto textText2 = new TextComponent("Controls:", font, SDL_Color{ 255,255,255 });
 	text2->AddComponent(textText2);
 	scene->Add(text2);
 
 	auto text3 = std::make_shared<GameObject>("Text3");
-	text3->AddComponent(new TransformComponent(glm::vec3(20, 175, 0)));
-	auto textText3 = new TextComponent("Player1(WASD): WD = Jump left up, SD = Jump left down, AS = Jump right down, WA = Jump right up", font, SDL_Color{ 255,255,255 });
+	text3->AddComponent(new TransformComponent(glm::vec3(20, 225, 0)));
+	auto textText3 = new TextComponent("Player1(WASD/Gamepad): WD = Jump left up, SD = Jump left down, AS = Jump right down, WA = Jump right up", font, SDL_Color{ 255,255,255 });
 	text3->AddComponent(textText3);
 	scene->Add(text3);
 
 	auto text4 = std::make_shared<GameObject>("Text4");
-	text4->AddComponent(new TransformComponent(glm::vec3(20, 200, 0)));
+	text4->AddComponent(new TransformComponent(glm::vec3(20, 250, 0)));
 	auto textText4 = new TextComponent("Player2(IJKL): IL = Jump left up, LK = Jump left down, KJ = Jump right down, IJ = Jump right up", font, SDL_Color{ 255,255,255 });
 	text4->AddComponent(textText4);
 	scene->Add(text4);
 
 	auto text5 = std::make_shared<GameObject>("Text5");
-	text5->AddComponent(new TransformComponent(glm::vec3(20, 300, 0)));
+	text5->AddComponent(new TransformComponent(glm::vec3(20, 350, 0)));
 	auto textText5 = new TextComponent("Game modes:", font, SDL_Color{ 255,255,255 });
 	text5->AddComponent(textText5);
 	scene->Add(text5);
 
 
 	auto text6 = std::make_shared<GameObject>("Text6");
-	text6->AddComponent(new TransformComponent(glm::vec3(20, 325, 0)));
+	text6->AddComponent(new TransformComponent(glm::vec3(20, 375, 0)));
 	auto textText6 = new TextComponent("Press 1 to play SinglePlayer mode", font, SDL_Color{ 255,255,255 });
 	text6->AddComponent(textText6);
 	scene->Add(text6);
 
 	auto text7 = std::make_shared<GameObject>("Text7");
-	text7->AddComponent(new TransformComponent(glm::vec3(20, 350, 0)));
+	text7->AddComponent(new TransformComponent(glm::vec3(20, 400, 0)));
 	auto textText7 = new TextComponent("Press 2 to play Co-op mode", font, SDL_Color{ 255,255,255 });
 	text7->AddComponent(textText7);
 	scene->Add(text7);
 
 	auto text8 = std::make_shared<GameObject>("Text8");
-	text8->AddComponent(new TransformComponent(glm::vec3(20, 375, 0)));
+	text8->AddComponent(new TransformComponent(glm::vec3(20, 425, 0)));
 	auto textText8 = new TextComponent("Press 3 to play Versus mode", font, SDL_Color{ 255,255,255 });
 	text8->AddComponent(textText8);
 	scene->Add(text8);
 
+	auto text9 = std::make_shared<GameObject>("Text9");
+	text9->AddComponent(new TransformComponent(glm::vec3(20, 470, 0)));
+	auto textText9 = new TextComponent("While in game, press P to return to this main menu", font, SDL_Color{ 255,255,255 });
+	text9->AddComponent(textText9);
+	scene->Add(text9);
+
+
+	auto text10 = std::make_shared<GameObject>("Text9");
+	text10->AddComponent(new TransformComponent(glm::vec3(20, 500, 0)));
+	auto textText10 = new TextComponent("Press ESC to close the game", font, SDL_Color{ 255,255,255 });
+	text10->AddComponent(textText10);
+	scene->Add(text10);
 
 }
 

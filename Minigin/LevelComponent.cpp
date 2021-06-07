@@ -101,10 +101,23 @@ void LevelComponent::SpawnDiscs()
     
     
     //for (auto& disc : m_Discs) disc->SetIsUsed(true);
-    
+    auto player1 = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
+    auto player2 = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(1);
+
+    ScoreComponent* player1Score = nullptr;
+    ScoreComponent* player2Score = nullptr;
+
+    if (player1)player1Score = player1->GetComponent<ScoreComponent>();
+    if (player2)player2Score = player2->GetComponent<ScoreComponent>();
+
+
+
     for (size_t i = 0; i < m_Discs.size(); i++)
     {
         m_Discs[i]->SetIsUsed(true);
+        if (player1) player1Score->IncreaseScore(int(Event::DiscLeftAtEndOfTheStage));
+        if (player2) player2Score->IncreaseScore(int(Event::DiscLeftAtEndOfTheStage));
+
     }
 
 
@@ -139,12 +152,6 @@ void LevelComponent::FlashCubesOnCompletion()
 
 void LevelComponent::Update()
 {
-    //unnecessary
-    //for (auto& cube : m_Cubes)
-    //{
-    //    if (cube)
-    //        cube->Update();
-    //}
 
     for (auto& disc : m_Discs)
     {

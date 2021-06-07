@@ -3,99 +3,101 @@
 //#include <Windows.h>
 
 dae::InputManager::InputManager()
-	:m_Buttons{ ControllerButton::ButtonA,ControllerButton::ButtonB, ControllerButton::ButtonX, ControllerButton::ButtonY,ControllerButton::ButtonUp,
-	ControllerButton::ButtonRight, ControllerButton::ButtonDown, ControllerButton::ButtonLeft , ControllerButton::ButtonSelect,ControllerButton::ButtonStart ,
-	ControllerButton::ButtonRightThumb,ControllerButton::ButtonLeftThumb,ControllerButton::ButtonRightShoulder,ControllerButton::ButtonLeftShoulder }
-	, m_CurrentState{}
+	:m_Buttons{ 
+	ControllerButton::ButtonA,
+	ControllerButton::ButtonB, 
+	ControllerButton::ButtonX, 
+	ControllerButton::ButtonY,
+	ControllerButton::ButtonUp,
+	ControllerButton::ButtonRight, 
+	ControllerButton::ButtonDown, 
+	ControllerButton::ButtonLeft , 
+	ControllerButton::ButtonSelect,
+	ControllerButton::ButtonStart ,
+	ControllerButton::ButtonRightThumb,
+	ControllerButton::ButtonLeftThumb,
+	ControllerButton::ButtonRightShoulder,
+	ControllerButton::ButtonLeftShoulder }
+	,m_CurrentState{}
 {
-	//for (size_t i = 0; i < XUSER_MAX_COUNT; i++)
-	//{
-	//	m_Controllers.push_back(std::make_unique<Controller>());
-	//}
+	for (size_t i = 0; i < XUSER_MAX_COUNT; i++) m_Controllers.push_back(std::make_unique<Controller>());
 }
 
 void dae::InputManager::ProcessInput()
 {
 	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
 
-	// Get the state of the controller from XInput.
 	XInputGetState(0, &m_CurrentState);
-	//updating triggers
+
 	m_Triggers[0].second = m_CurrentState.Gamepad.bLeftTrigger;
 	m_Triggers[1].second = m_CurrentState.Gamepad.bRightTrigger;
-	//updating sticks
+
 	m_Sticks[0].second = AnalogStickInput{ (float)m_CurrentState.Gamepad.sThumbLX,(float)m_CurrentState.Gamepad.sThumbLY };
 	m_Sticks[1].second = AnalogStickInput{ (float)m_CurrentState.Gamepad.sThumbRX, (float)m_CurrentState.Gamepad.sThumbRY };
 }
 
-bool dae::InputManager::IsPressed(ControllerButton button) const
+bool dae::InputManager::IsPressed(ControllerButton button, const  std::unique_ptr<Controller>& controller) const
 {
-	if (m_CurrentState.Gamepad.wButtons & int(button))
-	{
-		return true;
-	}
+	if (controller->m_CurrentState.Gamepad.wButtons & int(button)) return true;
 	return false;
 }
 
-//void dae::InputManager::BindCommands()
-//{
-//
-//}
-// TODO : change the names of the functions to controller buttons , controller analog sticks and keyboard buttons
 bool dae::InputManager::InputHandler()
 {
-	//const int connectedControllers{ 1 };
-	//for (DWORD i = 0; i < connectedControllers; i++)
+	DWORD dwResult;
+	for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
 	{
+		ZeroMemory(&(m_Controllers[i]->m_CurrentState), sizeof(XINPUT_STATE));
+		dwResult = XInputGetState(i, &(m_Controllers[i]->m_CurrentState));
+
 		for (ControllerButton button : m_Buttons)
 		{
 			ControllerKey key = std::make_pair(int(button), button);
 
-			if (m_ButtonCommands.find(key) == m_ButtonCommands.end())
+			if (m_Controllers[i]->m_ConsoleButtonCommands.find(key) == m_Controllers[i]->m_ConsoleButtonCommands.end())
 				continue;
 
-			const auto& command = m_ButtonCommands.at(key);
+			const auto& command = m_Controllers[i]->m_ConsoleButtonCommands.at(key).first;
 
-			if (command)
+			if (!command->GetIsPressed())
 			{
-				if (!command->GetIsPressed())
+				if (IsPressed(button, m_Controllers[i]))
 				{
-					if (IsPressed(button))
-					{
-						command->Execute();
-						command->SetIsPressed(true);
-					}
-				}
-				else
-				{
-					if (!IsPressed(button))
-					{
-						command->SetIsPressed(false);
-					}
-				}
-				//check if exited the program
-				if (button == ControllerButton::ButtonSelect && IsPressed(button))
-				{
-					return false;
+					command->Execute();
+					command->SetIsPressed(true);
 				}
 			}
+			else
+			{
+				if (!IsPressed(button, m_Controllers[i]))
+				{
+					command->Release();
+					command->SetIsPressed(false);
+				}
+			}
+			//if (button == ControllerButton::ButtonSelect && IsPressed(button, m_Controllers[i]))
+			//{
+			//	return false;
+			//}
 		}
-		return true;
 	}
+	return true;
 }
 
 void dae::InputManager::ControllerAnalogs()
 {
-	const int connectedControllers{ 1 };
-	for (DWORD i = 0; i < connectedControllers; i++)
+	DWORD dwResult;
+	for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
 	{
+		ZeroMemory(&(m_Controllers[i]->m_CurrentState), sizeof(XINPUT_STATE));
+		dwResult = XInputGetState(i, &(m_Controllers[i]->m_CurrentState));
 		//trigger analogs
 		for (ControllerTrigger trigger : m_Triggers)
 		{
-			if (m_TriggerCommands.find(trigger.first) == m_TriggerCommands.end())
+			if (m_Controllers[i]->m_ConsoleTriggerCommands.find(trigger.first) == m_Controllers[i]->m_ConsoleTriggerCommands.end())
 				continue;
 
-			const auto& command = m_TriggerCommands.at(trigger.first);
+			const auto& command = m_Controllers[i]->m_ConsoleTriggerCommands.at(trigger.first).first;
 
 			if (command)
 			{
@@ -109,10 +111,10 @@ void dae::InputManager::ControllerAnalogs()
 		//stick analogs
 		for (ControllerStick stick : m_Sticks)
 		{
-			if (m_StickCommands.find(stick.first) == m_StickCommands.end())
+			if (m_Controllers[i]->m_ConsoleStickCommands.find(stick.first) == m_Controllers[i]->m_ConsoleStickCommands.end())
 				continue;
 
-			const auto& command = m_StickCommands.at(stick.first);
+			const auto& command = m_Controllers[i]->m_ConsoleStickCommands.at(stick.first).first;
 
 			if (command)
 			{
@@ -132,7 +134,7 @@ bool dae::InputManager::KeyboardInput()
 
 	if (SDL_PollEvent(&ev))
 	{
-		if (ev.type == SDL_QUIT || m_Exiting)
+		if (ev.type == SDL_QUIT || m_IsExiting)
 			return false;
 
 		if (ev.type == SDL_KEYDOWN)
@@ -142,7 +144,7 @@ bool dae::InputManager::KeyboardInput()
 
 			if (commandMap.find(key) != commandMap.end())
 			{
-				const auto& command = commandMap.at(key);
+				const auto& command = commandMap.at(key).first;
 				command->Execute();
 				command->SetIsPressed(true);
 			}
@@ -154,7 +156,7 @@ bool dae::InputManager::KeyboardInput()
 
 			if (commandMap.find(key) != commandMap.end())
 			{
-				const auto& command = commandMap.at(key);
+				const auto& command = commandMap.at(key).first;
 				command->Release();
 				command->SetIsPressed(false);
 			}

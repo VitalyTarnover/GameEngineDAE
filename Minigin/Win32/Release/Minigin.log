@@ -1,9 +1,9 @@
 ﻿  QbertSceneManager.cpp
      Creating library D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\Win32\Release\QBert.lib and object D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\Win32\Release\QBert.exp
   Generating code
-  127 of 2259 functions ( 5.6%) were compiled, the rest were copied from previous compilation.
-    100 functions were new in current compilation
-    295 functions had inline decision re-evaluated but remain unchanged
+  1 of 2363 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    10 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Minigin.vcxproj -> D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\Win32\Release\QBert.exe
   D:\DAE\2020_2021\S4\Prog4\GameEngine\Minigin\Githubed\3rdParty\SDL2\lib\x86\SDL2.dll
