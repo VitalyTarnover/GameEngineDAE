@@ -4,8 +4,10 @@ class AudioService
 public:
 	enum class SoundNames
 	{
-		BoomEffect,
-		ChargeEffect,
+		JumpSFX,
+		FallSFX,
+		DiscSFX,
+		LevelCompleteSFX,
 	};
 
 	enum class MusicNames

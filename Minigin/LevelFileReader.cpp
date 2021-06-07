@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-LevelFileReader::LevelFileReader(std::string filePath)
+LevelFileReader::LevelFileReader(const std::string& filePath)
     :m_FilePath{filePath}
 {
 }

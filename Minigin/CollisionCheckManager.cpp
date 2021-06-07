@@ -129,14 +129,14 @@ void CollisionCheckManager::Update()
 
 }
 
-void CollisionCheckManager::AddObjectForCheck(std::shared_ptr<GameObject> gameObject)
+void CollisionCheckManager::AddObjectForCheck(const std::shared_ptr<GameObject>& gameObject)
 {
 	if (gameObject->GetName() == "Q*Bert") m_pQbert = gameObject;
 	else if (gameObject->GetName() == "Q*Bert2") m_pQbert2 = gameObject;
 	else m_pGameObjectsToCheck.push_back(gameObject);
 }
 
-void CollisionCheckManager::DeleteGameObject(std::shared_ptr<GameObject> gameObject)
+void CollisionCheckManager::DeleteGameObject(const std::shared_ptr<GameObject>& gameObject)
 {
 	for (size_t i = 0; i < m_pGameObjectsToCheck.size(); i++)
 	{

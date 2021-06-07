@@ -23,7 +23,7 @@
 #include "QbertSceneManager.h"
 
 #include "AudioLocator.h"
-
+#include "AudioServiceProvider.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -66,23 +66,30 @@ void dae::Minigin::Initialize()
 
 	AudioLocator::SetAudioService(new AudioServiceProvider());
 
-
+	
 	//AudioLocator::GetAudioService().AddSoundToLibrary(AudioService::MusicNames::Background01, "Resources/UsoppSiren.mp3");
 	//AudioLocator::GetAudioService().AddSoundToLibrary(AudioService::SoundNames::BoomEffect, "Resources/KleerBall01.wav");
 	//
+	AudioLocator::GetAudioService().AddSoundToLibrary(AudioService::SoundNames::DiscSFX, "Resources/SFX/QbertDiscSFX.wav");
+	AudioLocator::GetAudioService().AddSoundToLibrary(AudioService::SoundNames::FallSFX, "Resources/SFX/QbertFallSFX.wav");
+	AudioLocator::GetAudioService().AddSoundToLibrary(AudioService::SoundNames::JumpSFX, "Resources/SFX/QbertJumpSFX.wav");
+	AudioLocator::GetAudioService().AddSoundToLibrary(AudioService::SoundNames::LevelCompleteSFX, "Resources/SFX/QbertLevelCompleteSFX.wav");
+
 	//AudioLocator::GetAudioService().QueueSound(AudioService::MusicNames::Background01, 0.9f);
-	//AudioLocator::GetAudioService().QueueSound(AudioService::SoundNames::BoomEffect, 0.9f);
 
 
-	//AudioServiceProvider* audio = new AudioServiceProvider();
-	//
-	//AudioLocator::Provide(audio);
-	//
-	//m_Audio = AudioLocator::GetAudio();
-	//
-	//m_Audio->AddSoundEffect(AudioService::SoundNames::BoomEffect, "Resources/KleerBall01.wav");
-	//
-	//m_Audio->PlaySound(AudioService::SoundNames::BoomEffect);
+
+//AudioServiceProvider* audio = new AudioServiceProvider();
+//
+//AudioLocator::Provide(audio);
+//
+//m_Audio = AudioLocator::GetAudio();
+//
+//m_Audio->AddSoundEffect(AudioService::SoundNames::BoomEffect, "Resources/KleerBall01.wav");
+//
+//m_Audio->PlaySound(AudioService::SoundNames::BoomEffect);
+
+
 
 }
 
@@ -94,230 +101,6 @@ void dae::Minigin::LoadGame() const
 
 	QbertSceneManager::GetInstance().LoadMainMenu();
 
-	//scene.SetCurrentGameMode(GameMode::Versus);//GameMode::Coop
-	
-	//background
-	//auto go = std::make_shared<GameObject>("Background");
-	//go->AddComponent(new Texture2DComponent("background.jpg"));
-	//scene.Add(go);
-
-
-	//fps counter
-	//auto fpsCounter = std::make_shared<GameObject>("FPSCounter");
-	//auto font2 = ResourceManager::GetInstance().LoadFont("Lingua.otf", 14);
-	//fpsCounter->AddComponent(new FPSTextComponent(font2));
-	//scene.Add(fpsCounter);
-	
-	
-	/*
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
-
-	
-	switch (scene.GetCurrentGameMode())
-	{
-	case(GameMode::SinglePlayer):
-	{
-		//score
-		auto scoreDisplay = std::make_shared<GameObject>("ScoreDisplay");
-		scoreDisplay->AddComponent(new TransformComponent(glm::vec3(20, 70, 0)));
-		auto scoreCounter = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
-		scoreDisplay->AddComponent(scoreCounter);
-		scene.Add(scoreDisplay);
-
-
-
-		//healths
-		auto healthsDisplay = std::make_shared<GameObject>("LivesDisplay");
-		healthsDisplay->AddComponent(new TransformComponent(glm::vec3(20, 100, 0)));
-		auto healthsCounter = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
-		healthsDisplay->AddComponent(healthsCounter);
-		scene.Add(healthsDisplay);
-
-
-		auto level = std::make_shared<GameObject>("Level");
-		level->AddComponent(new LevelComponent(scene, glm::vec3(630, 175, 0), scene.GetSceneScale()));//670, 200, 0
-		scene.Add(level);
-		scene.AddLevel(level);
-		scene.SetCurrentLevel(level);
-
-
-		//q*bert
-		{
-			glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-			startPosition.x += scene.GetSceneScale() * 8.f;
-			startPosition.y -= scene.GetSceneScale() * 10.f;
-
-			auto qbert = std::make_shared<GameObject>("Q*Bert");
-			qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));//16,21
-			qbert->AddComponent(new HealthComponent(3));
-			qbert->AddComponent(new ScoreComponent(0));
-			qbert->AddWatcher(new LivesObserver());
-			qbert->AddWatcher(new ScoreObserver());
-			qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
-			qbert->AddComponent(new SpriteAnimComponent(8));
-			qbert->AddComponent(new QbertMovementComponent());
-			CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
-			scene.Add(qbert);
-			scene.AddPlayer(qbert);
-		}
-	}
-	break;
-	case(GameMode::Coop):
-	{
-		//score
-		auto scoreDisplay = std::make_shared<GameObject>("ScoreDisplay");
-		scoreDisplay->AddComponent(new TransformComponent(glm::vec3(20, 70, 0)));
-		auto scoreCounter = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
-		scoreDisplay->AddComponent(scoreCounter);
-		scene.Add(scoreDisplay);
-
-		auto scoreDisplay2 = std::make_shared<GameObject>("ScoreDisplay2");
-		scoreDisplay2->AddComponent(new TransformComponent(glm::vec3(200, 70, 0)));
-		auto scoreCounter2 = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
-		scoreDisplay2->AddComponent(scoreCounter2);
-		scene.Add(scoreDisplay2);
-
-
-		//healths
-		auto healthsDisplay = std::make_shared<GameObject>("LivesDisplay");
-		healthsDisplay->AddComponent(new TransformComponent(glm::vec3(20, 100, 0)));
-		auto healthsCounter = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
-		healthsDisplay->AddComponent(healthsCounter);
-		scene.Add(healthsDisplay);
-
-		auto healthsDisplay2 = std::make_shared<GameObject>("LivesDisplay2");
-		healthsDisplay2->AddComponent(new TransformComponent(glm::vec3(200, 100, 0)));
-		auto healthsCounter2 = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
-		healthsDisplay2->AddComponent(healthsCounter2);
-		scene.Add(healthsDisplay2);
-
-
-		auto level = std::make_shared<GameObject>("Level");
-		level->AddComponent(new LevelComponent(scene, glm::vec3(630, 175, 0), scene.GetSceneScale()));//670, 200, 0
-		scene.Add(level);
-		scene.AddLevel(level);
-		scene.SetCurrentLevel(level);
-
-
-		//q*bert
-		{
-			glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-			startPosition.x += scene.GetSceneScale() * 8.f;
-			startPosition.y -= scene.GetSceneScale() * 10.f;
-
-			auto qbert = std::make_shared<GameObject>("Q*Bert");
-			qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));//16,21
-			qbert->AddComponent(new HealthComponent(3));
-			qbert->AddComponent(new ScoreComponent(0));
-			qbert->AddWatcher(new LivesObserver());
-			qbert->AddWatcher(new ScoreObserver());
-			qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
-			qbert->AddComponent(new SpriteAnimComponent(8));
-			qbert->AddComponent(new QbertMovementComponent());
-			qbert->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(27);
-			CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
-			scene.Add(qbert);
-			scene.AddPlayer(qbert);
-		}
-		//q*bert2
-		{
-			glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(6)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-			startPosition.x += scene.GetSceneScale() * 8.f;
-			startPosition.y -= scene.GetSceneScale() * 10.f;
-
-			auto qbert2 = std::make_shared<GameObject>("Q*Bert2");
-			qbert2->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));//16,21
-			qbert2->AddComponent(new HealthComponent(3));
-			qbert2->AddComponent(new ScoreComponent(0));
-			qbert2->AddWatcher(new LivesObserver());
-			qbert2->AddWatcher(new ScoreObserver());
-			qbert2->AddComponent(new Texture2DComponent("Qbert2.png", scene.GetSceneScale()));
-			qbert2->AddComponent(new SpriteAnimComponent(8));
-			qbert2->AddComponent(new QbertMovementComponent());
-			qbert2->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(6);
-			CollisionCheckManager::GetInstance().AddObjectForCheck(qbert2);
-			scene.Add(qbert2);
-			scene.AddPlayer(qbert2);
-		}
-
-	}
-	break;
-	case(GameMode::Versus):
-	{
-		//score
-		auto scoreDisplay = std::make_shared<GameObject>("ScoreDisplay");
-		scoreDisplay->AddComponent(new TransformComponent(glm::vec3(20, 70, 0)));
-		auto scoreCounter = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
-		scoreDisplay->AddComponent(scoreCounter);
-		scene.Add(scoreDisplay);
-
-
-
-		//healths
-		auto healthsDisplay = std::make_shared<GameObject>("LivesDisplay");
-		healthsDisplay->AddComponent(new TransformComponent(glm::vec3(20, 100, 0)));
-		auto healthsCounter = new TextComponent("Lives: 3", font, SDL_Color{ 255,255,255 });
-		healthsDisplay->AddComponent(healthsCounter);
-		scene.Add(healthsDisplay);
-
-
-		auto level = std::make_shared<GameObject>("Level");
-		level->AddComponent(new LevelComponent(scene, glm::vec3(630, 175, 0), scene.GetSceneScale()));//670, 200, 0
-		scene.Add(level);
-		scene.AddLevel(level);
-		scene.SetCurrentLevel(level);
-
-
-		//q*bert
-		{
-			glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-			startPosition.x += scene.GetSceneScale() * 8.f;
-			startPosition.y -= scene.GetSceneScale() * 10.f;
-
-			auto qbert = std::make_shared<GameObject>("Q*Bert");
-			qbert->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));//16,21
-			qbert->AddComponent(new HealthComponent(3));
-			qbert->AddComponent(new ScoreComponent(0));
-			qbert->AddWatcher(new LivesObserver());
-			qbert->AddWatcher(new ScoreObserver());
-			qbert->AddComponent(new Texture2DComponent("Qbert.png", scene.GetSceneScale()));
-			qbert->AddComponent(new SpriteAnimComponent(8));
-			qbert->AddComponent(new QbertMovementComponent());
-			qbert->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(27);
-			CollisionCheckManager::GetInstance().AddObjectForCheck(qbert);
-			scene.Add(qbert);
-			scene.AddPlayer(qbert);
-		}
-		//coily
-		{
-			glm::vec3 startPosition = level->GetComponent<LevelComponent>()->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-			startPosition.x += scene.GetSceneScale() * 8.f;
-			startPosition.y -= scene.GetSceneScale() * 10.f;
-
-			auto coily = std::make_shared<GameObject>("Coily");
-			coily->AddComponent(new TransformComponent(startPosition, glm::vec2{ 15,15 }));
-			coily->AddComponent(new Texture2DComponent("Coily.png", scene.GetSceneScale()));
-
-			coily->AddComponent(new QbertMovementComponent(true, 75.f));
-			coily->GetComponent<QbertMovementComponent>()->SetCurrentCubeIndex(0);
-
-			coily->AddComponent(new SpriteAnimComponent(8));
-			scene.Add(coily);
-			CollisionCheckManager::GetInstance().AddObjectForCheck(coily);
-			scene.AddPlayer(coily);
-
-		}
-
-	}
-	break;
-	}
-	*/
-    
-
-
-
-
-	
 }
 
 void dae::Minigin::Cleanup()
@@ -350,7 +133,7 @@ void dae::Minigin::Run()
 
 	std::thread audioThread (&AudioService::Update, &AudioLocator::GetAudioService());
 
-
+	AudioLocator::GetAudioService().QueueSound(AudioService::SoundNames::LevelCompleteSFX, 30.f);
 
 	while (doContinue)
 	{

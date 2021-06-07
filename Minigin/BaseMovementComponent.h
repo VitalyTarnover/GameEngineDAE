@@ -35,11 +35,11 @@ protected:
     bool m_IsInDeathZone = false;
     float m_Speed;
     glm::vec2 m_MoveDistance;
-    bool m_FirstHalfOfTheJump;
+    bool m_FirstHalfOfTheJump = false;
     AnimStates m_Direction;
     glm::vec2 m_JumpStartPos;
-    int m_CurrentCubeIndex;
-    int m_SourceHeightOffset;
-    int m_CurrentColumn;
-    int m_CurrentRow;
+    int m_CurrentCubeIndex = 0;
+    int m_SourceHeightOffset = 0;
+    int m_CurrentColumn = 0;
+    int m_CurrentRow = 0;
 };

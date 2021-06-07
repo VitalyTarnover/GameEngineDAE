@@ -24,10 +24,14 @@ public:
 			Mix_FreeMusic(m_MusicLibrary.at(MusicNames::Background01));
 		if (m_MusicLibrary.find(MusicNames::Background02) != m_MusicLibrary.end())
 			Mix_FreeMusic(m_MusicLibrary.at(MusicNames::Background02));
-		if (m_SoundLibrary.find(SoundNames::BoomEffect) != m_SoundLibrary.end())
-			Mix_FreeChunk(m_SoundLibrary.at(SoundNames::BoomEffect));
-		if (m_SoundLibrary.find(SoundNames::ChargeEffect) != m_SoundLibrary.end())
-			Mix_FreeChunk(m_SoundLibrary.at(SoundNames::ChargeEffect));
+		if (m_SoundLibrary.find(SoundNames::DiscSFX) != m_SoundLibrary.end())
+			Mix_FreeChunk(m_SoundLibrary.at(SoundNames::DiscSFX));
+		if (m_SoundLibrary.find(SoundNames::FallSFX) != m_SoundLibrary.end())
+			Mix_FreeChunk(m_SoundLibrary.at(SoundNames::FallSFX));
+		if (m_SoundLibrary.find(SoundNames::JumpSFX) != m_SoundLibrary.end())
+			Mix_FreeChunk(m_SoundLibrary.at(SoundNames::JumpSFX));
+		if (m_SoundLibrary.find(SoundNames::LevelCompleteSFX) != m_SoundLibrary.end())
+			Mix_FreeChunk(m_SoundLibrary.at(SoundNames::LevelCompleteSFX));
 
 	};
 

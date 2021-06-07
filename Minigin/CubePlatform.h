@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "Scene.h"
 
-class CubePlatform
+class CubePlatform final
 {
 public:
 	CubePlatform();

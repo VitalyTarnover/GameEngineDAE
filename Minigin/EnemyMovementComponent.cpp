@@ -241,26 +241,22 @@ void EnemyMovementComponent::SidewaysJump()
 
 	if (abs(pos.x - m_JumpStartPos.x) > m_MoveDistance.x)
 	{
-		//landed on cube
+		//landed
 		int NonJumpingSprite = (int)m_Direction - 1;
 		m_pGameObject->GetComponent<SpriteAnimComponent>()->SetAnimState(AnimStates(NonJumpingSprite));
 		const auto& CurrentMap = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>();
 
 		auto cube = CurrentMap->GetCube(m_CurrentCubeIndex);
 
-		//offset fix
 		auto cubePos = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-		//auto srcRect = m_pGameObject->GetComponent<Texture2DComponent>()->GetSrcRect();
 
 		if (m_EnemyType == EnemyType::WrongWay)
 		{
 			m_pGameObject->GetComponent<TransformComponent>()->SetPosition(glm::vec3(cubePos.x - 15, cubePos.y + 20 * 2 + m_SourceHeightOffset,0));
-			//m_pGameObject->GetComponent<TransformComponent>()->SetPosition(glm::vec2(cubePos.x - srcRect.w, cubePos.y + srcRect.h * 2 + m_SourceHeightOffset));
 		}
 		else if (m_EnemyType == EnemyType::Ugg)
 		{
 			m_pGameObject->GetComponent<TransformComponent>()->SetPosition(glm::vec3(cubePos.x + 15 * 3.f, cubePos.y + 20 * 2 + m_SourceHeightOffset,0));
-			//m_pGameObject->GetComponent<TransformComponent>()->SetPosition(glm::vec2(cubePos.x + srcRect.w * 2.5f, cubePos.y + srcRect.h * 2 + m_SourceHeightOffset));
 		}
 
 		m_IsMoving = false;

@@ -92,7 +92,6 @@ void LevelComponent::SpawnDiscs()
     disc1Pos.x -= m_Offset.x * 1.5f;
     disc2Pos.x += m_Offset.x * 2.5f;
 
-    //for (auto& cube : m_Cubes) cube->SetHasDiscNextToIt(false);
 
     for (size_t i = 0; i < m_Cubes.size(); i++)
     {
@@ -100,7 +99,6 @@ void LevelComponent::SpawnDiscs()
     }
     
     
-    //for (auto& disc : m_Discs) disc->SetIsUsed(true);
     auto player1 = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
     auto player2 = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(1);
 
@@ -178,56 +176,8 @@ void LevelComponent::Render()
     }
 }
 
-bool LevelComponent::JumpToNextCube(int& currentIndex, AnimStates dir, bool isSidewaysJump, int currentColumn, int currentRow) const//  const AnimStates& dir
+bool LevelComponent::JumpToNextCube(int& currentIndex, AnimStates dir, bool isSidewaysJump, int currentColumn, int currentRow) const
 {
-    //int columnIndex = GetColumnNumber(currentIndex);
-    //
-    //switch (dir)
-    //{
-    //case AnimStates::MidAirRightUp:
-    //{
-    //    for (size_t i = 0; i < m_SideLength; i++)
-    //        if (currentIndex == m_MostRightBlocks[i])
-    //            return false;
-    //
-    //    int columnIndexAfterJump = columnIndex - 1;
-    //    currentIndex -= m_FirstRowCubeCount - columnIndexAfterJump;
-    //
-    //    break;
-    //}
-    //case AnimStates::MidAirLeftUp:
-    //{
-    //    for (size_t i = 0; i < m_SideLength; i++)
-    //        if (currentIndex == m_MostLeftBlocks[i])
-    //            return false;
-    //
-    //    currentIndex--;
-    //
-    //    break;
-    //}
-    //case AnimStates::MidAirRightDown:
-    //{
-    //    for (size_t i = 0; i < m_SideLength; i++)
-    //        if (currentIndex == m_LowestBlocks[i])
-    //            return false;
-    //
-    //    currentIndex++;
-    //
-    //    break;
-    //}
-    //case AnimStates::MidAirLeftDown:
-    //{
-    //    for (size_t i = 0; i < m_SideLength; i++)
-    //        if (currentIndex == m_LowestBlocks[i])
-    //            return false;
-    //
-    //    currentIndex += m_FirstRowCubeCount - columnIndex;
-    //
-    //    break;
-    //}
-    //}
-    //
-    //return true;
 
     if (isSidewaysJump)
     {
@@ -237,37 +187,29 @@ bool LevelComponent::JumpToNextCube(int& currentIndex, AnimStates dir, bool isSi
         {
         case AnimStates::MidAirLeftDown:
         {
-            if (currentColumn == 0)
-            {
-                return false;
-            }
+            if (currentColumn == 0) return false;
+
             currentIndex += m_FirstRowCubeCount - rowIndex + currentColumn - 1;
             break;
         }
         case AnimStates::MidAirRightUp:
         {
-            if (currentColumn == rowIndex)
-            {
-                return false;
-            }
+            if (currentColumn == rowIndex) return false;
+
             currentIndex -= m_FirstRowCubeCount - currentRow + currentColumn + 1;
             break;
         }
         case AnimStates::MidAirLeftUp:
         {
-            if (currentColumn == 0)
-            {
-                return false;
-            }
+            if (currentColumn == 0) return false;
+
             --currentIndex;
             break;
         }
         case AnimStates::MidAirRightDown:
         {
-            if (currentColumn == rowIndex)
-            {
-                return false;
-            }
+            if (currentColumn == rowIndex) return false;
+
             currentIndex -= m_FirstRowCubeCount - rowIndex + currentColumn;
             break;
         }
@@ -285,10 +227,7 @@ bool LevelComponent::JumpToNextCube(int& currentIndex, AnimStates dir, bool isSi
         {
             for (size_t i = 0; i < m_SideLength; i++)
             {
-                if (currentIndex == m_LowestBlocks[i])
-                {
-                    return false;
-                }
+                if (currentIndex == m_LowestBlocks[i]) return false;
             }
             currentIndex += m_FirstRowCubeCount - rowIndex;
             break;
@@ -297,10 +236,7 @@ bool LevelComponent::JumpToNextCube(int& currentIndex, AnimStates dir, bool isSi
         {
             for (size_t i = 0; i < m_SideLength; i++)
             {
-                if (currentIndex == m_MostRightBlocks[i])
-                {
-                    return false;
-                }
+                if (currentIndex == m_MostRightBlocks[i]) return false;
             }
             int rowIndexAfterJump = rowIndex - 1;
             currentIndex -= m_FirstRowCubeCount - rowIndexAfterJump;
@@ -310,10 +246,7 @@ bool LevelComponent::JumpToNextCube(int& currentIndex, AnimStates dir, bool isSi
         {
             for (size_t i = 0; i < m_SideLength; i++)
             {
-                if (currentIndex == m_MostLeftBlocks[i])
-                {
-                    return false;
-                }
+                if (currentIndex == m_MostLeftBlocks[i]) return false;
             }
             currentIndex--;
             break;
@@ -322,10 +255,7 @@ bool LevelComponent::JumpToNextCube(int& currentIndex, AnimStates dir, bool isSi
         {
             for (size_t i = 0; i < m_SideLength; i++)
             {
-                if (currentIndex == m_LowestBlocks[i])
-                {
-                    return false;
-                }
+                if (currentIndex == m_LowestBlocks[i]) return false;
             }
             currentIndex++;
             break;
@@ -341,7 +271,6 @@ bool LevelComponent::JumpToNextCube(int& currentIndex, AnimStates dir, bool isSi
 
 void LevelComponent::SwitchGameLevel(GameLevel gameLevel)
 {
-    //FlashCubesOnCompletion();
 
     if (m_EntireFlashCubesTimer >= 0)
     {
@@ -417,7 +346,6 @@ void LevelComponent::LevelCompletedCheck()
         m_FlashingCubes = true;
         EnemyManager::GetInstance().DeleteAllEnemies(true);
 
-        //SwitchGameLevel(currentScene->GetGameLevel());
     }
     else if (currentScene->GetGameLevel() == GameLevel::Level3)
     {
@@ -540,10 +468,6 @@ void LevelComponent::TeleportPlayersToSpawnPos()
         break;
     }
 
-
-   
-    
-    
 }
 
 
@@ -555,7 +479,6 @@ int LevelComponent::GetRowNumber(const int& currentTileIndex) const
     {
         if (currentTileIndex < cubeCount)
             return i;
-
         cubeCount += (m_FirstRowCubeCount - (i + 1));
     }
 
@@ -598,7 +521,6 @@ void LevelComponent::DeleteUsedDiscs()
                 {
                     dae::SceneManager::GetInstance().GetCurrentScene()->DeleteGameObject(m_Discs[i]->GetGameObject());
                     CollisionCheckManager::GetInstance().DeleteGameObject(m_Discs[i]->GetGameObject());
-                    //m_Discs.erase(m_Discs.begin() + i);
                     m_Discs.erase(std::remove(m_Discs.begin(), m_Discs.end(), m_Discs[i]), m_Discs.end());
                 }
             }

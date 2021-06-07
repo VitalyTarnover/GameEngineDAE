@@ -2,10 +2,10 @@
 #include <glm\vec3.hpp>
 #include <vector>
 
-class LevelFileReader
+class LevelFileReader final
 {
 public:
-	LevelFileReader(std::string filePath);
+	LevelFileReader(const std::string& filePath);
 	~LevelFileReader() = default;
 
 	LevelFileReader(const LevelFileReader&) = delete;

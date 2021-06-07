@@ -70,7 +70,6 @@ private:
 	int m_MostRightBlocks[m_SideLength];
 	int m_LowestBlocks[m_SideLength];
 	
-	//const static int m_MaxCubes = 28;
 	std::vector<std::shared_ptr<CubePlatform>> m_Cubes;
 
 	std::vector<std::shared_ptr<DiscPlatform>> m_Discs;

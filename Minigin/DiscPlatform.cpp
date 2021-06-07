@@ -6,6 +6,8 @@
 #include "EnemyManager.h"
 #include <cmath>
 
+
+
 DiscPlatform::DiscPlatform(const glm::vec3& finalPos)
 	:m_FinalPos {finalPos}
 {
@@ -13,8 +15,6 @@ DiscPlatform::DiscPlatform(const glm::vec3& finalPos)
 
 	m_FinalPos.y -= 25 * dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale();
 	m_FinalPos.x += 5 * dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale();
-	//auto currentLevelComponent = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>();
-	//auto finalPos = currentLevelComponent->GetCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 	
 }
 
@@ -70,10 +70,6 @@ void DiscPlatform::MoveToTheTop()
 
 		if (abs(discPosition.x - m_FinalPos.x) > 2)
 		{
-			//float newXPos = std::lerp(m_FinalPos.x, discPosition.x, m_MoveFactor);
-			//float newYPos = std::lerp(m_FinalPos.y, discPosition.y, m_MoveFactor);
-			//m_pTransformComponent->SetPosition(glm::vec3{ newXPos, newYPos, 0 });
-			//m_MoveFactor += SystemTime::GetInstance().GetDeltaTime() * m_Speed;
 
 			auto newPos = discPosition + m_Direction * m_Speed * SystemTime::GetInstance().GetDeltaTime();
 
@@ -87,8 +83,6 @@ void DiscPlatform::MoveToTheTop()
 			m_IsMovingToTop = false;
 			m_IsUsed = true;
 			dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(m_PlayerIndex)->GetComponent<QbertMovementComponent>()->SetDiscTransform(nullptr);
-			//mby kill here
-			//dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->DeleteDisc(this);
 		}
 	}
 }

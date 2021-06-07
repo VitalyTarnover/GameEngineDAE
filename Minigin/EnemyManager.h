@@ -2,7 +2,7 @@
 #include "Singleton.h"
 #include <vector>
 
-class EnemyManager : public dae::Singleton<EnemyManager>
+class EnemyManager final : public dae::Singleton<EnemyManager>
 {
 public:
 	EnemyManager() 

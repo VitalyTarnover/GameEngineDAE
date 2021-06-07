@@ -3,14 +3,13 @@
 #include "GameObject.h"
 #include "Components.h"
 
-//class TransformComponent;
 
 class CollisionCheckManager final : public dae::Singleton<CollisionCheckManager>
 {
 public:
 	void Update();
-	void AddObjectForCheck(std::shared_ptr<GameObject> gameObject);
-	void DeleteGameObject(std::shared_ptr<GameObject> gameObject);
+	void AddObjectForCheck(const std::shared_ptr<GameObject>& gameObject);
+	void DeleteGameObject(const std::shared_ptr<GameObject>& gameObject);
 	void CleanUp() 
 	{ 
 		m_pGameObjectsToCheck.clear(); 

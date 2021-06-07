@@ -13,6 +13,9 @@ BaseMovementComponent::BaseMovementComponent()
 	, m_IsMoving{ false }
 	, m_CurrentCubeIndex{ 0 }
 	, m_FallingToDeath{ false }
+	, m_CurrentRow{0}
+	, m_CurrentColumn{0}
+	, m_JumpStartPos {glm::vec3(0,0,0)}
 	, m_Direction{ AnimStates::OnPlatformLeftDown }
 {
 	const glm::vec2& cubeOffset = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<LevelComponent>()->GetOffset();
@@ -63,12 +66,10 @@ void BaseMovementComponent::Jump()
 
 	const glm::vec2 speed = { m_Speed, m_Speed * moveDistRatio * (m_MoveDistance.y / jumpHeight) };
 
-	if (m_Direction == AnimStates::MidAirRightDown || m_Direction == AnimStates::MidAirRightUp)
-		pos.x += elapsedTime * speed.x;
+	if (m_Direction == AnimStates::MidAirRightDown || m_Direction == AnimStates::MidAirRightUp) pos.x += elapsedTime * speed.x;
 	else pos.x -= elapsedTime * speed.x;
 
-	if (m_Direction == AnimStates::MidAirRightDown || m_Direction == AnimStates::MidAirLeftDown)
-		jumpHeight = m_MoveDistance.y / 2.0f;
+	if (m_Direction == AnimStates::MidAirRightDown || m_Direction == AnimStates::MidAirLeftDown) jumpHeight = m_MoveDistance.y / 2.0f;
 	else jumpHeight = m_MoveDistance.y * 1.5f;
 
 	if (m_FirstHalfOfTheJump)
@@ -111,13 +112,10 @@ void BaseMovementComponent::Jump()
 		
 
 
-
-
 		m_IsMoving = false;
 
 		auto cube = CurrentMap->GetCube(m_CurrentCubeIndex);
-		//offset fix
-		//m_pGameObject->GetComponent<TransformComponent>()->SetPosition(cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition());
+		
 		pos.x = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 8.f);
 		pos.y = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 10.f);
 
@@ -147,10 +145,8 @@ void BaseMovementComponent::FallToDeath()
 	else
 		pos.x -= elapsedTime * speed.x;
 
-	if ((int)m_Direction >= (int)AnimStates::OnPlatformRightDown)
-		jumpHeight = m_MoveDistance.y / 2.0f;
-	else
-		jumpHeight = m_MoveDistance.y * 1.5f;
+	if ((int)m_Direction >= (int)AnimStates::OnPlatformRightDown) jumpHeight = m_MoveDistance.y / 2.0f;
+	else jumpHeight = m_MoveDistance.y * 1.5f;
 
 	if (m_FirstHalfOfTheJump)
 	{
@@ -161,19 +157,7 @@ void BaseMovementComponent::FallToDeath()
 	}
 	else pos.y += elapsedTime * speed.y;
 
-	//if (pos.y > 720)
-	//{
-	//	m_IsMoving = false;
-	//	m_FallingToDeath = false;
-	//
-	//	if (m_pGameObject->GetName() == "Q*bert")
-	//	{
-	//		auto pPlayer = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0);
-	//		pPlayer.get()->GetComponent<HealthComponent>()->Die();
-	//	}
-	//	
-	//}
-	//else transform->SetPosition(glm::vec3(pos.x, pos.y, 0));
+	
 
 	if (m_FallToDeathTimer > 0)
 	{

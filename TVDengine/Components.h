@@ -154,7 +154,7 @@ private:
 	TextComponent* m_pText = nullptr;
 };
 
-class HealthComponent : public BaseComponent
+class HealthComponent final : public BaseComponent
 {
 public:
 	HealthComponent(const unsigned int& health);
@@ -169,7 +169,7 @@ private:
 	bool m_Dead;
 };
 
-class ScoreComponent : public BaseComponent
+class ScoreComponent final : public BaseComponent
 {
 public:
 	ScoreComponent(const unsigned int& score);

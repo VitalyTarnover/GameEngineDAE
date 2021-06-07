@@ -3,6 +3,7 @@ d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\vc142.pd
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\vc142.idb
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\miniginpch.obj
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\scoreobserver.obj
+d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\qbertscenemanager.obj
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\qbertmovementcomponent.obj
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\minigin.obj
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\main.obj
@@ -10,15 +11,14 @@ d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\livesobs
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\levelfilereader.obj
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\levelcomponent.obj
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\enemymovementcomponent.obj
+d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\enemymanager.obj
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\discplatform.obj
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\cubeplatform.obj
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\collisioncheckmanager.obj
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\basemovementcomponent.obj
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\audioserviceprovider.obj
-d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\enemymanager.obj
-d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\minigin\x64\debug\qbertscenemanager.obj
-d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\x64\debug\qbert.exe
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\x64\debug\qbert.ilk
+d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\x64\debug\qbert.exe
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\x64\debug\qbert.pdb
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\x64\debug\qbert.lib
 d:\dae\2020_2021\s4\prog4\gameengine\minigin\githubed\x64\debug\qbert.exp

@@ -9,6 +9,7 @@
 #include "CollisionCheckManager.h"
 #include "Scene.h"
 #include "Minigin.h"
+#include "QbertSceneManager.h"
 
 
 using namespace dae;
@@ -21,36 +22,33 @@ void EnemyManager::Update()
 
 	if (currentScene->GetCurrentGameMode() == GameMode::SinglePlayer)
 	{
-		if (!currentScene->GetPlayer(0) || currentScene->GetPlayer(0)->GetComponent<HealthComponent>()->GetLives() <= 0)return;
+		if (!currentScene->GetPlayer(0) || currentScene->GetPlayer(0)->GetComponent<HealthComponent>()->GetLives() <= 0)
+		{
+			if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() != GameMode::MainMenu)
+				QbertSceneManager::GetInstance().LoadMainMenu();
+			return;
+		}
 	}
 	else if (currentScene->GetCurrentGameMode() == GameMode::Coop)
 	{
 		if (!currentScene->GetPlayer(0) || currentScene->GetPlayer(0)->GetComponent<HealthComponent>()->GetLives() <= 0
-			&& (!currentScene->GetPlayer(1) || currentScene->GetPlayer(1)->GetComponent<HealthComponent>()->GetLives() <= 0)) return;
-		
+			&& (!currentScene->GetPlayer(1) || currentScene->GetPlayer(1)->GetComponent<HealthComponent>()->GetLives() <= 0))
+		{
+			if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() != GameMode::MainMenu)
+				QbertSceneManager::GetInstance().LoadMainMenu();
+			return;
+		}
 	}
 	else if (currentScene->GetCurrentGameMode() == GameMode::Versus)
 	{
-		//if (!currentScene->GetPlayer(0) || currentScene->GetPlayer(0)->GetComponent<HealthComponent>()->GetLives() <= 0
-		//	&& (!currentScene->GetPlayer(1) || currentScene->GetPlayer(1)->GetComponent<HealthComponent>()->GetLives() <= 0)) return;
-		//
-		//if (m_Enemies.size() <= 3)
-		//{
-		//	m_WrongWayUggSpawnTimer -= elapsedTime;
-		//	m_SamSlickSpawnTimer -= elapsedTime;
-		//
-		//	if (m_WrongWayUggSpawnTimer <= 0.f)
-		//	{
-		//		SpawnWrongWayOrUgg();
-		//		m_WrongWayUggSpawnTimer = m_WrongWayUggSpawnTime;
-		//	}
-		//
-		//	if (m_SamSlickSpawnTimer <= 0.f)
-		//	{
-		//		SpawnSamOrSlick();
-		//		m_SamSlickSpawnTimer = m_SamSlickSpawnTime;
-		//	}
-		//}
+
+		if (!currentScene->GetPlayer(0) || currentScene->GetPlayer(0)->GetComponent<HealthComponent>()->GetLives() <= 0)
+		{
+			if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() != GameMode::MainMenu)
+				QbertSceneManager::GetInstance().LoadMainMenu();
+			return;
+		}
+
 		return;
 	}
 
@@ -129,7 +127,6 @@ void EnemyManager::SpawnWrongWayOrUgg()
 		CollisionCheckManager::GetInstance().AddObjectForCheck(ugg);
 		m_Enemies.push_back(ugg);
 	}
-	//m_WrongWayOrUggNumber++;
 }
 
 void EnemyManager::SpawnSamOrSlick()
@@ -200,7 +197,6 @@ void EnemyManager::SpawnCoily()
 	scene->Add(coily);
 	CollisionCheckManager::GetInstance().AddObjectForCheck(coily);
 	m_Enemies.push_back(coily);
-	//m_CoilyIsOnMap = true;
 }
 
 void EnemyManager::DeleteEnemyGameObject(const std::shared_ptr<GameObject>& gameObject)
@@ -213,14 +209,9 @@ void EnemyManager::DeleteEnemyGameObject(const std::shared_ptr<GameObject>& game
 
 	for (size_t i = 0; i < m_Enemies.size(); i++)
 	{
-		//if (m_Enemies[i] == gameObject)m_Enemies.erase(m_Enemies.begin() + i);
 		m_Enemies.erase(std::remove(m_Enemies.begin(), m_Enemies.end(), m_Enemies[i]), m_Enemies.end());
 	}
-
 	
-	//if (gameObject->GetName() == "Coily") m_CoilyIsOnMap = false;
-	//else if (gameObject->GetName() == "WrongWay" || gameObject->GetName() == "Ugg") m_WrongWayOrUggNumber--;
-	//else if (gameObject->GetName() == "Sam" || gameObject->GetName() == "Slick") m_SamOrSlickOnMap = false;
 }
 
 
@@ -260,10 +251,7 @@ void EnemyManager::DeleteSuicideJumpers()
 		{
 			m_Enemies[i]->SetMarkedForDelete(true);
 			collisionManager.DeleteGameObject(m_Enemies[i]);
-			//m_Enemies.erase(m_Enemies.begin() + i);
 			m_Enemies.erase(std::remove(m_Enemies.begin(), m_Enemies.end(), m_Enemies[i]), m_Enemies.end());
-			//i = m_Enemies.size();
-			//i--;
 		}
 	}
 }

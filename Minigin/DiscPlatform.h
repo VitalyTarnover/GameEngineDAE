@@ -3,7 +3,7 @@
 #include "Scene.h"
 
 
-class DiscPlatform
+class DiscPlatform final
 {
 public:
 	DiscPlatform(const glm::vec3& finalPos);
